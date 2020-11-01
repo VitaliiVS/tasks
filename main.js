@@ -1,25 +1,40 @@
 const title = document.createElement('h1');
 const tasksContainer = document.createElement('div');
 const taskInput = document.createElement('input');
-const submitTask = document.createElement('button');
+const createTask = document.createElement('button');
 const tasksList = document.createElement('ul');
 
 taskInput.setAttribute('type', 'text');
-submitTask.innerHTML = "+ Add";
+createTask.innerHTML = "+ Add";
 title.innerHTML = "TODOs";
 
 document.body.append(title);
 document.body.append(tasksContainer);
 tasksContainer.append(taskInput);
-tasksContainer.append(submitTask);
+tasksContainer.append(createTask);
 tasksContainer.append(tasksList);
 
+tasksList.classList.add('tasks-list');
+
+function getAllSiblings(elem) {
+    let siblings = [];
+    let sibling = elem.parentNode.firstChild;
+
+    while (sibling) {
+        if (sibling.nodeType === 1 && sibling !== elem) {
+            siblings.push(sibling);
+        }
+        sibling = sibling.nextSibling;
+    }
+
+    return siblings;
+};
 
 function addTask() {
     let value = document.querySelector('input[type=text]').value;
     const itemContainer = document.createElement('li');
     const item = document.createElement('p');
-    const compItem = document.createElement('input');
+    const compItem = document.createElement('button');
     const editItem = document.createElement('button');
     const deleteItem = document.createElement('button');
 
@@ -27,8 +42,8 @@ function addTask() {
     editItem.classList.add("edit-button");
     deleteItem.classList.add("delete-button");
 
-    compItem.setAttribute('type', 'checkbox');
     item.innerHTML = value;
+    compItem.innerHTML = "Done";
     editItem.innerHTML = "Edit";
     deleteItem.innerHTML = "Delete";
 
@@ -43,68 +58,82 @@ function addTask() {
 }
 
 function completeTask(event) {
-    const checkbox = event.target;
+    const completeButton = event.target;
+    const task = completeButton.nextElementSibling;
+    const siblings = getAllSiblings(completeButton);
 
-    if (checkbox.className != 'comp-button') return;
-
-    const item = checkbox.nextElementSibling;
-
-    if (checkbox.checked) {
-        item.style.textDecoration = "line-through";
-    } else {
-        item.style.textDecoration = "none";
+    if (completeButton.classList.contains('comp-button')) {
+        task.style.textDecoration = "line-through";
+        completeButton.remove();
+        siblings[1].remove();
+        siblings[2].remove();
     }
+    else return;
 }
 
 function editTask(event) {
     const editButton = event.target;
-    const taskTxt = editButton.previousElementSibling;
-    const editItem = document.createElement('input');
-    const deleteButtton = editButton.nextElementSibling;
-    editItem.setAttribute('type', 'text');
+    const editTaskInput = document.createElement('input');
+    editTaskInput.setAttribute('type', 'text');
 
-    if (editButton.className != 'edit-button') return;
+    if (editButton.classList.contains('edit-button')) {
+        const siblings = getAllSiblings(editButton);
+        const task = siblings[1];
+        const deleteButtton = siblings[2];
+        const completeButton = siblings[0];
 
-    editItem.value = taskTxt.innerHTML;
-    taskTxt.replaceWith(editItem);
-    taskTxt.remove();
-    editButton.innerHTML = "Save";
-    editButton.classList.remove("edit-button");
-    editButton.classList.add("save-button");
-    deleteButtton.setAttribute('disabled','');
+        editTaskInput.value = task.innerHTML;
+        task.replaceWith(editTaskInput);
+        task.remove();
+        editButton.innerHTML = "Save";
+        editButton.classList.remove("edit-button");
+        editButton.classList.add("save-button");
+        deleteButtton.setAttribute('hidden', '');
+        completeButton.setAttribute('hidden', '');
 
-    tasksList.removeEventListener('click', editTask);
-    tasksList.addEventListener('click', saveTask);
+        tasksList.removeEventListener('click', editTask);
+        tasksList.addEventListener('click', saveTask);
+    }
+    else return;
 }
 
 function saveTask(event) {
     const saveButton = event.target;
-    const editItem = saveButton.previousElementSibling;
-    const taskTxt = document.createElement('p');
-    const deleteButtton = saveButton.nextElementSibling;
+    const task = document.createElement('p');
 
-    if (saveButton.className != 'save-button') return;
+    if (saveButton.classList.contains('save-button')) {
+        const siblings = getAllSiblings(saveButton);
+        const editTaskInput = siblings[1];
+        const deleteButtton = siblings[2];
+        const completeButton = siblings[0];
 
-    taskTxt.innerHTML = editItem.value;
-    editItem.replaceWith(taskTxt);
-    editItem.remove();
-    saveButton.innerHTML = "Edit";
-    saveButton.classList.add("edit-button");
-    saveButton.classList.remove("save-button");
-    deleteButtton.removeAttribute('disabled','');
+        task.innerHTML = editTaskInput.value;
+        editTaskInput.replaceWith(task);
+        editTaskInput.remove();
+        saveButton.innerHTML = "Edit";
+        saveButton.classList.add("edit-button");
+        saveButton.classList.remove("save-button");
+        deleteButtton.removeAttribute('hidden', '');
+        completeButton.removeAttribute('hidden', '');
 
-    tasksList.removeEventListener('click', saveTask);
-    tasksList.addEventListener('click', editTask);
+        tasksList.removeEventListener('click', saveTask);
+        tasksList.addEventListener('click', editTask);
+    }
+    else return;
 }
 
 function deleteTask(event) {
-    if (event.target.className != 'delete-button') return;
 
-    const item = event.target.closest('li');
-    item.remove();
+    if (event.target.classList.contains('delete-button')) {
+        const item = event.target.closest('li');
+        item.remove();
+    }
+    else return;
 }
+
+
 
 tasksList.addEventListener('click', editTask);
 tasksList.addEventListener('click', completeTask);
 tasksList.addEventListener('click', deleteTask);
-submitTask.addEventListener('click', addTask);
+createTask.addEventListener('click', addTask);
