@@ -1,3 +1,40 @@
+body {
+    box-sizing: border-box;
+}
+.header {
+    text-align: center;
+}
+.tasks-container {
+    display: grid;
+    grid-gap: 15px;
+
+    justify-content: center;
+    align-items: center;
+}
+.task-input {
+    min-width: 350px;
+    max-width: 350px;
+}
 .tasks-list {
     list-style: none;
+    padding: 0;
+}
+.task {
+    min-width: 100px;
+    max-width: 100px;
+    margin: 0px;
+    overflow: hidden;
+}
+.button-container {
+    display: grid;
+    justify-content: center;
+}
+.create-button {
+    min-width: 100px;
+}
+
+.task-container {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px 60px;
+    grid-auto-rows: 20px;
 }

@@ -1,20 +1,33 @@
 const title = document.createElement('h1');
 const tasksContainer = document.createElement('div');
 const taskInput = document.createElement('input');
-const createTask = document.createElement('button');
+const createButtonContainer = document.createElement('div');
+const createButton = document.createElement('button');
 const tasksList = document.createElement('ul');
 
-taskInput.setAttribute('type', 'text');
-createTask.innerHTML = "+ Add";
 title.innerHTML = "TODOs";
+title.classList.add('header');
+
+tasksContainer.classList.add('tasks-container');
+
+taskInput.setAttribute('type', 'text');
+taskInput.classList.add('task-input');
+
+createButtonContainer.classList.add('button-container');
+
+createButton.classList.add('create-button');
+createButton.innerHTML = "+ Add";
+
+tasksList.classList.add('tasks-list');
+
 
 document.body.append(title);
 document.body.append(tasksContainer);
 tasksContainer.append(taskInput);
-tasksContainer.append(createTask);
+tasksContainer.append(createButtonContainer);
+createButtonContainer.append(createButton);
 tasksContainer.append(tasksList);
 
-tasksList.classList.add('tasks-list');
 
 function getAllSiblings(elem) {
     let siblings = [];
@@ -32,27 +45,29 @@ function getAllSiblings(elem) {
 
 function addTask() {
     let value = document.querySelector('input[type=text]').value;
-    const itemContainer = document.createElement('li');
-    const item = document.createElement('p');
-    const compItem = document.createElement('button');
-    const editItem = document.createElement('button');
-    const deleteItem = document.createElement('button');
+    const taskContainer = document.createElement('li');
+    const task = document.createElement('p');
+    const completeButton = document.createElement('button');
+    const editButton = document.createElement('button');
+    const deleteButton = document.createElement('button');
 
-    compItem.classList.add("comp-button");
-    editItem.classList.add("edit-button");
-    deleteItem.classList.add("delete-button");
+    taskContainer.classList.add('task-container')
+    task.classList.add('task');
+    completeButton.classList.add("comp-button");
+    editButton.classList.add("edit-button");
+    deleteButton.classList.add("delete-button");
 
-    item.innerHTML = value;
-    compItem.innerHTML = "Done";
-    editItem.innerHTML = "Edit";
-    deleteItem.innerHTML = "Delete";
+    task.innerHTML = value;
+    completeButton.innerHTML = "Done";
+    editButton.innerHTML = "Edit";
+    deleteButton.innerHTML = "Delete";
 
     if (value != '') {
-        tasksList.append(itemContainer);
-        itemContainer.append(compItem);
-        itemContainer.append(item);
-        itemContainer.append(editItem);
-        itemContainer.append(deleteItem);
+        tasksList.append(taskContainer);
+        taskContainer.append(completeButton);
+        taskContainer.append(task);
+        taskContainer.append(editButton);
+        taskContainer.append(deleteButton);
         document.querySelector('input').value = '';
     }
 }
@@ -88,8 +103,8 @@ function editTask(event) {
         editButton.innerHTML = "Save";
         editButton.classList.remove("edit-button");
         editButton.classList.add("save-button");
-        deleteButtton.setAttribute('hidden', '');
-        completeButton.setAttribute('hidden', '');
+        deleteButtton.setAttribute('disabled', '');
+        completeButton.setAttribute('disabled', '');
 
         tasksList.removeEventListener('click', editTask);
         tasksList.addEventListener('click', saveTask);
@@ -109,12 +124,13 @@ function saveTask(event) {
 
         task.innerHTML = editTaskInput.value;
         editTaskInput.replaceWith(task);
+        task.classList.add('task');
         editTaskInput.remove();
         saveButton.innerHTML = "Edit";
         saveButton.classList.add("edit-button");
         saveButton.classList.remove("save-button");
-        deleteButtton.removeAttribute('hidden', '');
-        completeButton.removeAttribute('hidden', '');
+        deleteButtton.removeAttribute('disabled', '');
+        completeButton.removeAttribute('disabled', '');
 
         tasksList.removeEventListener('click', saveTask);
         tasksList.addEventListener('click', editTask);
@@ -136,4 +152,4 @@ function deleteTask(event) {
 tasksList.addEventListener('click', editTask);
 tasksList.addEventListener('click', completeTask);
 tasksList.addEventListener('click', deleteTask);
-createTask.addEventListener('click', addTask);
+createButton.addEventListener('click', addTask);
