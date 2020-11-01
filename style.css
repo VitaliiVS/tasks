@@ -1,40 +1,59 @@
 body {
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 .header {
     text-align: center;
 }
-.tasks-container {
+.container {
     display: grid;
     grid-gap: 15px;
-
+    grid-template-columns: 325px 20px;
     justify-content: center;
     align-items: center;
 }
-.task-input {
-    min-width: 350px;
-    max-width: 350px;
-}
+
 .tasks-list {
     list-style: none;
     padding: 0;
 }
 .task {
-    min-width: 100px;
-    max-width: 180px;
+    min-width: 245px;
+    max-width: 245px;
     margin: 0px;
     overflow: hidden;
-}
-.button-container {
-    display: grid;
-    justify-content: center;
-}
-.create-button {
-    min-width: 100px;
+    font-size: 1.125em;
 }
 
 .task-container {
     display: grid;
-    grid-template-columns: 60px 1fr 60px 60px;
+    grid-template-columns: 20px 245px 20px 20px;
     grid-auto-rows: 20px;
+    grid-gap: 15px;
+    margin: 5px 0;
+}
+
+a {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    transform: scale(1.2);
+    transition: all 0.5s ease-in-out;
+}
+
+.create-button:hover {
+    color: green;
+}
+
+.edit-button:hover {
+    color: blue;
+}
+.save-button:hover {
+    color: blue;
+}
+.delete-button:hover {
+    color: red;
 }

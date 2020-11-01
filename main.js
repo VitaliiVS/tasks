@@ -1,22 +1,19 @@
 const title = document.createElement('h1');
 const tasksContainer = document.createElement('div');
 const taskInput = document.createElement('input');
-const createButtonContainer = document.createElement('div');
-const createButton = document.createElement('button');
+const createButton = document.createElement('a');
 const tasksList = document.createElement('ul');
 
 title.innerHTML = "TODOs";
 title.classList.add('header');
 
-tasksContainer.classList.add('tasks-container');
+tasksContainer.classList.add('container');
 
 taskInput.setAttribute('type', 'text');
 taskInput.classList.add('task-input');
 
-createButtonContainer.classList.add('button-container');
-
-createButton.classList.add('create-button');
-createButton.innerHTML = "+ Add";
+createButton.setAttribute('href', '#');
+createButton.classList.add("create-button","far","fa-plus-square");
 
 tasksList.classList.add('tasks-list');
 
@@ -24,8 +21,7 @@ tasksList.classList.add('tasks-list');
 document.body.append(title);
 document.body.append(tasksContainer);
 tasksContainer.append(taskInput);
-tasksContainer.append(createButtonContainer);
-createButtonContainer.append(createButton);
+tasksContainer.append(createButton);
 tasksContainer.append(tasksList);
 
 
@@ -47,20 +43,23 @@ function addTask() {
     let value = document.querySelector('input[type=text]').value;
     const taskContainer = document.createElement('li');
     const task = document.createElement('p');
-    const completeButton = document.createElement('button');
-    const editButton = document.createElement('button');
-    const deleteButton = document.createElement('button');
+    
+    const completeButton = document.createElement('a');
+    const editButton = document.createElement('a');
+    const deleteButton = document.createElement('a');
 
-    taskContainer.classList.add('task-container')
+    taskContainer.classList.add('task-container');
     task.classList.add('task');
-    completeButton.classList.add("comp-button");
-    editButton.classList.add("edit-button");
-    deleteButton.classList.add("delete-button");
-
     task.innerHTML = value;
-    completeButton.innerHTML = "Done";
-    editButton.innerHTML = "Edit";
-    deleteButton.innerHTML = "Delete";
+
+    completeButton.classList.add("comp-button","far","fa-check-square");
+    completeButton.setAttribute('href', '#');
+
+    editButton.classList.add("edit-button","far","fa-edit");
+    editButton.setAttribute('href', '#');
+
+    deleteButton.classList.add("delete-button","far","fa-trash-alt");
+    deleteButton.setAttribute('href', '#');
 
     if (value != '') {
         tasksList.append(taskContainer);
@@ -68,7 +67,7 @@ function addTask() {
         taskContainer.append(task);
         taskContainer.append(editButton);
         taskContainer.append(deleteButton);
-        document.querySelector('input').value = '';
+        document.querySelector('.task-input').value = '';
     }
 }
 
@@ -100,9 +99,8 @@ function editTask(event) {
         editTaskInput.value = task.innerHTML;
         task.replaceWith(editTaskInput);
         task.remove();
-        editButton.innerHTML = "Save";
-        editButton.classList.remove("edit-button");
-        editButton.classList.add("save-button");
+        editButton.classList.remove("edit-button","fa-edit");
+        editButton.classList.add("save-button","fa-save");
         deleteButtton.setAttribute('disabled', '');
         completeButton.setAttribute('disabled', '');
 
@@ -126,9 +124,8 @@ function saveTask(event) {
         editTaskInput.replaceWith(task);
         task.classList.add('task');
         editTaskInput.remove();
-        saveButton.innerHTML = "Edit";
-        saveButton.classList.add("edit-button");
-        saveButton.classList.remove("save-button");
+        saveButton.classList.add("edit-button","fa-edit");
+        saveButton.classList.remove("save-button","fa-save");
         deleteButtton.removeAttribute('disabled', '');
         completeButton.removeAttribute('disabled', '');
 
