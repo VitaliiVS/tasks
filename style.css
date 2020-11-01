@@ -33,15 +33,23 @@ body {
     margin: 5px 0;
 }
 
-a {
+button {
     font-size: 1.5em;
     text-decoration: none;
     color: black;
+    border: none;
+    background-color: white;
+    cursor: pointer;
 }
 
-a:hover {
+button:hover {
     transform: scale(1.2);
     transition: all 0.5s ease-in-out;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .create-button:hover {
@@ -56,4 +64,9 @@ a:hover {
 }
 .delete-button:hover {
     color: red;
+}
+
+.disabled {
+    color: gray;
+    pointer-events: none;
 }

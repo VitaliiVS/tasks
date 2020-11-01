@@ -1,7 +1,7 @@
 const title = document.createElement('h1');
 const tasksContainer = document.createElement('div');
 const taskInput = document.createElement('input');
-const createButton = document.createElement('a');
+const createButton = document.createElement('button');
 const tasksList = document.createElement('ul');
 
 title.innerHTML = "TODOs";
@@ -44,9 +44,9 @@ function addTask() {
     const taskContainer = document.createElement('li');
     const task = document.createElement('p');
     
-    const completeButton = document.createElement('a');
-    const editButton = document.createElement('a');
-    const deleteButton = document.createElement('a');
+    const completeButton = document.createElement('button');
+    const editButton = document.createElement('button');
+    const deleteButton = document.createElement('button');
 
     taskContainer.classList.add('task-container');
     task.classList.add('task');
@@ -101,9 +101,10 @@ function editTask(event) {
         task.remove();
         editButton.classList.remove("edit-button","fa-edit");
         editButton.classList.add("save-button","fa-save");
+        deleteButtton.classList.add("disabled");
+        completeButton.classList.add("disabled");
         deleteButtton.setAttribute('disabled', '');
         completeButton.setAttribute('disabled', '');
-
         tasksList.removeEventListener('click', editTask);
         tasksList.addEventListener('click', saveTask);
     }
@@ -126,6 +127,8 @@ function saveTask(event) {
         editTaskInput.remove();
         saveButton.classList.add("edit-button","fa-edit");
         saveButton.classList.remove("save-button","fa-save");
+        deleteButtton.classList.remove("disabled");
+        completeButton.classList.remove("disabled");
         deleteButtton.removeAttribute('disabled', '');
         completeButton.removeAttribute('disabled', '');
 
