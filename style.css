@@ -24,7 +24,10 @@ body {
     overflow: hidden;
     font-size: 1.125em;
 }
-
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
 .task-container {
     display: grid;
     grid-template-columns: 20px 245px 20px 20px;

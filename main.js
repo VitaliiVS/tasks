@@ -1,155 +1,151 @@
-const title = document.createElement('h1');
-const tasksContainer = document.createElement('div');
-const taskInput = document.createElement('input');
-const createButton = document.createElement('button');
-const tasksList = document.createElement('ul');
+const title = document.createElement('h1')
+const container = document.createElement('div')
+const taskInput = document.createElement('input')
+const createButton = document.createElement('button')
+const tasksList = document.createElement('ul')
+const editTaskInput = document.createElement('input')
 
-title.innerHTML = "TODOs";
-title.classList.add('header');
+title.classList.add('header')
+title.textContent = "TODOs"
 
-tasksContainer.classList.add('container');
+container.classList.add('container')
+container.append(taskInput)
+container.append(createButton)
+container.append(tasksList)
 
-taskInput.setAttribute('type', 'text');
-taskInput.classList.add('task-input');
+taskInput.classList.add('task-input')
+taskInput.setAttribute('type', 'text')
 
-createButton.setAttribute('href', '#');
-createButton.classList.add("create-button","far","fa-plus-square");
+createButton.classList.add("create-button","far","fa-plus-square")
 
-tasksList.classList.add('tasks-list');
+tasksList.classList.add('tasks-list')
 
+editTaskInput.setAttribute('type', 'text')
 
-document.body.append(title);
-document.body.append(tasksContainer);
-tasksContainer.append(taskInput);
-tasksContainer.append(createButton);
-tasksContainer.append(tasksList);
-
+document.body.append(title)
+document.body.append(container)
 
 function getAllSiblings(elem) {
-    let siblings = [];
-    let sibling = elem.parentNode.firstChild;
+    const siblings = []
+    let sibling = elem.parentNode.firstChild
 
     while (sibling) {
         if (sibling.nodeType === 1 && sibling !== elem) {
-            siblings.push(sibling);
+            siblings.push(sibling)
         }
-        sibling = sibling.nextSibling;
+        sibling = sibling.nextSibling
     }
 
-    return siblings;
-};
+    return siblings
+}
 
 function addTask() {
-    let value = document.querySelector('input[type=text]').value;
-    const taskContainer = document.createElement('li');
-    const task = document.createElement('p');
+    const taskContainer = document.createElement('li')
+    const task = document.createElement('p')
     
-    const completeButton = document.createElement('button');
-    const editButton = document.createElement('button');
-    const deleteButton = document.createElement('button');
+    const completeButton = document.createElement('input')
+    const editButton = document.createElement('button')
+    const deleteButton = document.createElement('button')
 
-    taskContainer.classList.add('task-container');
-    task.classList.add('task');
-    task.innerHTML = value;
+    completeButton.setAttribute('type', 'checkbox')
+    completeButton.classList.add("comp-button")
+    editButton.classList.add("edit-button","far","fa-edit")
+    deleteButton.classList.add("delete-button","far","fa-trash-alt")
+    taskContainer.classList.add('task-container')
+    task.classList.add('task')
+    task.textContent = taskInput.value
 
-    completeButton.classList.add("comp-button","far","fa-check-square");
-    completeButton.setAttribute('href', '#');
+    taskContainer.append(completeButton)
+    taskContainer.append(task)
+    taskContainer.append(editButton)
+    taskContainer.append(deleteButton)
 
-    editButton.classList.add("edit-button","far","fa-edit");
-    editButton.setAttribute('href', '#');
-
-    deleteButton.classList.add("delete-button","far","fa-trash-alt");
-    deleteButton.setAttribute('href', '#');
-
-    if (value != '') {
-        tasksList.append(taskContainer);
-        taskContainer.append(completeButton);
-        taskContainer.append(task);
-        taskContainer.append(editButton);
-        taskContainer.append(deleteButton);
-        document.querySelector('.task-input').value = '';
+    if (taskInput.value != '') {
+        tasksList.append(taskContainer)
+        taskInput.value = ''
     }
 }
 
 function completeTask(event) {
-    const completeButton = event.target;
-    const task = completeButton.nextElementSibling;
-    const siblings = getAllSiblings(completeButton);
+    const completeButton = event.target
+    const siblings = getAllSiblings(completeButton)
 
-    if (completeButton.classList.contains('comp-button')) {
-        task.style.textDecoration = "line-through";
-        completeButton.remove();
-        siblings[1].remove();
-        siblings[2].remove();
+    if (completeButton.classList.contains('comp-button') && completeButton.checked == true) {
+        siblings[0].classList.add("completed")
+        siblings[1].classList.add("disabled")
+        siblings[1].setAttribute('disabled', '')
     }
-    else return;
+    else if (completeButton.classList.contains('comp-button') && completeButton.checked == false){
+        siblings[0].classList.remove("completed")
+        siblings[1].classList.remove("disabled")
+        siblings[1].removeAttribute('disabled', '')
+    }
+    else return
 }
 
 function editTask(event) {
-    const editButton = event.target;
-    const editTaskInput = document.createElement('input');
-    editTaskInput.setAttribute('type', 'text');
+    const editButton = event.target
 
     if (editButton.classList.contains('edit-button')) {
-        const siblings = getAllSiblings(editButton);
-        const task = siblings[1];
-        const deleteButtton = siblings[2];
-        const completeButton = siblings[0];
+        const siblings = getAllSiblings(editButton)
+        const task = siblings[1]
+        const deleteButtton = siblings[2]
+        const completeButton = siblings[0]
 
-        editTaskInput.value = task.innerHTML;
-        task.replaceWith(editTaskInput);
-        task.remove();
-        editButton.classList.remove("edit-button","fa-edit");
-        editButton.classList.add("save-button","fa-save");
-        deleteButtton.classList.add("disabled");
-        completeButton.classList.add("disabled");
-        deleteButtton.setAttribute('disabled', '');
-        completeButton.setAttribute('disabled', '');
-        tasksList.removeEventListener('click', editTask);
-        tasksList.addEventListener('click', saveTask);
+        editTaskInput.value = task.textContent
+        task.replaceWith(editTaskInput)
+        task.remove()
+        editButton.classList.remove("edit-button","fa-edit")
+        editButton.classList.add("save-button","fa-save")
+        deleteButtton.classList.add("disabled")
+        completeButton.classList.add("disabled")
+        deleteButtton.setAttribute('disabled', '')
+        completeButton.setAttribute('disabled', '')
+        tasksList.removeEventListener('click', editTask)
+        tasksList.addEventListener('click', saveTask)
     }
-    else return;
+    else return
 }
 
 function saveTask(event) {
-    const saveButton = event.target;
-    const task = document.createElement('p');
+    const saveButton = event.target
+    const task = document.createElement('p')
 
     if (saveButton.classList.contains('save-button')) {
-        const siblings = getAllSiblings(saveButton);
-        const editTaskInput = siblings[1];
-        const deleteButtton = siblings[2];
-        const completeButton = siblings[0];
+        const siblings = getAllSiblings(saveButton)
+        const editTaskInput = siblings[1]
+        const deleteButtton = siblings[2]
+        const completeButton = siblings[0]
 
-        task.innerHTML = editTaskInput.value;
-        editTaskInput.replaceWith(task);
-        task.classList.add('task');
-        editTaskInput.remove();
-        saveButton.classList.add("edit-button","fa-edit");
-        saveButton.classList.remove("save-button","fa-save");
-        deleteButtton.classList.remove("disabled");
-        completeButton.classList.remove("disabled");
-        deleteButtton.removeAttribute('disabled', '');
-        completeButton.removeAttribute('disabled', '');
+        task.textContent = editTaskInput.value
+        editTaskInput.replaceWith(task)
+        task.classList.add('task')
+        editTaskInput.remove()
+        saveButton.classList.add("edit-button","fa-edit")
+        saveButton.classList.remove("save-button","fa-save")
+        deleteButtton.classList.remove("disabled")
+        completeButton.classList.remove("disabled")
+        deleteButtton.removeAttribute('disabled', '')
+        completeButton.removeAttribute('disabled', '')
 
-        tasksList.removeEventListener('click', saveTask);
-        tasksList.addEventListener('click', editTask);
+        tasksList.removeEventListener('click', saveTask)
+        tasksList.addEventListener('click', editTask)
     }
-    else return;
+    else return
 }
 
 function deleteTask(event) {
 
     if (event.target.classList.contains('delete-button')) {
-        const item = event.target.closest('li');
-        item.remove();
+        const item = event.target.closest('li')
+        item.remove()
     }
-    else return;
+    else return
 }
 
 
 
-tasksList.addEventListener('click', editTask);
-tasksList.addEventListener('click', completeTask);
-tasksList.addEventListener('click', deleteTask);
-createButton.addEventListener('click', addTask);
+tasksList.addEventListener('click', editTask)
+tasksList.addEventListener('click', completeTask)
+tasksList.addEventListener('click', deleteTask)
+createButton.addEventListener('click', addTask)
