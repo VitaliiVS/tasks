@@ -24,7 +24,7 @@ class Form {
         this.taskInput.classList.add('task-input')
         this.taskInput.setAttribute('type', 'text')
 
-        this.createButton.classList.add("create-button", "far", "fa-plus-square")
+        this.createButton.classList.add('create-button', 'far', 'fa-plus-square')
 
         this.tasksList.classList.add('tasks-list')
 
@@ -52,9 +52,9 @@ class Task {
         const deleteButton = document.createElement('button')
 
         completeButton.setAttribute('type', 'checkbox')
-        completeButton.classList.add("comp-button")
-        editButton.classList.add("edit-button", "far", "fa-edit")
-        deleteButton.classList.add("delete-button", "far", "fa-trash-alt")
+        completeButton.classList.add('comp-button')
+        editButton.classList.add('edit-button', 'far', 'fa-edit')
+        deleteButton.classList.add('delete-button', 'far', 'fa-trash-alt')
         taskContainer.classList.add('task-container')
         task.classList.add('task')
         task.textContent = taskInput.value
@@ -97,13 +97,13 @@ class Task {
         const children = Task.getChildren(completeButton)
 
         if (completeButton.classList.contains('comp-button') && completeButton.checked == true) {
-            children[0].classList.add("completed")
-            children[1].classList.add("disabled")
+            children[0].classList.add('completed')
+            children[1].classList.add('disabled')
             children[1].setAttribute('disabled', '')
         }
         else if (completeButton.classList.contains('comp-button') && completeButton.checked == false) {
-            children[0].classList.remove("completed")
-            children[1].classList.remove("disabled")
+            children[0].classList.remove('completed')
+            children[1].classList.remove('disabled')
             children[1].removeAttribute('disabled', '')
         }
         else return
@@ -123,10 +123,10 @@ class Task {
             editTaskInput.value = task.textContent
             task.replaceWith(editTaskInput)
             task.remove()
-            editButton.classList.remove("edit-button", "fa-edit")
-            editButton.classList.add("save-button", "fa-save")
-            deleteButtton.classList.add("disabled")
-            completeButton.classList.add("disabled")
+            editButton.classList.remove('edit-button', 'fa-edit')
+            editButton.classList.add('save-button', 'fa-save')
+            deleteButtton.classList.add('disabled')
+            completeButton.classList.add('disabled')
             deleteButtton.setAttribute('disabled', '')
             completeButton.setAttribute('disabled', '')
             tasksList.removeEventListener('click', this.editTask)
@@ -149,10 +149,10 @@ class Task {
             editTaskInput.replaceWith(task)
             task.classList.add('task')
             editTaskInput.remove()
-            saveButton.classList.add("edit-button", "fa-edit")
-            saveButton.classList.remove("save-button", "fa-save")
-            deleteButtton.classList.remove("disabled")
-            completeButton.classList.remove("disabled")
+            saveButton.classList.add('edit-button', 'fa-edit')
+            saveButton.classList.remove('save-button', 'fa-save')
+            deleteButtton.classList.remove('disabled')
+            completeButton.classList.remove('disabled')
             deleteButtton.removeAttribute('disabled', '')
             completeButton.removeAttribute('disabled', '')
 
@@ -177,7 +177,7 @@ class Task {
 const form = new Form
 const task = new Task
 
-form.renderTaskForm("Tasks")
+form.renderTaskForm('Tasks')
 
 const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
