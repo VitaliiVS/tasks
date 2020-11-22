@@ -95,11 +95,9 @@ class Store {
 
     addTask = () => {
         const taskContainer = Store.createTask()
-        const tasksList = document.querySelector('.tasks-list')
         const taskInput = document.querySelector('.task-input')
 
         if (taskInput.value.trim() != '') {
-            tasksList.append(taskContainer)
             this.tasks.push(taskContainer)
             taskInput.value = ''
             this.update()
@@ -169,11 +167,13 @@ class Store {
             children[0].classList.add('completed')
             children[1].classList.add('disabled')
             children[1].setAttribute('disabled', '')
+            this.update()
         }
         else if (completeButton.classList.contains('comp-button') && completeButton.checked == false) {
             children[0].classList.remove('completed')
             children[1].classList.remove('disabled')
             children[1].removeAttribute('disabled', '')
+            this.update()
         }
         else return
     }
