@@ -1,46 +1,55 @@
 class Form {
-    constructor() {
+    constructor(name, tag, type) {
+        this.name = name
+        this.title = document.createElement(tag)
         this.container = document.createElement('div')
-        this.taskInput = document.createElement('input')
-        this.createButton = document.createElement('button')
         this.tasksList = document.createElement('ul')
-        this.editTaskInput = document.createElement('input')
+
+        this.type = type
     }
 
-
-    static createTitle = (text) => {
-        const title = document.createElement('h1')
-        title.classList.add('header')
-        title.textContent = text
-
-        return title
-    }
-
-    renderTaskForm = (text) => {
-        const title = Form.createTitle(text)
-
+    renderForm() {
+        this.title.textContent = this.name
+        this.title.classList.add('header')
         this.container.classList.add('container')
-        this.taskInput.classList.add('task-input')
-        this.taskInput.setAttribute('type', 'text')
-        this.createButton.classList.add('create-button', 'far', 'fa-plus-square')
-        this.tasksList.classList.add('tasks-list')
-
-        this.container.append(this.taskInput)
-        this.container.append(this.createButton)
         this.container.append(this.tasksList)
+        this.tasksList.classList.add(this.type)
 
-        document.body.append(title)
+        document.body.append(this.title)
         document.body.append(this.container)
     }
 }
 
+class TaskForm extends Form {
+    constructor(name, tag, type) {
+        super(name, tag, type)
+        this.taskInput = document.createElement('input')
+        this.createButton = document.createElement('button')
+        this.editTaskInput = document.createElement('input')
+    }
+
+    renderTaskForm = () => {
+        this.taskInput.classList.add('task-input')
+        this.taskInput.setAttribute('type', 'text')
+        this.createButton.classList.add('create-button', 'far', 'fa-plus-square')
+
+        this.container.append(this.taskInput)
+        this.container.append(this.createButton)
+
+        super.renderForm()
+    }
+
+}
+
 class Store {
-    constructor(elem) {
-        this.listElement = elem
+    constructor(tasks, completed) {
+        this.tasksList = tasks
+        this.completedList = completed
         this.tasks = []
     }
 
     static renderTask = (task) => {
+
         const taskContainer = document.createElement('li')
         const taskLabel = document.createElement('p')
         const completeButton = document.createElement('input')
@@ -59,14 +68,13 @@ class Store {
 
 
         if (task.isCompleted == true) {
-            completeButton.setAttribute('checked','')
+            completeButton.setAttribute('checked', '')
             taskLabel.classList.add('completed')
-            editButton.classList.add('disabled')
-            editButton.setAttribute('disabled', '')
+            editButton.classList.add('hidden')
         }
 
         taskContainer.append(completeButton)
-        
+
         if (task.editView == true) {
             editTaskInput.value = task.taskLabel
             editButton.classList.add('save-button', 'fa-save')
@@ -87,27 +95,30 @@ class Store {
         return taskContainer
     }
 
-    static getMaxId = (arr) => {
-        const newArr = []
-        arr.forEach(x => newArr.push(x.taskId))
-
-        return Math.max.apply(null, newArr)
-    }
-
     getTaskId = (task) => {
         const id = +task.dataset.id
         const taskIndex = this.tasks.findIndex(x => x.taskId === id)
-        
+
         return taskIndex
     }
 
     update = () => {
-        while (this.listElement.firstChild) {
-            this.listElement.removeChild(this.listElement.firstChild)
+        while (this.tasksList.firstChild) {
+            this.tasksList.removeChild(this.tasksList.firstChild)
         }
+
+        while (this.completedList.firstChild) {
+            this.completedList.removeChild(this.completedList.firstChild)
+        }
+
         for (const task of this.tasks) {
-            const item = Store.renderTask(task) 
-            this.listElement.append(item)
+            if (task.isCompleted == false && task.isDeleted != true) {
+                const item = Store.renderTask(task)
+                this.tasksList.append(item)
+            } else if (task.isCompleted == true && task.isDeleted != true) {
+                const item = Store.renderTask(task)
+                this.completedList.append(item)
+            }
         }
     }
 
@@ -116,13 +127,10 @@ class Store {
         const taskInput = document.querySelector('.task-input')
         task.taskId = this.tasks.length + 1
 
-        if (this.tasks.some(x => x.taskId === task.taskId)) {
-            task.taskId = Store.getMaxId(this.tasks) + 1
-        }
-
         task.taskLabel = taskInput.value
         task.isCompleted = false
         task.editView = false
+        task.isDeleted = false
 
         if (task.taskLabel.trim() != '') {
             this.tasks.push(task)
@@ -189,7 +197,7 @@ class Store {
             const task = event.target.closest('li')
             const taskId = this.getTaskId(task)
 
-            this.tasks.splice(taskId, 1)
+            this.tasks[taskId].isDeleted = true
             this.update()
         }
         else return
@@ -197,16 +205,22 @@ class Store {
 
 }
 
-const form = new Form
+const tasksForm = new TaskForm('Tasks', 'h1', 'tasks-list')
+const completedForm = new Form('Completed Tasks', 'h2', 'completed-list')
 
-form.renderTaskForm('Tasks')
+tasksForm.renderTaskForm()
+completedForm.renderForm()
 
 const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
+const completedList = document.querySelector('.completed-list')
 
-const store = new Store(tasksList)
+const store = new Store(tasksList, completedList)
 
 createButton.addEventListener('click', store.createTask)
 tasksList.addEventListener('click', store.completeTask)
 tasksList.addEventListener('click', store.editTask)
 tasksList.addEventListener('click', store.deleteTask)
+
+completedList.addEventListener('click', store.completeTask)
+completedList.addEventListener('click', store.deleteTask)
