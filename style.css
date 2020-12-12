@@ -34,7 +34,7 @@ body {
     grid-template-columns: 20px 245px 20px 20px;
     grid-auto-rows: 20px;
     grid-gap: 15px;
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
 button {
@@ -46,7 +46,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+button:hover, button:focus {
     transform: scale(1.2);
     transition: all 0.5s ease-in-out;
 }
@@ -56,25 +56,21 @@ button:focus {
     box-shadow: none;
 }
 
-.create-button:hover {
+.create-button:hover, .create-button:focus {
     color: green;
 }
 
-.edit-button:hover {
+.edit-button:hover, .edit-button:focus {
     color: blue;
 }
-.save-button:hover {
+.save-button:hover, .save-button:focus {
     color: blue;
 }
-.delete-button:hover {
+.delete-button:hover, .delete-button:focus {
     color: red;
 }
 
 .disabled {
     color: gray;
     pointer-events: none;
-}
-
-.hidden {
-    display: none !important;
 }

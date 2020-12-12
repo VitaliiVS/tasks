@@ -1,14 +1,47 @@
+class EventEmitter {
+    constructor() {
+        this.events = {}
+    }
+
+    on(eventName, fn) {
+        if (!this.events[eventName]) {
+            this.events[eventName] = []
+        }
+
+        this.events[eventName].push(fn)
+
+        return () => {
+            this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn)
+        }
+    }
+
+    emit(eventName, data) {
+        const event = this.events[eventName]
+        if (event) {
+            event.forEach(fn => { fn.call(null, data) })
+        }
+    }
+}
+
 class Form {
     constructor(name, tag, type) {
         this.name = name
         this.title = document.createElement(tag)
         this.container = document.createElement('div')
         this.tasksList = document.createElement('ul')
+        this.taskInput = document.createElement('input')
+        this.createButton = document.createElement('button')
+        this.editTaskInput = document.createElement('input')
 
         this.type = type
     }
 
     renderForm() {
+        this.taskInput.classList.add('task-input')
+        this.taskInput.setAttribute('type', 'text')
+        this.createButton.classList.add('create-button', 'far', 'fa-plus-square')
+        this.container.append(this.taskInput)
+        this.container.append(this.createButton)
         this.title.textContent = this.name
         this.title.classList.add('header')
         this.container.classList.add('container')
@@ -20,207 +53,200 @@ class Form {
     }
 }
 
-class TaskForm extends Form {
-    constructor(name, tag, type) {
-        super(name, tag, type)
-        this.taskInput = document.createElement('input')
-        this.createButton = document.createElement('button')
-        this.editTaskInput = document.createElement('input')
+class Render {
+    constructor(tasksList) {
+        this.tasksList = tasksList
     }
 
-    renderTaskForm = () => {
-        this.taskInput.classList.add('task-input')
-        this.taskInput.setAttribute('type', 'text')
-        this.createButton.classList.add('create-button', 'far', 'fa-plus-square')
+    createTask = (task) => {
 
-        this.container.append(this.taskInput)
-        this.container.append(this.createButton)
+        if (task.isDeleted != true) {
+            const taskContainer = document.createElement('li')
+            const taskLabel = document.createElement('p')
+            const completeButton = document.createElement('input')
+            const editButton = document.createElement('button')
+            const deleteButton = document.createElement('button')
+            const editTaskInput = document.createElement('input')
 
-        super.renderForm()
-    }
+            editTaskInput.setAttribute('type', 'text')
+            editTaskInput.classList.add('edit-view')
+            completeButton.setAttribute('type', 'checkbox')
+            completeButton.classList.add('comp-button')
+            editButton.classList.add('far')
+            deleteButton.classList.add('delete-button', 'far', 'fa-trash-alt')
+            taskContainer.classList.add('task-container')
+            taskContainer.setAttribute('data-id', task.taskId)
+            taskLabel.classList.add('task')
 
-}
+            if (task.isCompleted == true) {
+                completeButton.setAttribute('checked', '')
+                taskLabel.classList.add('completed')
+                editButton.classList.add('disabled')
+            }
 
-class Store {
-    constructor(tasks, completed) {
-        this.tasksList = tasks
-        this.completedList = completed
-        this.tasks = []
-    }
+            taskContainer.append(completeButton)
 
-    static renderTask = (task) => {
+            if (task.editView == true) {
+                editTaskInput.value = task.taskLabel
+                editButton.classList.add('save-button', 'fa-save')
+                deleteButton.classList.add('disabled')
+                completeButton.classList.add('disabled')
+                deleteButton.setAttribute('disabled', '')
+                completeButton.setAttribute('disabled', '')
+                taskContainer.append(editTaskInput)
+            } else if (task.editView == false) {
+                taskLabel.textContent = task.taskLabel
+                editButton.classList.add('edit-button', 'fa-edit')
+                taskContainer.append(taskLabel)
+            }
 
-        const taskContainer = document.createElement('li')
-        const taskLabel = document.createElement('p')
-        const completeButton = document.createElement('input')
-        const editButton = document.createElement('button')
-        const deleteButton = document.createElement('button')
-        const editTaskInput = document.createElement('input')
+            taskContainer.append(editButton)
+            taskContainer.append(deleteButton)
 
-        editTaskInput.setAttribute('type', 'text')
-        completeButton.setAttribute('type', 'checkbox')
-        completeButton.classList.add('comp-button')
-        editButton.classList.add('far')
-        deleteButton.classList.add('delete-button', 'far', 'fa-trash-alt')
-        taskContainer.classList.add('task-container')
-        taskContainer.setAttribute('data-id', task.taskId)
-        taskLabel.classList.add('task')
-
-
-        if (task.isCompleted == true) {
-            completeButton.setAttribute('checked', '')
-            taskLabel.classList.add('completed')
-            editButton.classList.add('hidden')
+            this.tasksList.append(taskContainer)
         }
 
-        taskContainer.append(completeButton)
-
-        if (task.editView == true) {
-            editTaskInput.value = task.taskLabel
-            editButton.classList.add('save-button', 'fa-save')
-            deleteButton.classList.add('disabled')
-            completeButton.classList.add('disabled')
-            deleteButton.setAttribute('disabled', '')
-            completeButton.setAttribute('disabled', '')
-            taskContainer.append(editTaskInput)
-        } else if (task.editView == false) {
-            taskLabel.textContent = task.taskLabel
-            editButton.classList.add('edit-button', 'fa-edit')
-            taskContainer.append(taskLabel)
-        }
-
-        taskContainer.append(editButton)
-        taskContainer.append(deleteButton)
-
-        return taskContainer
+        else return
     }
 
-    getTaskId = (task) => {
-        const id = +task.dataset.id
-        const taskIndex = this.tasks.findIndex(x => x.taskId === id)
-
-        return taskIndex
-    }
-
-    update = () => {
+    render = (tasks) => {
         while (this.tasksList.firstChild) {
             this.tasksList.removeChild(this.tasksList.firstChild)
         }
-
-        while (this.completedList.firstChild) {
-            this.completedList.removeChild(this.completedList.firstChild)
-        }
-
-        for (const task of this.tasks) {
-            if (task.isCompleted == false && task.isDeleted != true) {
-                const item = Store.renderTask(task)
-                this.tasksList.append(item)
-            } else if (task.isCompleted == true && task.isDeleted != true) {
-                const item = Store.renderTask(task)
-                this.completedList.append(item)
-            }
+        for (const task of tasks) {
+            this.createTask(task)
         }
     }
+}
 
-    createTask = () => {
+class Store {
+    constructor(input) {
+        this.tasks = []
+        this.input = input
+    }
+
+    addTask = (input) => {
         const task = {}
-        const taskInput = document.querySelector('.task-input')
-        task.taskId = this.tasks.length + 1
 
-        task.taskLabel = taskInput.value
+        task.taskId = this.tasks.length + 1
+        task.taskLabel = input
         task.isCompleted = false
         task.editView = false
         task.isDeleted = false
 
-        if (task.taskLabel.trim() != '') {
-            this.tasks.push(task)
-            this.update()
-            taskInput.value = ''
+        this.tasks.push(task)
+    }
+
+    deleteTask = (id) => {
+        const taskId = this.tasks.findIndex(x => x.taskId === id)
+        this.tasks[taskId].isDeleted = true
+    }
+
+    completeTask = (id) => {
+        const taskId = this.tasks.findIndex(x => x.taskId === id)
+
+        if (this.tasks[taskId].isCompleted == true) {
+            this.tasks[taskId].isCompleted = false
+        }
+        else if (this.tasks[taskId].isCompleted == false) {
+            this.tasks[taskId].isCompleted = true
         }
     }
 
-    completeTask = (event) => {
-        const completeButton = event.target
-
-        if (completeButton.classList.contains('comp-button')) {
-            const task = event.target.closest('li')
-            const taskId = this.getTaskId(task)
-
-            if (completeButton.checked == true) {
-                this.tasks[taskId].isCompleted = true
-                this.update()
-            }
-            else if (completeButton.checked == false) {
-                this.tasks[taskId].isCompleted = false
-                this.update()
-            }
-        }
-
-        else return
-    }
-
-    editTask = (event) => {
-        const editButton = event.target
-
-        if (editButton.classList.contains('edit-button')) {
-            const task = event.target.closest('li')
-            const taskId = this.getTaskId(task)
-
+    editTask = (id, value) => {
+        const taskId = this.tasks.findIndex(x => x.taskId === id)
+        if (this.tasks[taskId].editView == false) {
+            this.tasks.forEach(task => task.editView = false)
             this.tasks[taskId].editView = true
-            tasksList.removeEventListener('click', this.editTask)
-            tasksList.addEventListener('click', this.saveTask)
-            this.update()
-        }
-        else return
-    }
-
-    saveTask = (event) => {
-        const saveButton = event.target
-
-        if (saveButton.classList.contains('save-button')) {
-            const task = event.target.closest('li')
-            const taskId = this.getTaskId(task)
-            const newTaskValue = task.children[1].value
-
+        } else if (this.tasks[taskId].editView == true) {
             this.tasks[taskId].editView = false
-            this.tasks[taskId].taskLabel = newTaskValue
-            tasksList.removeEventListener('click', this.saveTask)
-            tasksList.addEventListener('click', this.editTask)
-            this.update()
+            this.tasks[taskId].taskLabel = value
         }
-        else return
     }
 
-    deleteTask = (event) => {
-
-        if (event.target.classList.contains('delete-button')) {
-            const task = event.target.closest('li')
-            const taskId = this.getTaskId(task)
-
-            this.tasks[taskId].isDeleted = true
-            this.update()
-        }
-        else return
+    cancelEdit = () => {
+        this.tasks.forEach(task => task.editView = false)
     }
-
 }
 
-const tasksForm = new TaskForm('Tasks', 'h1', 'tasks-list')
-const completedForm = new Form('Completed Tasks', 'h2', 'completed-list')
+const emitter = new EventEmitter()
+const tasksForm = new Form('Tasks', 'h1', 'tasks-list')
 
-tasksForm.renderTaskForm()
-completedForm.renderForm()
+tasksForm.renderForm()
 
 const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
-const completedList = document.querySelector('.completed-list')
+const tasksInput = document.querySelector('.task-input')
 
-const store = new Store(tasksList, completedList)
+const store = new Store(tasksInput)
+const render = new Render(tasksList)
 
-createButton.addEventListener('click', store.createTask)
-tasksList.addEventListener('click', store.completeTask)
-tasksList.addEventListener('click', store.editTask)
-tasksList.addEventListener('click', store.deleteTask)
+emitter.on('list-changed', data => {
+    render.render(data.tasks)
+})
 
-completedList.addEventListener('click', store.completeTask)
-completedList.addEventListener('click', store.deleteTask)
+createButton.addEventListener('click', () => {
+    if (tasksInput.value.trim() != '') {
+        store.addTask(tasksInput.value)
+        emitter.emit('list-changed', { tasks: store.tasks })
+    }
+
+    tasksInput.value = ''
+})
+
+tasksInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+        if (tasksInput.value.trim() != '') {
+            store.addTask(tasksInput.value)
+            emitter.emit('list-changed', { tasks: store.tasks })
+        }
+
+        tasksInput.value = ''
+    }
+})
+
+tasksList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delete-button')) {
+        const taskId = +event.target.closest('li').dataset.id
+        store.deleteTask(taskId)
+        emitter.emit('list-changed', { tasks: store.tasks })
+    }
+})
+
+tasksList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('comp-button')) {
+        const taskId = +event.target.closest('li').dataset.id
+        store.completeTask(taskId)
+        emitter.emit('list-changed', { tasks: store.tasks })
+    }
+})
+
+tasksList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('edit-button')) {
+        const taskId = +event.target.closest('li').dataset.id
+        store.editTask(taskId)
+        emitter.emit('list-changed', { tasks: store.tasks })
+    } else if (event.target.classList.contains('save-button')) {
+        const taskId = +event.target.closest('li').dataset.id
+        const value = event.target.previousSibling.value
+        store.editTask(taskId, value)
+        emitter.emit('list-changed', { tasks: store.tasks })
+    }
+})
+
+tasksList.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+        const task = document.querySelector('.edit-view')
+        const id = +task.closest('li').dataset.id
+        const value = task.value
+        store.editTask(id, value)
+        emitter.emit('list-changed', { tasks: store.tasks })
+    }
+})
+
+document.addEventListener('keyup', (event) => {
+    if (event.key === 'Escape') {
+        store.cancelEdit()
+        emitter.emit('list-changed', { tasks: store.tasks })
+    }
+})
