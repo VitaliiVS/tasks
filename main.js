@@ -135,11 +135,15 @@ class Store {
         task.isDeleted = false
 
         this.tasks.push(task)
+
+        return this.tasks
     }
 
     deleteTask = (id) => {
         const taskId = this.tasks.findIndex(x => x.taskId === id)
         this.tasks[taskId].isDeleted = true
+
+        return this.tasks
     }
 
     completeTask = (id) => {
@@ -151,6 +155,8 @@ class Store {
         else if (this.tasks[taskId].isCompleted == false) {
             this.tasks[taskId].isCompleted = true
         }
+
+        return this.tasks
     }
 
     editTask = (id, value) => {
@@ -162,10 +168,14 @@ class Store {
             this.tasks[taskId].editView = false
             this.tasks[taskId].taskLabel = value
         }
+        
+        return this.tasks
     }
 
     cancelEdit = () => {
         this.tasks.forEach(task => task.editView = false)
+
+        return this.tasks
     }
 }
 
@@ -187,8 +197,8 @@ emitter.on('list-changed', data => {
 
 createButton.addEventListener('click', () => {
     if (tasksInput.value.trim() != '') {
-        store.addTask(tasksInput.value)
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.addTask(tasksInput.value)
+        emitter.emit('list-changed', { tasks: tasks })
     }
 
     tasksInput.value = ''
@@ -197,8 +207,8 @@ createButton.addEventListener('click', () => {
 tasksInput.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
         if (tasksInput.value.trim() != '') {
-            store.addTask(tasksInput.value)
-            emitter.emit('list-changed', { tasks: store.tasks })
+            const tasks = store.addTask(tasksInput.value)
+            emitter.emit('list-changed', { tasks: tasks })
         }
 
         tasksInput.value = ''
@@ -208,29 +218,29 @@ tasksInput.addEventListener('keyup', (event) => {
 tasksList.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-button')) {
         const taskId = +event.target.closest('li').dataset.id
-        store.deleteTask(taskId)
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.deleteTask(taskId)
+        emitter.emit('list-changed', { tasks: tasks })
     }
 })
 
 tasksList.addEventListener('click', (event) => {
     if (event.target.classList.contains('comp-button')) {
         const taskId = +event.target.closest('li').dataset.id
-        store.completeTask(taskId)
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.completeTask(taskId)
+        emitter.emit('list-changed', { tasks: tasks })
     }
 })
 
 tasksList.addEventListener('click', (event) => {
     if (event.target.classList.contains('edit-button')) {
         const taskId = +event.target.closest('li').dataset.id
-        store.editTask(taskId)
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.editTask(taskId)
+        emitter.emit('list-changed', { tasks: tasks })
     } else if (event.target.classList.contains('save-button')) {
         const taskId = +event.target.closest('li').dataset.id
         const value = event.target.previousSibling.value
-        store.editTask(taskId, value)
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.editTask(taskId, value)
+        emitter.emit('list-changed', { tasks: tasks })
     }
 })
 
@@ -239,14 +249,14 @@ tasksList.addEventListener('keyup', (event) => {
         const task = document.querySelector('.edit-view')
         const id = +task.closest('li').dataset.id
         const value = task.value
-        store.editTask(id, value)
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.editTask(id, value)
+        emitter.emit('list-changed', { tasks: tasks })
     }
 })
 
 document.addEventListener('keyup', (event) => {
     if (event.key === 'Escape') {
-        store.cancelEdit()
-        emitter.emit('list-changed', { tasks: store.tasks })
+        const tasks = store.cancelEdit()
+        emitter.emit('list-changed', { tasks: tasks })
     }
 })
