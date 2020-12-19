@@ -3,22 +3,22 @@ class EventEmitter {
         this.events = {}
     }
 
-    on(eventName, fn) {
+    on(eventName, callback) {
         if (!this.events[eventName]) {
             this.events[eventName] = []
         }
 
-        this.events[eventName].push(fn)
+        this.events[eventName].push(callback)
 
         return () => {
-            this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn)
+            this.events[eventName] = this.events[eventName].filter(eventFn => callback !== eventFn)
         }
     }
 
     emit(eventName, data) {
         const event = this.events[eventName]
         if (event) {
-            event.forEach(fn => { fn.call(null, data) })
+            event.forEach(callback => { callback.call(null, data) })
         }
     }
 }
@@ -50,6 +50,16 @@ class Form {
 
         document.body.append(this.title)
         document.body.append(this.container)
+    }
+}
+
+class Task {
+    constructor(id, input) {
+        this.taskId = id
+        this.taskLabel = input
+        this.isCompleted = false
+        this.editView = false
+        this.isDeleted = false
     }
 }
 
@@ -120,19 +130,18 @@ class Render {
 }
 
 class Store {
-    constructor(input) {
+    constructor() {
         this.tasks = []
-        this.input = input
     }
 
     addTask = (input) => {
-        const task = {}
 
-        task.taskId = this.tasks.length + 1
-        task.taskLabel = input
-        task.isCompleted = false
-        task.editView = false
-        task.isDeleted = false
+        if (input.value.trim() === '') {
+            return
+        }
+
+        const taskId = this.tasks.length + 1
+        const task = new Task(taskId, input.value)
 
         this.tasks.push(task)
 
@@ -188,7 +197,7 @@ const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
 const tasksInput = document.querySelector('.task-input')
 
-const store = new Store(tasksInput)
+const store = new Store()
 const render = new Render(tasksList)
 
 emitter.on('list-changed', data => {
@@ -196,8 +205,8 @@ emitter.on('list-changed', data => {
 })
 
 createButton.addEventListener('click', () => {
-    if (tasksInput.value.trim() != '') {
-        const tasks = store.addTask(tasksInput.value)
+    const tasks = store.addTask(tasksInput)
+    if (tasks != undefined) {
         emitter.emit('list-changed', { tasks: tasks })
     }
 
@@ -206,8 +215,8 @@ createButton.addEventListener('click', () => {
 
 tasksInput.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
-        if (tasksInput.value.trim() != '') {
-            const tasks = store.addTask(tasksInput.value)
+        const tasks = store.addTask(tasksInput)
+        if (tasks != undefined) {
             emitter.emit('list-changed', { tasks: tasks })
         }
 
