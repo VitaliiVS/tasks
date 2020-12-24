@@ -62,7 +62,7 @@ class Task {
 }
 
 class Form extends Render {
-    constructor(tag, classNames, textContent, listType, root) {
+    constructor(tag, classNames, textContent, listType) {
         super()
 
         this.title = {
@@ -72,7 +72,6 @@ class Form extends Render {
         }
 
         this.listType = listType
-        this.root = root
     }
 
     renderForm = () => {
@@ -108,11 +107,11 @@ class Form extends Render {
         return container
     }
 
-    render = () => {
-        while (this.root.firstChild)
-            this.root.removeChild(this.root.firstChild)
+    render = (root) => {
+        while (root.firstChild)
+            root.removeChild(root.firstChild)
         const form = this.renderForm()
-        this.root.append(form)
+        root.append(form)
     }
 }
 
@@ -264,9 +263,9 @@ class Store {
 const root = document.querySelector('.root')
 
 const emitter = new EventEmitter()
-const tasksForm = new Form('h1', 'header', 'Tasks', 'tasks-list', root)
+const tasksForm = new Form('h1', 'header', 'Tasks', 'tasks-list')
 
-document.addEventListener('readystatechange', tasksForm.render())
+document.addEventListener('readystatechange', tasksForm.render(root))
 
 const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
