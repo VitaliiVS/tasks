@@ -56,7 +56,6 @@ class Task {
         this.taskId = id
         this.taskLabel = input
         this.isCompleted = false
-        this.editView = false
         this.isDeleted = false
     }
 }
@@ -89,7 +88,8 @@ class Form extends Render {
         })
         const taskInput = super.createElem({
             tag: 'input',
-            classNames: ['task-input']
+            classNames: ['task-input'],
+            attributes: { 'placeholder': 'What you want to do?' }
         })
         const createButton = super.createElem({
             tag: 'button',
@@ -206,7 +206,57 @@ class Store {
         this.tasks = []
     }
 
-    addTask = (input) => {
+    getData = async (url) => {
+        const response = await fetch(url)
+
+        if (response.ok) {
+            const content = await response.json()
+            this.tasks = content
+            this.tasks.forEach(x => x.editView = false)
+
+            return this.tasks
+        }
+    }
+
+    postData = async (url, data) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+        if (response.ok) {
+            const content = await response.json()
+            this.tasks = content
+            this.tasks.forEach(x => x.editView = false)
+
+            return this.tasks
+        }
+    }
+
+    putData = async (url, id, data) => {
+        const response = await fetch(`${url}/${id}`, {
+            method: 'PUT',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+        if (response.ok) {
+            const content = await response.json()
+            this.tasks = content
+            this.tasks.forEach(x => x.editView = false)
+
+            return this.tasks
+        }
+    }
+
+    addTask = (input, url) => {
 
         if (input.value.trim() === '') {
             return
@@ -215,42 +265,56 @@ class Store {
         const taskId = this.tasks.length + 1
         const task = new Task(taskId, input.value)
 
-        this.tasks.push(task)
-
-        return this.tasks
+        return this.postData(url, task)
     }
 
-    deleteTask = (id) => {
+    deleteTask = (id, url) => {
         const taskId = this.tasks.findIndex(x => x.taskId === id)
-        this.tasks[taskId].isDeleted = true
+        const task = this.tasks[taskId]
+        const internalId = task._id
+        task.isDeleted = true
+        delete task.editView
+        delete task._id
 
-        return this.tasks
+
+        return this.putData(url, internalId, task)
     }
 
-    completeTask = (id) => {
+    completeTask = (id, url) => {
         const taskId = this.tasks.findIndex(x => x.taskId === id)
+        const task = this.tasks[taskId]
+        const internalId = task._id
+        delete task.editView
+        delete task._id
 
-        if (this.tasks[taskId].isCompleted == true) {
-            this.tasks[taskId].isCompleted = false
+        if (task.isCompleted == true) {
+            task.isCompleted = false
+            return this.putData(url, internalId, task)
         }
-        else if (this.tasks[taskId].isCompleted == false) {
-            this.tasks[taskId].isCompleted = true
+        else if (task.isCompleted == false) {
+            task.isCompleted = true
+            return this.putData(url, internalId, task)
         }
-
-        return this.tasks
     }
 
-    editTask = (id, value) => {
+    editTask = (id, value, url) => {
         const taskId = this.tasks.findIndex(x => x.taskId === id)
-        if (this.tasks[taskId].editView == false) {
+        const task = this.tasks[taskId]
+        const internalId = task._id
+
+
+        if (task.editView == false) {
             this.tasks.forEach(task => task.editView = false)
-            this.tasks[taskId].editView = true
-        } else if (this.tasks[taskId].editView == true) {
-            this.tasks[taskId].editView = false
-            this.tasks[taskId].taskLabel = value
-        }
+            task.editView = true
 
-        return this.tasks
+            return this.tasks
+        } else if (task.editView == true) {
+            delete task.editView
+            delete task._id
+            task.taskLabel = value
+
+            return this.putData(url, internalId, task)
+        }
     }
 
     cancelEdit = () => {
@@ -261,9 +325,13 @@ class Store {
 }
 
 const root = document.querySelector('.root')
+const url = "http://127.0.0.1:3000/tasks"
 
 const emitter = new EventEmitter()
 const tasksForm = new Form('h1', 'header', 'Tasks', 'tasks-list')
+const store = new Store()
+const render = new RenderTask()
+
 
 document.addEventListener('readystatechange', tasksForm.render(root))
 
@@ -271,15 +339,19 @@ const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
 const tasksInput = document.querySelector('.task-input')
 
-const store = new Store()
-const render = new RenderTask()
+
+document.addEventListener('readystatechange', (async () => {
+    const tasks = await store.getData(url)
+    emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+})())
 
 emitter.on('list-changed', data => {
     render.render(data.root, data.tasks)
 })
 
-createButton.addEventListener('click', () => {
-    const tasks = store.addTask(tasksInput)
+createButton.addEventListener('click', async () => {
+    const tasks = await store.addTask(tasksInput, url)
+
     if (tasks != undefined) {
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
@@ -287,9 +359,9 @@ createButton.addEventListener('click', () => {
     tasksInput.value = ''
 })
 
-tasksInput.addEventListener('keyup', (event) => {
+tasksInput.addEventListener('keyup', async (event) => {
     if (event.key === 'Enter') {
-        const tasks = store.addTask(tasksInput)
+        const tasks = await store.addTask(tasksInput, url)
         if (tasks != undefined) {
             emitter.emit('list-changed', { tasks: tasks, root: tasksList })
         }
@@ -298,23 +370,23 @@ tasksInput.addEventListener('keyup', (event) => {
     }
 })
 
-tasksList.addEventListener('click', (event) => {
+tasksList.addEventListener('click', async (event) => {
     if (event.target.classList.contains('delete-button')) {
         const taskId = +event.target.closest('li').dataset.id
-        const tasks = store.deleteTask(taskId)
+        const tasks = await store.deleteTask(taskId, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
 })
 
-tasksList.addEventListener('click', (event) => {
+tasksList.addEventListener('click', async (event) => {
     if (event.target.classList.contains('comp-button')) {
         const taskId = +event.target.closest('li').dataset.id
-        const tasks = store.completeTask(taskId)
+        const tasks = await store.completeTask(taskId, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
 })
 
-tasksList.addEventListener('click', (event) => {
+tasksList.addEventListener('click', async (event) => {
     if (event.target.classList.contains('edit-button')) {
         const taskId = +event.target.closest('li').dataset.id
         const tasks = store.editTask(taskId)
@@ -322,7 +394,7 @@ tasksList.addEventListener('click', (event) => {
     } else if (event.target.classList.contains('save-button')) {
         const taskId = +event.target.closest('li').dataset.id
         const value = event.target.previousSibling.value
-        const tasks = store.editTask(taskId, value)
+        const tasks = await store.editTask(taskId, value, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
 })
