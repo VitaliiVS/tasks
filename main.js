@@ -103,7 +103,6 @@ class Form extends Render {
         container.append(title)
         container.append(tasksContainer)
 
-
         return container
     }
 
@@ -276,7 +275,6 @@ class Store {
         delete task.editView
         delete task._id
 
-
         return this.putData(url, internalId, task)
     }
 
@@ -332,13 +330,11 @@ const tasksForm = new Form('h1', 'header', 'Tasks', 'tasks-list')
 const store = new Store()
 const render = new RenderTask()
 
-
 document.addEventListener('readystatechange', tasksForm.render(root))
 
 const createButton = document.querySelector('.create-button')
 const tasksList = document.querySelector('.tasks-list')
 const tasksInput = document.querySelector('.task-input')
-
 
 document.addEventListener('readystatechange', (async () => {
     const tasks = await store.getData(url)
@@ -399,12 +395,12 @@ tasksList.addEventListener('click', async (event) => {
     }
 })
 
-tasksList.addEventListener('keyup', (event) => {
+tasksList.addEventListener('keyup', async (event) => {
     if (event.key === 'Enter') {
         const task = document.querySelector('.edit-view')
         const id = +task.closest('li').dataset.id
         const value = task.value
-        const tasks = store.editTask(id, value)
+        const tasks = await store.editTask(id, value, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
 })
