@@ -1,0 +1,21 @@
+{
+  "name": "tasks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "VitalyVS",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^2.0.1",
+    "koa-mongo": "^1.9.2",
+    "koa-router": "^10.0.0",
+    "koa2-cors": "^2.0.6",
+    "mongodb": "^3.6.3"
+  }
+}
