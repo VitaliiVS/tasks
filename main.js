@@ -98,6 +98,8 @@ class Form extends Render {
             classNames: ['create-button', 'far', 'fa-plus-square']
         })
 
+        document.title = this.title.textContent
+
         tasksContainer.append(taskInput)
         tasksContainer.append(createButton)
         tasksContainer.append(tasksList)
@@ -109,8 +111,9 @@ class Form extends Render {
     }
 
     render = (root) => {
-        while (root.firstChild)
+        while (root.firstChild) {
             root.removeChild(root.firstChild)
+        }
         const form = this.renderForm()
         root.append(form)
     }
