@@ -10,9 +10,7 @@ class EventEmitter {
 
         this.events[eventName].push(callback)
 
-        return () => {
-            this.events[eventName] = this.events[eventName].filter(eventFn => callback !== eventFn)
-        }
+        return () => this.unsubscribe(eventName, callback)
     }
 
     emit = (eventName, data) => {
@@ -20,6 +18,10 @@ class EventEmitter {
         if (event) {
             event.forEach(callback => { callback.call(null, data) })
         }
+    }
+
+    unsubscribe = (eventName, callback) => {
+        this.events[eventName] = this.events[eventName].filter(eventFn => callback !== eventFn)
     }
 }
 
@@ -341,7 +343,7 @@ document.addEventListener('readystatechange', (async () => {
     emitter.emit('list-changed', { tasks: tasks, root: tasksList })
 })())
 
-emitter.on('list-changed', data => {
+const unsubscribe = emitter.on('list-changed', data => {
     render.render(data.root, data.tasks)
 })
 
