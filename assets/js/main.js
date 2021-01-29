@@ -62,6 +62,17 @@ class Task {
     }
 }
 
+class ApiCall {
+    constructor(method, body) {
+        this.method = method
+        this.cache = 'no-cache'
+        this.headers = {
+            'Content-Type': 'application/json'
+        }
+        this.body = JSON.stringify(body)
+    }
+}
+
 class Form extends Render {
     constructor(tag, classNames, textContent, listType) {
         super()
@@ -210,6 +221,17 @@ class Store {
         this.tasks = []
     }
 
+    uuid = () => {
+        let date = new Date().getTime()
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            const r = (date + Math.random() * 16) % 16 | 0
+            date = Math.floor(date / 16)
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+        })
+    
+        return uuid
+    }
+
     getData = async (url) => {
         const response = await fetch(url)
 
@@ -223,15 +245,8 @@ class Store {
     }
 
     postData = async (url, data) => {
-        const response = await fetch(url, {
-            method: 'POST',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-
+        const response = await fetch(url, new ApiCall('POST', data))
+ 
         if (response.ok) {
             const content = await response.json()
             this.tasks = content
@@ -242,14 +257,7 @@ class Store {
     }
 
     putData = async (url, id, data) => {
-        const response = await fetch(`${url}/${id}`, {
-            method: 'PUT',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
+        const response = await fetch(`${url}/${id}`, new ApiCall('PUT', data))
 
         if (response.ok) {
             const content = await response.json()
@@ -266,7 +274,7 @@ class Store {
             return
         }
 
-        const taskId = this.tasks.length + 1
+        const taskId = this.uuid()
         const task = new Task(taskId, input.value)
 
         return this.postData(url, task)
@@ -373,7 +381,7 @@ tasksInput.addEventListener('keyup', async (event) => {
 
 tasksList.addEventListener('click', async (event) => {
     if (event.target.classList.contains('delete-button')) {
-        const taskId = +event.target.closest('li').dataset.id
+        const taskId = event.target.closest('li').dataset.id
         const tasks = await store.deleteTask(taskId, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
@@ -381,7 +389,7 @@ tasksList.addEventListener('click', async (event) => {
 
 tasksList.addEventListener('click', async (event) => {
     if (event.target.classList.contains('comp-button')) {
-        const taskId = +event.target.closest('li').dataset.id
+        const taskId = event.target.closest('li').dataset.id
         const tasks = await store.completeTask(taskId, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     }
@@ -389,11 +397,11 @@ tasksList.addEventListener('click', async (event) => {
 
 tasksList.addEventListener('click', async (event) => {
     if (event.target.classList.contains('edit-button')) {
-        const taskId = +event.target.closest('li').dataset.id
+        const taskId = event.target.closest('li').dataset.id
         const tasks = store.editTask(taskId)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     } else if (event.target.classList.contains('save-button')) {
-        const taskId = +event.target.closest('li').dataset.id
+        const taskId = event.target.closest('li').dataset.id
         const value = event.target.previousSibling.value
         const tasks = await store.editTask(taskId, value, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
@@ -403,7 +411,7 @@ tasksList.addEventListener('click', async (event) => {
 tasksList.addEventListener('keyup', async (event) => {
     if (event.key === 'Enter') {
         const task = document.querySelector('.edit-view')
-        const id = +task.closest('li').dataset.id
+        const id = task.closest('li').dataset.id
         const value = task.value
         const tasks = await store.editTask(id, value, url)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
