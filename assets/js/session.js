@@ -31,7 +31,7 @@ export class Session {
             document.cookie = `token=${content.token}`
             return true
         } else {
-            return 
+            return
         }
     }
 }

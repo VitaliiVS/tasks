@@ -13,18 +13,19 @@ export class Store {
             date = Math.floor(date / 16)
             return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16)
         })
-    
+
         return uuid
     }
 
     getData = async (url, token) => {
-        const response = await fetch(url,{
+        const response = await fetch(url, {
             method: 'GET',
             cache: 'no-cache',
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${token}`
-            }})
+            }
+        })
 
         if (response.ok) {
             const content = await response.json()

@@ -232,85 +232,85 @@ const registerButton = document.querySelector('.register-button')
 emitter.on('logged-in', data => {
     document.addEventListener('readystatechange', tasksForm.render(root))
 
-        const createButton = document.querySelector('.create-button')
-        const tasksList = document.querySelector('.tasks-list')
-        const tasksInput = document.querySelector('.task-input')
+    const createButton = document.querySelector('.create-button')
+    const tasksList = document.querySelector('.tasks-list')
+    const tasksInput = document.querySelector('.task-input')
 
-        document.addEventListener('readystatechange', (async () => {
-            const tasks = await store.getData(tasksUrl, data.token)
+    document.addEventListener('readystatechange', (async () => {
+        const tasks = await store.getData(tasksUrl, data.token)
+        emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+    })())
+
+    const unsubscribe = emitter.on('list-changed', data => {
+        render.render(data.root, data.tasks)
+    })
+
+    createButton.addEventListener('click', async () => {
+        const tasks = await store.addTask(tasksInput, tasksUrl, data.token)
+
+        if (tasks != undefined) {
             emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-        })())
+        }
 
-        const unsubscribe = emitter.on('list-changed', data => {
-            render.render(data.root, data.tasks)
-        })
+        tasksInput.value = ''
+    })
 
-        createButton.addEventListener('click', async () => {
+    tasksInput.addEventListener('keyup', async (event) => {
+        if (event.key === 'Enter') {
             const tasks = await store.addTask(tasksInput, tasksUrl, data.token)
-
             if (tasks != undefined) {
                 emitter.emit('list-changed', { tasks: tasks, root: tasksList })
             }
 
             tasksInput.value = ''
-        })
+        }
+    })
 
-        tasksInput.addEventListener('keyup', async (event) => {
-            if (event.key === 'Enter') {
-                const tasks = await store.addTask(tasksInput, tasksUrl, data.token)
-                if (tasks != undefined) {
-                    emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-                }
+    tasksList.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('delete-button')) {
+            const taskId = event.target.closest('li').dataset.id
+            const tasks = await store.deleteTask(taskId, tasksUrl, data.token)
+            emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+        }
+    })
 
-                tasksInput.value = ''
-            }
-        })
+    tasksList.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('comp-button')) {
+            const taskId = event.target.closest('li').dataset.id
+            const tasks = await store.completeTask(taskId, tasksUrl, data.token)
+            emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+        }
+    })
 
-        tasksList.addEventListener('click', async (event) => {
-            if (event.target.classList.contains('delete-button')) {
-                const taskId = event.target.closest('li').dataset.id
-                const tasks = await store.deleteTask(taskId, tasksUrl, data.token)
-                emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-            }
-        })
+    tasksList.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('edit-button')) {
+            const taskId = event.target.closest('li').dataset.id
+            const tasks = store.editTask(taskId)
+            emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+        } else if (event.target.classList.contains('save-button')) {
+            const taskId = event.target.closest('li').dataset.id
+            const value = event.target.previousSibling.value
+            const tasks = await store.editTask(taskId, value, tasksUrl, data.token)
+            emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+        }
+    })
 
-        tasksList.addEventListener('click', async (event) => {
-            if (event.target.classList.contains('comp-button')) {
-                const taskId = event.target.closest('li').dataset.id
-                const tasks = await store.completeTask(taskId, tasksUrl, data.token)
-                emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-            }
-        })
+    tasksList.addEventListener('keyup', async (event) => {
+        if (event.key === 'Enter') {
+            const task = document.querySelector('.edit-view')
+            const id = task.closest('li').dataset.id
+            const value = task.value
+            const tasks = await store.editTask(id, value, tasksUrl, data.token)
+            emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+        }
+    })
 
-        tasksList.addEventListener('click', async (event) => {
-            if (event.target.classList.contains('edit-button')) {
-                const taskId = event.target.closest('li').dataset.id
-                const tasks = store.editTask(taskId)
-                emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-            } else if (event.target.classList.contains('save-button')) {
-                const taskId = event.target.closest('li').dataset.id
-                const value = event.target.previousSibling.value
-                const tasks = await store.editTask(taskId, value, tasksUrl, data.token)
-                emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-            }
-        })
-
-        tasksList.addEventListener('keyup', async (event) => {
-            if (event.key === 'Enter') {
-                const task = document.querySelector('.edit-view')
-                const id = task.closest('li').dataset.id
-                const value = task.value
-                const tasks = await store.editTask(id, value, tasksUrl, data.token)
-                emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-            }
-        })
-
-        document.addEventListener('keyup', (event) => {
-            if (event.key === 'Escape') {
-                const tasks = store.cancelEdit()
-                emitter.emit('list-changed', { tasks: tasks, root: tasksList })
-            }
-        })
+    document.addEventListener('keyup', (event) => {
+        if (event.key === 'Escape') {
+            const tasks = store.cancelEdit()
+            emitter.emit('list-changed', { tasks: tasks, root: tasksList })
+        }
+    })
 })
 
 if (document.cookie === '') {
@@ -318,7 +318,7 @@ if (document.cookie === '') {
         const login = await session.login(loginUrl, username.value, password.value)
         if (login != undefined) {
             const token = document.cookie
-            emitter.emit('logged-in', {token: token.toString().slice(6) })
+            emitter.emit('logged-in', { token: token.toString().slice(6) })
         } else {
             alert('Incorrect username or password')
         }
@@ -328,13 +328,12 @@ if (document.cookie === '') {
         const register = await session.register(registerUrl, username.value, password.value)
         if (register != undefined) {
             const token = document.cookie
-            emitter.emit('logged-in', {token: token.toString().slice(6) })
+            emitter.emit('logged-in', { token: token.toString().slice(6) })
         } else {
             alert('User already exist')
         }
-
     })
 } else {
     const token = document.cookie
-    emitter.emit('logged-in', {token: token.toString().slice(6) })
+    emitter.emit('logged-in', { token: token.toString().slice(6) })
 }
