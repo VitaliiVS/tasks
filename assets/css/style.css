@@ -150,3 +150,84 @@ button:focus {
   text-decoration: line-through;
   color: gray;
 }
+
+.login-container {
+  display: grid;
+  grid-template-areas: "a1 a1" "a2 a2" "a3 a4";
+  grid-gap: 10px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 50px;
+}
+
+.name-input {
+  height: 30px;
+  font-size: 1.125em;
+  min-width: 325px;
+  grid-area: a1;
+}
+
+.name-input::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.name-input::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.name-input:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.name-input::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.name-input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pass-input {
+  height: 30px;
+  font-size: 1.125em;
+  min-width: 325px;
+  grid-area: a2;
+}
+
+.pass-input::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pass-input::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pass-input:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pass-input::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pass-input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.login-button {
+  grid-area: a3;
+}
+
+.register-button {
+  grid-area: a4;
+}
+
+.login-button, .register-button {
+  margin: 0 10px;
+  width: 140px;
+  height: 40px;
+}
