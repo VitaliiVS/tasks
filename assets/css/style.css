@@ -47,6 +47,7 @@ button:focus {
 .task-input {
   height: 30px;
   font-size: 1.125em;
+  min-width: 325px;
 }
 
 .task-input::-webkit-input-placeholder {

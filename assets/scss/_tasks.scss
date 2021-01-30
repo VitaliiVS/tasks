@@ -6,12 +6,7 @@
 }
 
 .task-input {
-    height: 30px;
-    font-size: 1.125em;
-
-    &::placeholder {
-        color: rgba(0, 0, 0, 0.5);
-    }
+    @include input;
 }
 
 .tasks-list {
