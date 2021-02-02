@@ -102,6 +102,12 @@ class TasksForm extends Render {
             classNames: ['create-button', 'far', 'fa-plus-square']
         })
 
+        const logoutButton = super.createElem({
+            tag: 'button',
+            classNames: ['logout-button'],
+            textContent: 'Log out'
+        })
+
         document.title = this.title.textContent
 
         tasksContainer.append(taskInput)
@@ -109,6 +115,7 @@ class TasksForm extends Render {
         tasksContainer.append(tasksList)
 
         container.append(title)
+        container.append(logoutButton)
         container.append(tasksContainer)
 
         return container
@@ -235,6 +242,12 @@ emitter.on('logged-in', data => {
     const createButton = document.querySelector('.create-button')
     const tasksList = document.querySelector('.tasks-list')
     const tasksInput = document.querySelector('.task-input')
+
+
+    document.addEventListener('click', () => {
+        document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        location.reload()
+    })
 
     document.addEventListener('readystatechange', (async () => {
         const tasks = await store.getData(tasksUrl, data.token)

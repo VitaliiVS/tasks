@@ -142,6 +142,13 @@ button:focus {
   margin-left: 0px;
 }
 
+.logout-button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  width: 150px;
+}
+
 .disabled {
   color: #d9d9d9;
   pointer-events: none;
