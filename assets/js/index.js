@@ -231,6 +231,7 @@ const session = new Session()
 
 
 document.addEventListener('readystatechange', login.render(root))
+
 const username = document.querySelector('.name-input')
 const password = document.querySelector('.pass-input')
 const loginButton = document.querySelector('.login-button')
@@ -243,7 +244,6 @@ emitter.on('logged-in', data => {
     const tasksList = document.querySelector('.tasks-list')
     const tasksInput = document.querySelector('.task-input')
     const logoutButton = document.querySelector('.logout-button')
-
 
     logoutButton.addEventListener('click', () => {
         document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
