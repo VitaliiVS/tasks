@@ -242,9 +242,10 @@ emitter.on('logged-in', data => {
     const createButton = document.querySelector('.create-button')
     const tasksList = document.querySelector('.tasks-list')
     const tasksInput = document.querySelector('.task-input')
+    const logoutButton = document.querySelector('.logout-button')
 
 
-    document.addEventListener('click', () => {
+    logoutButton.addEventListener('click', () => {
         document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
         location.reload()
     })
@@ -335,8 +336,20 @@ if (document.cookie === '') {
         } else {
             alert('Incorrect username or password')
         }
-
     })
+
+    password.addEventListener('keyup', async (event) => {
+        if (event.key === 'Enter') {
+            const login = await session.login(loginUrl, username.value, password.value)
+            if (login != undefined) {
+                const token = document.cookie
+                emitter.emit('logged-in', { token: token.toString().slice(6) })
+            } else {
+                alert('Incorrect username or password')
+            }
+        }
+    })
+
     registerButton.addEventListener('click', async () => {
         const register = await session.register(registerUrl, username.value, password.value)
         if (register != undefined) {
