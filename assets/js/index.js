@@ -218,9 +218,9 @@ class RenderTask extends Render {
 
 const root = document.querySelector('.root')
 
-const loginUrl = "http://127.0.0.1:3000/auth"
-const registerUrl = "http://127.0.0.1:3000/register"
-const tasksUrl = "http://127.0.0.1:3000/tasks"
+const loginUrl = 'http://127.0.0.1:3000/auth'
+const registerUrl = 'http://127.0.0.1:3000/register'
+const tasksUrl = 'http://127.0.0.1:3000/tasks'
 
 const login = new LoginForm('h1', 'header', 'Login or Register')
 const tasksForm = new TasksForm('h1', 'header', 'Tasks', 'tasks-list')
@@ -246,7 +246,7 @@ emitter.on('logged-in', data => {
     const logoutButton = document.querySelector('.logout-button')
 
     logoutButton.addEventListener('click', () => {
-        document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
         location.reload()
     })
 

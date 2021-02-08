@@ -5,8 +5,8 @@ export class Session {
 
     login = async (url, username, password) => {
         const data = {
-            "username": username,
-            "password": password
+            'username': username.toLowerCase(),
+            'password': password
         }
         const response = await fetch(url, new ApiCall('POST', data))
 
@@ -21,8 +21,8 @@ export class Session {
 
     register = async (registerUrl, username, password) => {
         const data = {
-            "username": username,
-            "password": password
+            'username': username.toLowerCase(),
+            'password': password
         }
         const response = await fetch(registerUrl, new ApiCall('POST', data))
 
