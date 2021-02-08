@@ -1,8 +1,16 @@
 .container {
     display: grid;
-    grid-template-columns: 325px 20px;
     justify-content: center;
     align-items: center;
+
+    @include sm-min {
+        grid-template-columns: 300px 20px;
+    }
+
+    @include sm {
+        grid-template-columns: 240px 45px;
+        overflow: hidden;
+    }
 }
 
 .task-input {
@@ -17,17 +25,21 @@
 .task-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-
-    width: 370px;
-    margin: 10px 0;
     padding-bottom: 5px;
-
     border-bottom: 1px solid #c3c7c7;
+
+    @include sm-min {
+        width: 370px;
+        margin: 10px 0;
+    }
+
+    @include sm {
+        width: 290px;
+        margin: 5px 0;
+    }
 }
 
 .task {
-    min-width: 245px;
-    max-width: 245px;
     margin: 0px;
     padding: 5px;
 
@@ -35,20 +47,38 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    @include sm-min {
+        min-width: 245px;
+        max-width: 245px;
+    }
+
+    @include sm {
+        min-width: 160px;
+        max-width: 160px;
+    }
 }
 
 .edit-view {
-    min-width: 240px;
-    max-width: 240px;
     margin: 0px 1px 0px 0px;
     padding: 5px;
 
     font-size: 1.125em;
     overflow: hidden;
+
+    @include sm-min {
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+    @include sm {
+        min-width: 157px;
+        max-width: 157px;
+    }
 }
 
 .create-button {
-    margin-left: 15px;
+    margin-left: 25px;
 }
 
 .comp-button {
@@ -84,10 +114,18 @@
 
 .logout-button {
     position: absolute;
-    top: 20px;
-    right: 30px;
 
-    width: 150px;
+    @include sm-min {
+        width: 150px;
+        top: 20px;
+        right: 30px;
+    }
+
+    @include sm {
+        width: 101px;
+        top: 10px;
+        right: 0;
+    }
 }
 
 .disabled {

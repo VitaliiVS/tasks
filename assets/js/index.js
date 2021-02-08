@@ -329,19 +329,9 @@ emitter.on('logged-in', data => {
 
 if (document.cookie === '') {
     loginButton.addEventListener('click', async () => {
-        const login = await session.login(loginUrl, username.value, password.value)
-        if (login != undefined) {
-            const token = document.cookie
-            emitter.emit('logged-in', { token: token.toString().slice(6) })
-        } else {
-            alert('Incorrect username or password')
-        }
-    })
-
-    password.addEventListener('keyup', async (event) => {
-        if (event.key === 'Enter') {
+        if (username.value.trim() !== '' && password.value.trim() !== '') {
             const login = await session.login(loginUrl, username.value, password.value)
-            if (login != undefined) {
+            if (login !== undefined) {
                 const token = document.cookie
                 emitter.emit('logged-in', { token: token.toString().slice(6) })
             } else {
@@ -350,13 +340,29 @@ if (document.cookie === '') {
         }
     })
 
+    password.addEventListener('keyup', async (event) => {
+        if (event.key === 'Enter') {
+            if (username.value.trim() !== '' && password.value.trim() !== '') {
+                const login = await session.login(loginUrl, username.value, password.value)
+                if (login != undefined) {
+                    const token = document.cookie
+                    emitter.emit('logged-in', { token: token.toString().slice(6) })
+                } else {
+                    alert('Incorrect username or password')
+                }
+            }
+        }
+    })
+
     registerButton.addEventListener('click', async () => {
-        const register = await session.register(registerUrl, username.value, password.value)
-        if (register != undefined) {
-            const token = document.cookie
-            emitter.emit('logged-in', { token: token.toString().slice(6) })
-        } else {
-            alert('User already exist')
+        if (username.value.trim() !== '' && password.value.trim() !== '') {
+            const register = await session.register(registerUrl, username.value, password.value)
+            if (register !== undefined) {
+                const token = document.cookie
+                emitter.emit('logged-in', { token: token.toString().slice(6) })
+            } else if (register === undefined) {
+                alert('User already exist')
+            }
         }
     })
 } else {
