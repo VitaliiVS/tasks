@@ -1,24 +1,16 @@
 import { ApiCall } from './api.js'
 import { Task } from './task.js'
+import { uuid } from './uuid.js'
 
 export class Store {
     constructor() {
-        this.tasks = []
-    }
-
-    uuid = () => {
-        let date = new Date().getTime()
-        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-            const r = (date + Math.random() * 16) % 16 | 0
-            date = Math.floor(date / 16)
-            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-        })
-
-        return uuid
+        this.tasks = [],
+        this.userId = ''
     }
 
     getData = async (url, token) => {
-        const response = await fetch(url, {
+        const userId = this.userId
+        const response = await fetch(`${url}?userId=${userId}`, {
             method: 'GET',
             cache: 'no-cache',
             headers: {
@@ -66,8 +58,8 @@ export class Store {
             return
         }
 
-        const taskId = this.uuid()
-        const task = new Task(taskId, input.value)
+        const taskId = uuid() 
+        const task = new Task(taskId, this.userId, input.value)
 
         return this.postData(url, task, token)
     }

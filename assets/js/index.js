@@ -2,6 +2,7 @@ import { EventEmitter } from './ee.js'
 import { Render } from './render.js'
 import { Store } from './store.js'
 import { Session } from './session.js'
+import { parseJwt } from './parseJwt.js'
 
 class LoginForm extends Render {
     constructor(tag, classNames, textContent) {
@@ -251,7 +252,7 @@ emitter.on('logged-in', data => {
     })
 
     document.addEventListener('readystatechange', (async () => {
-        const tasks = await store.getData(tasksUrl, data.token)
+        const tasks = await store.getData(tasksUrl, data.token, data.userId)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     })())
 
@@ -260,7 +261,7 @@ emitter.on('logged-in', data => {
     })
 
     createButton.addEventListener('click', async () => {
-        const tasks = await store.addTask(tasksInput, tasksUrl, data.token)
+        const tasks = await store.addTask(tasksInput, tasksUrl, data.token, data.userId)
 
         if (tasks != undefined) {
             emitter.emit('list-changed', { tasks: tasks, root: tasksList })
@@ -332,8 +333,9 @@ if (document.cookie === '') {
         if (username.value.trim() !== '' && password.value.trim() !== '') {
             const login = await session.login(loginUrl, username.value, password.value)
             if (login !== undefined) {
+                store.userId = login
                 const token = document.cookie
-                emitter.emit('logged-in', { token: token.toString().slice(6) })
+                emitter.emit('logged-in', { token: token.toString().slice(6), })
             } else {
                 alert('Incorrect username or password')
             }
@@ -345,6 +347,7 @@ if (document.cookie === '') {
             if (username.value.trim() !== '' && password.value.trim() !== '') {
                 const login = await session.login(loginUrl, username.value, password.value)
                 if (login != undefined) {
+                    store.userId = login
                     const token = document.cookie
                     emitter.emit('logged-in', { token: token.toString().slice(6) })
                 } else {
@@ -358,14 +361,19 @@ if (document.cookie === '') {
         if (username.value.trim() !== '' && password.value.trim() !== '') {
             const register = await session.register(registerUrl, username.value, password.value)
             if (register !== undefined) {
+                store.userId = register
                 const token = document.cookie
-                emitter.emit('logged-in', { token: token.toString().slice(6) })
+                emitter.emit('logged-in', { token: token.toString().slice(6), })
             } else if (register === undefined) {
                 alert('User already exist')
             }
         }
     })
 } else {
-    const token = document.cookie
-    emitter.emit('logged-in', { token: token.toString().slice(6) })
+    const cookie = document.cookie
+    const token = cookie.toString().slice(6)
+    const user = parseJwt(token)
+    store.userId = user.user.userId
+
+    emitter.emit('logged-in', { token: token })
 }
