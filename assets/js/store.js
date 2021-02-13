@@ -5,7 +5,7 @@ import { uuid } from './uuid.js'
 export class Store {
     constructor() {
         this.tasks = [],
-        this.userId = ''
+            this.userId = ''
     }
 
     getData = async (url, token) => {
@@ -58,7 +58,7 @@ export class Store {
             return
         }
 
-        const taskId = uuid() 
+        const taskId = uuid()
         const task = new Task(taskId, this.userId, input.value)
 
         return this.postData(url, task, token)

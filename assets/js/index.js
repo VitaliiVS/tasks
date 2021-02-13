@@ -252,7 +252,7 @@ emitter.on('logged-in', data => {
     })
 
     document.addEventListener('readystatechange', (async () => {
-        const tasks = await store.getData(tasksUrl, data.token, data.userId)
+        const tasks = await store.getData(tasksUrl, data.token)
         emitter.emit('list-changed', { tasks: tasks, root: tasksList })
     })())
 
@@ -261,7 +261,7 @@ emitter.on('logged-in', data => {
     })
 
     createButton.addEventListener('click', async () => {
-        const tasks = await store.addTask(tasksInput, tasksUrl, data.token, data.userId)
+        const tasks = await store.addTask(tasksInput, tasksUrl, data.token)
 
         if (tasks != undefined) {
             emitter.emit('list-changed', { tasks: tasks, root: tasksList })
@@ -335,7 +335,7 @@ if (document.cookie === '') {
             if (login !== undefined) {
                 store.userId = login
                 const token = document.cookie
-                emitter.emit('logged-in', { token: token.toString().slice(6), })
+                emitter.emit('logged-in', { token: token.toString().slice(6) })
             } else {
                 alert('Incorrect username or password')
             }
@@ -363,7 +363,7 @@ if (document.cookie === '') {
             if (register !== undefined) {
                 store.userId = register
                 const token = document.cookie
-                emitter.emit('logged-in', { token: token.toString().slice(6), })
+                emitter.emit('logged-in', { token: token.toString().slice(6) })
             } else if (register === undefined) {
                 alert('User already exist')
             }
