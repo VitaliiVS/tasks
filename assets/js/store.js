@@ -4,13 +4,11 @@ import { uuid } from './uuid.js'
 
 export class Store {
     constructor() {
-        this.tasks = [],
-            this.userId = ''
+        this.tasks = []
     }
 
     getData = async (url, token) => {
-        const userId = this.userId
-        const response = await fetch(`${url}?userId=${userId}`, {
+        const response = await fetch(url, {
             method: 'GET',
             cache: 'no-cache',
             headers: {
@@ -59,7 +57,7 @@ export class Store {
         }
 
         const taskId = uuid()
-        const task = new Task(taskId, this.userId, input.value)
+        const task = new Task(taskId, input.value)
 
         return this.postData(url, task, token)
     }
