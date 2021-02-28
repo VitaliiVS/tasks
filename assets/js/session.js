@@ -1,6 +1,5 @@
 import { ApiCall } from './api.js'
 import { uuid } from './uuid.js'
-import { parseJwt } from './parseJwt.js'
 
 export class Session {
     constructor() { }
@@ -15,9 +14,8 @@ export class Session {
         if (response.ok) {
             const content = await response.json()
             document.cookie = `token=${content.token}`
-            const user = parseJwt(content.token)
 
-            return user.user.userId
+            return true
         } else {
             return
         }
@@ -34,9 +32,8 @@ export class Session {
         if (response.ok) {
             const content = await response.json()
             document.cookie = `token=${content.token}`
-            const user = parseJwt(content.token)
 
-            return user.user.userId
+            return true
         } else {
             return
         }

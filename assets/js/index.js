@@ -2,7 +2,6 @@ import { EventEmitter } from './ee.js'
 import { Render } from './render.js'
 import { Store } from './store.js'
 import { Session } from './session.js'
-import { parseJwt } from './parseJwt.js'
 
 class LoginForm extends Render {
     constructor(tag, classNames, textContent) {
@@ -333,7 +332,6 @@ if (document.cookie === '') {
         if (username.value.trim() !== '' && password.value.trim() !== '') {
             const login = await session.login(loginUrl, username.value, password.value)
             if (login !== undefined) {
-                store.userId = login
                 const token = document.cookie
                 emitter.emit('logged-in', { token: token.toString().slice(6) })
             } else {
@@ -347,7 +345,6 @@ if (document.cookie === '') {
             if (username.value.trim() !== '' && password.value.trim() !== '') {
                 const login = await session.login(loginUrl, username.value, password.value)
                 if (login != undefined) {
-                    store.userId = login
                     const token = document.cookie
                     emitter.emit('logged-in', { token: token.toString().slice(6) })
                 } else {
@@ -361,7 +358,6 @@ if (document.cookie === '') {
         if (username.value.trim() !== '' && password.value.trim() !== '') {
             const register = await session.register(registerUrl, username.value, password.value)
             if (register !== undefined) {
-                store.userId = register
                 const token = document.cookie
                 emitter.emit('logged-in', { token: token.toString().slice(6) })
             } else if (register === undefined) {
@@ -372,8 +368,6 @@ if (document.cookie === '') {
 } else {
     const cookie = document.cookie
     const token = cookie.toString().slice(6)
-    const user = parseJwt(token)
-    store.userId = user.user.userId
 
     emitter.emit('logged-in', { token: token })
 }
