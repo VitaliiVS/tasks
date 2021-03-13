@@ -1,7 +1,9 @@
-import { EventEmitter } from './ee.js'
-import { Render } from './render.js'
-import { Store } from './store.js'
-import { Session } from './session.js'
+import 'regenerator-runtime/runtime'
+import './scss/style.scss'
+import { EventEmitter } from './components/ee.js'
+import { Render } from './components/render.js'
+import { Store } from './components/store.js'
+import { Session } from './components/session.js'
 
 class LoginForm extends Render {
     constructor(tag, classNames, textContent) {
