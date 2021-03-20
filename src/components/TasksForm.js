@@ -29,7 +29,7 @@ class TasksForm extends React.Component {
         }
     }
 
-    async handleTasksChange(taskId, action, taskTitle) {
+    async handleTasksChange(action, taskId, taskTitle) {
         if (action === 'delete-button') {
             const tasks = await store.deleteTask(taskId, this.tasksUrl, this.props.token)
             this.props.onTasksChange(tasks)
@@ -38,6 +38,9 @@ class TasksForm extends React.Component {
             this.props.onTasksChange(tasks)
         } else if (action === 'edit-button' || action === 'save-button' || action === 'edit-view') {
             const tasks = await store.editTask(taskId, taskTitle, this.tasksUrl, this.props.token)
+            this.props.onTasksChange(tasks)
+        } else if (action === 'cancel') {
+            const tasks = store.cancelEdit()
             this.props.onTasksChange(tasks)
         }
     }
