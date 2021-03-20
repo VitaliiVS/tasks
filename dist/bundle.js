@@ -266,6 +266,9 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
             username: e.target.value
           });
         },
+        onKeyUp: function onKeyUp(e) {
+          if (e.key === 'Enter') _this2.handleLogin();
+        },
         className: "name-input",
         type: "text",
         placeholder: "Username"
@@ -275,6 +278,9 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
           return _this2.setState({
             password: e.target.value
           });
+        },
+        onKeyUp: function onKeyUp(e) {
+          if (e.key === 'Enter') _this2.handleLogin();
         },
         className: "pass-input",
         type: "password",
@@ -351,8 +357,8 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
     key: "handleChange",
     value: function handleChange(e) {
       var classNames = e.target.className.split(' ');
-      var button = classNames[0];
-      this.props.onTasksChange(this.props.taskId, button, this.state.taskTitle);
+      var action = classNames[0];
+      this.props.onTasksChange(this.props.taskId, action, this.state.taskTitle);
     }
   }, {
     key: "render",
@@ -388,6 +394,9 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
           deleteButtonClassNames = _editView$edit.deleteButtonClassNames,
           compButtonClassNames = _editView$edit.compButtonClassNames;
       var task = this.props.editView ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+        onKeyUp: function onKeyUp(e) {
+          if (e.key === 'Enter') _this2.handleChange(e);
+        },
         value: this.state.taskTitle,
         onChange: function onChange(e) {
           return _this2.setState({
@@ -559,14 +568,14 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "handleTasksChange",
     value: function () {
-      var _handleTasksChange = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(taskId, button, taskTitle) {
+      var _handleTasksChange = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(taskId, action, taskTitle) {
         var tasks, _tasks, _tasks2;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!(button === 'delete-button')) {
+                if (!(action === 'delete-button')) {
                   _context3.next = 7;
                   break;
                 }
@@ -581,7 +590,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
                 break;
 
               case 7:
-                if (!(button === 'comp-button')) {
+                if (!(action === 'comp-button')) {
                   _context3.next = 14;
                   break;
                 }
@@ -596,7 +605,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
                 break;
 
               case 14:
-                if (!(button === 'edit-button' || button === 'save-button')) {
+                if (!(action === 'edit-button' || action === 'save-button' || action === 'edit-view')) {
                   _context3.next = 19;
                   break;
                 }
@@ -658,6 +667,9 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
           return _this2.setState({
             taskTitle: e.target.value
           });
+        },
+        onKeyUp: function onKeyUp(e) {
+          if (e.key === 'Enter') _this2.handleAddTask();
         },
         className: "task-input",
         placeholder: "What you want to do?"
