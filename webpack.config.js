@@ -38,7 +38,16 @@ module.exports = {
         use: [
           miniCss.loader,
           'css-loader',
-          'sass-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              'postcssOptions': {
+                'config': path.resolve(__dirname, 'postcss.config.js')
+              }
+            }
+          },
+          'sass-loader'
         ]
       }
     ]
