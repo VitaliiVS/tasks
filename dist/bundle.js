@@ -347,6 +347,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleKeyUp = _this.handleKeyUp.bind(_assertThisInitialized(_this));
     _this.state = {
       taskTitle: _this.props.taskTitle
     };
@@ -358,7 +359,20 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
     value: function handleChange(e) {
       var classNames = e.target.className.split(' ');
       var action = classNames[0];
-      this.props.onTasksChange(this.props.taskId, action, this.state.taskTitle);
+      this.props.onTasksChange(action, this.props.taskId, this.state.taskTitle);
+    }
+  }, {
+    key: "handleKeyUp",
+    value: function handleKeyUp(e) {
+      if (e.key === 'Enter') {
+        this.handleChange(e);
+      } else if (e.key === 'Escape') {
+        var action = 'cancel';
+        this.props.onTasksChange(action);
+        this.setState({
+          taskTitle: this.props.taskTitle
+        });
+      }
     }
   }, {
     key: "render",
@@ -394,9 +408,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
           deleteButtonClassNames = _editView$edit.deleteButtonClassNames,
           compButtonClassNames = _editView$edit.compButtonClassNames;
       var task = this.props.editView ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        onKeyUp: function onKeyUp(e) {
-          if (e.key === 'Enter') _this2.handleChange(e);
-        },
+        onKeyUp: this.handleKeyUp,
         value: this.state.taskTitle,
         onChange: function onChange(e) {
           return _this2.setState({
@@ -568,8 +580,8 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "handleTasksChange",
     value: function () {
-      var _handleTasksChange = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(taskId, action, taskTitle) {
-        var tasks, _tasks, _tasks2;
+      var _handleTasksChange = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action, taskId, taskTitle) {
+        var tasks, _tasks, _tasks2, _tasks3;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
@@ -586,7 +598,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
               case 3:
                 tasks = _context3.sent;
                 this.props.onTasksChange(tasks);
-                _context3.next = 19;
+                _context3.next = 22;
                 break;
 
               case 7:
@@ -601,12 +613,12 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
               case 10:
                 _tasks = _context3.sent;
                 this.props.onTasksChange(_tasks);
-                _context3.next = 19;
+                _context3.next = 22;
                 break;
 
               case 14:
                 if (!(action === 'edit-button' || action === 'save-button' || action === 'edit-view')) {
-                  _context3.next = 19;
+                  _context3.next = 21;
                   break;
                 }
 
@@ -616,8 +628,16 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
               case 17:
                 _tasks2 = _context3.sent;
                 this.props.onTasksChange(_tasks2);
+                _context3.next = 22;
+                break;
 
-              case 19:
+              case 21:
+                if (action === 'cancel') {
+                  _tasks3 = store.cancelEdit();
+                  this.props.onTasksChange(_tasks3);
+                }
+
+              case 22:
               case "end":
                 return _context3.stop();
             }
