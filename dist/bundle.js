@@ -350,8 +350,8 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
   _createClass(TaskCard, [{
     key: "handleChange",
     value: function handleChange(e) {
-      var classes = e.target.className.split(' ');
-      var button = classes[0];
+      var classNames = e.target.className.split(' ');
+      var button = classNames[0];
       this.props.onTasksChange(this.props.taskId, button, this.state.taskTitle);
     }
   }, {
@@ -361,12 +361,12 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
 
       var isCompleted = {
         true: {
-          taskClasses: "task completed",
-          editButton: "edit-button far fa-edit disabled"
+          taskClassNames: "task completed",
+          editButtonClassNames: "edit-button far fa-edit disabled"
         },
         false: {
-          taskClasses: "task",
-          editButton: this.props.editView ? "save-button far fa-save" : "edit-button far fa-edit"
+          taskClassNames: "task",
+          editButtonClassNames: this.props.editView ? "save-button far fa-save" : "edit-button far fa-edit"
         }
       };
       var editView = {
@@ -381,8 +381,8 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
       };
       var completed = this.props.isCompleted;
       var _isCompleted$complete = isCompleted[completed],
-          taskClasses = _isCompleted$complete.taskClasses,
-          editButton = _isCompleted$complete.editButton;
+          taskClassNames = _isCompleted$complete.taskClassNames,
+          editButtonClassNames = _isCompleted$complete.editButtonClassNames;
       var edit = this.props.editView;
       var _editView$edit = editView[edit],
           deleteButtonClassNames = _editView$edit.deleteButtonClassNames,
@@ -397,7 +397,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
         className: "edit-view",
         type: "text"
       }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
-        className: taskClasses
+        className: taskClassNames
       }, this.props.taskTitle);
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
         className: "task-container"
@@ -409,7 +409,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
         disabled: this.props.editView
       }), task, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleChange,
-        className: editButton
+        className: editButtonClassNames
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleChange,
         className: deleteButtonClassNames,
