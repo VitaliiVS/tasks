@@ -29,14 +29,14 @@ class TasksForm extends React.Component {
         }
     }
 
-    async handleTasksChange(taskId, button, taskTitle) {
-        if (button === 'delete-button') {
+    async handleTasksChange(taskId, action, taskTitle) {
+        if (action === 'delete-button') {
             const tasks = await store.deleteTask(taskId, this.tasksUrl, this.props.token)
             this.props.onTasksChange(tasks)
-        } else if (button === 'comp-button') {
+        } else if (action === 'comp-button') {
             const tasks = await store.completeTask(taskId, this.tasksUrl, this.props.token)
             this.props.onTasksChange(tasks)
-        } else if (button === 'edit-button' || button === 'save-button') {
+        } else if (action === 'edit-button' || action === 'save-button' || action === 'edit-view') {
             const tasks = await store.editTask(taskId, taskTitle, this.tasksUrl, this.props.token)
             this.props.onTasksChange(tasks)
         }
@@ -69,6 +69,7 @@ class TasksForm extends React.Component {
                     <input
                         value={this.state.taskTitle}
                         onChange={(e) => this.setState({ taskTitle: e.target.value })}
+                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleAddTask() }}
                         className="task-input"
                         placeholder="What you want to do?"
                     />

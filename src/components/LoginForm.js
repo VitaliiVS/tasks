@@ -49,6 +49,7 @@ class LoginForm extends React.Component {
                     <input
                         value={this.state.username}
                         onChange={(e) => this.setState({ username: e.target.value })}
+                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleLogin() }}
                         className="name-input"
                         type="text"
                         placeholder="Username"
@@ -56,6 +57,7 @@ class LoginForm extends React.Component {
                     <input
                         value={this.state.password}
                         onChange={(e) => this.setState({ password: e.target.value })}
+                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleLogin() }}
                         className="pass-input"
                         type="password"
                         placeholder="Password"

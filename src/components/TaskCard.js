@@ -13,8 +13,8 @@ class TaskCard extends React.Component {
 
     handleChange(e) {
         const classNames = e.target.className.split(' ')
-        const button = classNames[0]
-        this.props.onTasksChange(this.props.taskId, button, this.state.taskTitle)
+        const action = classNames[0]
+        this.props.onTasksChange(this.props.taskId, action, this.state.taskTitle)
     }
 
     render() {
@@ -47,7 +47,7 @@ class TaskCard extends React.Component {
         const { deleteButtonClassNames, compButtonClassNames } = editView[edit]
 
         const task = this.props.editView
-            ? <input value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className="edit-view" type="text" />
+            ? <input onKeyUp={(e) => { if (e.key === 'Enter') this.handleChange(e) }} value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className="edit-view" type="text" />
             : <p className={taskClassNames}>{this.props.taskTitle}</p>
 
         return (
