@@ -15,7 +15,7 @@ export class Session {
             const content = await response.json()
             document.cookie = `token=${content.token}`
 
-            return true
+            return content.token
         } else {
             return
         }
@@ -33,7 +33,7 @@ export class Session {
             const content = await response.json()
             document.cookie = `token=${content.token}`
 
-            return true
+            return content.token
         } else {
             return
         }

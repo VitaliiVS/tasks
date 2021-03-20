@@ -1,1 +1,4 @@
 node_modules
+dist/bundle.js.map
+dist/style.css.map
+.gitignore

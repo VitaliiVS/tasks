@@ -26,14 +26,15 @@ export class Store {
         }
     }
 
-    postData = async (url, data, token) => {
-        const response = await fetch(url, new ApiCall('POST', data, token))
+    postData = async (taskTitle, url, token) => {
+        const taskId = uuid()
+        const task = new Task(taskId, taskTitle)
+        const response = await fetch(url, new ApiCall('POST', task, token))
 
         if (response.ok) {
             const content = await response.json()
             this.tasks = content
             this.tasks.forEach(x => x.editView = false)
-
             return this.tasks
         }
     }
@@ -48,18 +49,6 @@ export class Store {
 
             return this.tasks
         }
-    }
-
-    addTask = (input, url, token) => {
-
-        if (input.value.trim() === '') {
-            return
-        }
-
-        const taskId = uuid()
-        const task = new Task(taskId, input.value)
-
-        return this.postData(url, task, token)
     }
 
     deleteTask = (id, url, token) => {
@@ -94,7 +83,6 @@ export class Store {
         const taskId = this.tasks.findIndex(x => x.taskId === id)
         const task = this.tasks[taskId]
         const internalId = task._id
-
 
         if (task.editView == false) {
             this.tasks.forEach(task => task.editView = false)

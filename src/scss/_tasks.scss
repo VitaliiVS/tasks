@@ -131,6 +131,10 @@
 .disabled {
     color: #d9d9d9;
     pointer-events: none;
+
+    &:after {
+        border: 2px solid rgb(172, 163, 163);
+    }
 }
 
 .completed {

@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const miniCss = require('mini-css-extract-plugin')
 
 module.exports = {
@@ -35,18 +34,19 @@ module.exports = {
         }]
       },
       {
-        test:/\.(s*)css$/,
+        test: /\.(s*)css$/,
         use: [
-           miniCss.loader,
-           'css-loader',
-           'sass-loader',
+          miniCss.loader,
+          'css-loader',
+          'sass-loader',
         ]
-     }
+      }
     ]
   },
   plugins: [
     new miniCss({
       filename: 'style.css',
     }),
-  ]
+  ],
+  devtool: "source-map"
 }
