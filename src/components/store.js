@@ -23,6 +23,8 @@ export class Store {
             this.tasks.forEach(x => x.editView = false)
 
             return this.tasks
+        } else {
+            return new Error('Not authorized')
         }
     }
 
@@ -36,11 +38,37 @@ export class Store {
             this.tasks = content
             this.tasks.forEach(x => x.editView = false)
             return this.tasks
+        } else {
+            return new Error('Not authorized')
         }
     }
 
-    putData = async (url, id, data, token) => {
-        const response = await fetch(`${url}/${id}`, new ApiCall('PUT', data, token))
+    putData = async (url, id, token, action, taskTitle) => {
+        const data = {}
+
+        if (action === 'delete-button') {
+            const task = this.deleteTask(id)
+            data.task = task.task
+            data._id = task._id
+        } else if (action === 'comp-button') {
+            const task = this.completeTask(id)
+            data.task = task.task
+            data._id = task._id
+        } else if (action === 'edit-button') {
+            const tasks = this.editTask(id)
+
+            return tasks
+        } else if (action === 'save-button' || action === 'edit-view') {
+            const task = this.editTask(id, taskTitle)
+            data.task = task.task
+            data._id = task._id
+        } else if (action === 'cancel') {
+            const tasks = this.cancelEdit()
+
+            return tasks
+        }
+
+        const response = await fetch(`${url}/${data._id}`, new ApiCall('PUT', data.task, token))
 
         if (response.ok) {
             const content = await response.json()
@@ -48,53 +76,61 @@ export class Store {
             this.tasks.forEach(x => x.editView = false)
 
             return this.tasks
+        } else {
+            return new Error('Not authorized')
         }
     }
 
-    deleteTask = (id, url, token) => {
+    deleteTask = (id) => {
+        const data = {}
         const taskId = this.tasks.findIndex(x => x.taskId === id)
-        const task = this.tasks[taskId]
-        const internalId = task._id
-        task.isDeleted = true
-        delete task.editView
-        delete task._id
 
-        return this.putData(url, internalId, task, token)
+        data.task = this.tasks[taskId]
+        data._id = data.task._id
+        data.task.isDeleted = true
+        delete data.task.editView
+        delete data.task._id
+
+        return data
     }
 
-    completeTask = (id, url, token) => {
+    completeTask = (id) => {
+        const data = {}
         const taskId = this.tasks.findIndex(x => x.taskId === id)
-        const task = this.tasks[taskId]
-        const internalId = task._id
-        delete task.editView
-        delete task._id
 
-        if (task.isCompleted == true) {
-            task.isCompleted = false
-            return this.putData(url, internalId, task, token)
+        data.task = this.tasks[taskId]
+        data._id = data.task._id
+        delete data.task.editView
+        delete data.task._id
+
+        if (data.task.isCompleted == true) {
+            data.task.isCompleted = false
+            return data
         }
-        else if (task.isCompleted == false) {
-            task.isCompleted = true
-            return this.putData(url, internalId, task, token)
+        else if (data.task.isCompleted == false) {
+            data.task.isCompleted = true
+            return data
         }
     }
 
-    editTask = (id, value, url, token) => {
+    editTask = (id, taskTitle) => {
+        const data = {}
         const taskId = this.tasks.findIndex(x => x.taskId === id)
-        const task = this.tasks[taskId]
-        const internalId = task._id
 
-        if (task.editView == false) {
+        data.task = this.tasks[taskId]
+        data._id = data.task._id
+
+        if (data.task.editView == false) {
             this.tasks.forEach(task => task.editView = false)
-            task.editView = true
+            data.task.editView = true
 
             return this.tasks
-        } else if (task.editView == true) {
-            delete task.editView
-            delete task._id
-            task.taskLabel = value
+        } else if (data.task.editView == true) {
+            delete data.task.editView
+            delete data.task._id
+            data.task.taskLabel = taskTitle
 
-            return this.putData(url, internalId, task, token)
+            return data
         }
     }
 

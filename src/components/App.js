@@ -7,11 +7,9 @@ class App extends React.Component {
         super(props)
 
         this.handleTokenChange = this.handleTokenChange.bind(this)
-        this.handleTasksChange = this.handleTasksChange.bind(this)
 
         this.state = {
-            token: '',
-            tasks: []
+            token: ''
         }
     }
 
@@ -27,17 +25,11 @@ class App extends React.Component {
         this.setState({ token })
     }
 
-    handleTasksChange(tasks) {
-        this.setState({ tasks })
-    }
-
     render() {
         if (this.state.token !== '') {
             return <TasksForm
                 token={this.state.token}
-                tasks={this.state.tasks}
                 onTokenChange={this.handleTokenChange}
-                onTasksChange={this.handleTasksChange}
             />
         } else {
             return <LoginForm

@@ -50,10 +50,8 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.handleTokenChange = _this.handleTokenChange.bind(_assertThisInitialized(_this));
-    _this.handleTasksChange = _this.handleTasksChange.bind(_assertThisInitialized(_this));
     _this.state = {
-      token: '',
-      tasks: []
+      token: ''
     };
     return _this;
   }
@@ -77,21 +75,12 @@ var App = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
-    key: "handleTasksChange",
-    value: function handleTasksChange(tasks) {
-      this.setState({
-        tasks: tasks
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
       if (this.state.token !== '') {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TasksForm__WEBPACK_IMPORTED_MODULE_2__.default, {
           token: this.state.token,
-          tasks: this.state.tasks,
-          onTokenChange: this.handleTokenChange,
-          onTasksChange: this.handleTasksChange
+          onTokenChange: this.handleTokenChange
         });
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_LoginForm__WEBPACK_IMPORTED_MODULE_1__.default, {
@@ -504,6 +493,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
     _this.handleTasksChange = _this.handleTasksChange.bind(_assertThisInitialized(_this));
     _this.tasksUrl = 'http://127.0.0.1:3000/tasks';
     _this.state = {
+      tasks: [],
       taskTitle: ''
     };
     return _this;
@@ -523,7 +513,15 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
 
               case 2:
                 tasks = _context.sent;
-                this.props.onTasksChange(tasks);
+
+                if (tasks instanceof Error) {
+                  this.handleLogout();
+                  alert('Not authorized');
+                } else {
+                  this.setState({
+                    tasks: tasks
+                  });
+                }
 
               case 4:
               case "end":
@@ -549,7 +547,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 if (!(this.state.taskTitle.trim() !== '')) {
-                  _context2.next = 6;
+                  _context2.next = 5;
                   break;
                 }
 
@@ -558,12 +556,20 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
 
               case 3:
                 tasks = _context2.sent;
-                this.props.onTasksChange(tasks);
-                this.setState({
-                  taskTitle: ''
-                });
 
-              case 6:
+                if (tasks instanceof Error) {
+                  this.handleLogout();
+                  alert('Not authorized');
+                } else {
+                  this.setState({
+                    tasks: tasks
+                  });
+                  this.setState({
+                    taskTitle: ''
+                  });
+                }
+
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -581,63 +587,27 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
     key: "handleTasksChange",
     value: function () {
       var _handleTasksChange = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action, taskId, taskTitle) {
-        var tasks, _tasks, _tasks2, _tasks3;
-
+        var tasks;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!(action === 'delete-button')) {
-                  _context3.next = 7;
-                  break;
-                }
+                _context3.next = 2;
+                return store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle);
 
-                _context3.next = 3;
-                return store.deleteTask(taskId, this.tasksUrl, this.props.token);
-
-              case 3:
+              case 2:
                 tasks = _context3.sent;
-                this.props.onTasksChange(tasks);
-                _context3.next = 22;
-                break;
 
-              case 7:
-                if (!(action === 'comp-button')) {
-                  _context3.next = 14;
-                  break;
+                if (tasks instanceof Error) {
+                  this.handleLogout();
+                  alert('Not authorized');
+                } else {
+                  this.setState({
+                    tasks: tasks
+                  });
                 }
 
-                _context3.next = 10;
-                return store.completeTask(taskId, this.tasksUrl, this.props.token);
-
-              case 10:
-                _tasks = _context3.sent;
-                this.props.onTasksChange(_tasks);
-                _context3.next = 22;
-                break;
-
-              case 14:
-                if (!(action === 'edit-button' || action === 'save-button' || action === 'edit-view')) {
-                  _context3.next = 21;
-                  break;
-                }
-
-                _context3.next = 17;
-                return store.editTask(taskId, taskTitle, this.tasksUrl, this.props.token);
-
-              case 17:
-                _tasks2 = _context3.sent;
-                this.props.onTasksChange(_tasks2);
-                _context3.next = 22;
-                break;
-
-              case 21:
-                if (action === 'cancel') {
-                  _tasks3 = store.cancelEdit();
-                  this.props.onTasksChange(_tasks3);
-                }
-
-              case 22:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -663,7 +633,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var tasks = this.props.tasks;
+      var tasks = this.state.tasks;
       var listItems = tasks.map(function (task) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TaskCard__WEBPACK_IMPORTED_MODULE_1__.default, {
           onTasksChange: _this2.handleTasksChange,
@@ -909,7 +879,7 @@ var Store = function Store() {
               response = _context.sent;
 
               if (!response.ok) {
-                _context.next = 10;
+                _context.next = 12;
                 break;
               }
 
@@ -926,7 +896,10 @@ var Store = function Store() {
 
               return _context.abrupt("return", _this.tasks);
 
-            case 10:
+            case 12:
+              return _context.abrupt("return", new Error('Not authorized'));
+
+            case 13:
             case "end":
               return _context.stop();
           }
@@ -955,7 +928,7 @@ var Store = function Store() {
               response = _context2.sent;
 
               if (!response.ok) {
-                _context2.next = 12;
+                _context2.next = 14;
                 break;
               }
 
@@ -972,7 +945,10 @@ var Store = function Store() {
 
               return _context2.abrupt("return", _this.tasks);
 
-            case 12:
+            case 14:
+              return _context2.abrupt("return", new Error('Not authorized'));
+
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -986,27 +962,84 @@ var Store = function Store() {
   }());
 
   _defineProperty(this, "putData", /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(url, id, data, token) {
-      var response, content;
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(url, id, token, action, taskTitle) {
+      var data, task, _task, tasks, _task2, _tasks, response, content;
+
       return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.next = 2;
-              return fetch("".concat(url, "/").concat(id), new _api_js__WEBPACK_IMPORTED_MODULE_0__.ApiCall('PUT', data, token));
+              data = {};
 
-            case 2:
-              response = _context3.sent;
-
-              if (!response.ok) {
-                _context3.next = 10;
+              if (!(action === 'delete-button')) {
+                _context3.next = 7;
                 break;
               }
 
-              _context3.next = 6;
+              task = _this.deleteTask(id);
+              data.task = task.task;
+              data._id = task._id;
+              _context3.next = 27;
+              break;
+
+            case 7:
+              if (!(action === 'comp-button')) {
+                _context3.next = 13;
+                break;
+              }
+
+              _task = _this.completeTask(id);
+              data.task = _task.task;
+              data._id = _task._id;
+              _context3.next = 27;
+              break;
+
+            case 13:
+              if (!(action === 'edit-button')) {
+                _context3.next = 18;
+                break;
+              }
+
+              tasks = _this.editTask(id);
+              return _context3.abrupt("return", tasks);
+
+            case 18:
+              if (!(action === 'save-button' || action === 'edit-view')) {
+                _context3.next = 24;
+                break;
+              }
+
+              _task2 = _this.editTask(id, taskTitle);
+              data.task = _task2.task;
+              data._id = _task2._id;
+              _context3.next = 27;
+              break;
+
+            case 24:
+              if (!(action === 'cancel')) {
+                _context3.next = 27;
+                break;
+              }
+
+              _tasks = _this.cancelEdit();
+              return _context3.abrupt("return", _tasks);
+
+            case 27:
+              _context3.next = 29;
+              return fetch("".concat(url, "/").concat(data._id), new _api_js__WEBPACK_IMPORTED_MODULE_0__.ApiCall('PUT', data.task, token));
+
+            case 29:
+              response = _context3.sent;
+
+              if (!response.ok) {
+                _context3.next = 39;
+                break;
+              }
+
+              _context3.next = 33;
               return response.json();
 
-            case 6:
+            case 33:
               content = _context3.sent;
               _this.tasks = content;
 
@@ -1016,7 +1049,10 @@ var Store = function Store() {
 
               return _context3.abrupt("return", _this.tasks);
 
-            case 10:
+            case 39:
+              return _context3.abrupt("return", new Error('Not authorized'));
+
+            case 40:
             case "end":
               return _context3.stop();
           }
@@ -1024,63 +1060,69 @@ var Store = function Store() {
       }, _callee3);
     }));
 
-    return function (_x6, _x7, _x8, _x9) {
+    return function (_x6, _x7, _x8, _x9, _x10) {
       return _ref3.apply(this, arguments);
     };
   }());
 
-  _defineProperty(this, "deleteTask", function (id, url, token) {
+  _defineProperty(this, "deleteTask", function (id) {
+    var data = {};
+
     var taskId = _this.tasks.findIndex(function (x) {
       return x.taskId === id;
     });
 
-    var task = _this.tasks[taskId];
-    var internalId = task._id;
-    task.isDeleted = true;
-    delete task.editView;
-    delete task._id;
-    return _this.putData(url, internalId, task, token);
+    data.task = _this.tasks[taskId];
+    data._id = data.task._id;
+    data.task.isDeleted = true;
+    delete data.task.editView;
+    delete data.task._id;
+    return data;
   });
 
-  _defineProperty(this, "completeTask", function (id, url, token) {
+  _defineProperty(this, "completeTask", function (id) {
+    var data = {};
+
     var taskId = _this.tasks.findIndex(function (x) {
       return x.taskId === id;
     });
 
-    var task = _this.tasks[taskId];
-    var internalId = task._id;
-    delete task.editView;
-    delete task._id;
+    data.task = _this.tasks[taskId];
+    data._id = data.task._id;
+    delete data.task.editView;
+    delete data.task._id;
 
-    if (task.isCompleted == true) {
-      task.isCompleted = false;
-      return _this.putData(url, internalId, task, token);
-    } else if (task.isCompleted == false) {
-      task.isCompleted = true;
-      return _this.putData(url, internalId, task, token);
+    if (data.task.isCompleted == true) {
+      data.task.isCompleted = false;
+      return data;
+    } else if (data.task.isCompleted == false) {
+      data.task.isCompleted = true;
+      return data;
     }
   });
 
-  _defineProperty(this, "editTask", function (id, value, url, token) {
+  _defineProperty(this, "editTask", function (id, taskTitle) {
+    var data = {};
+
     var taskId = _this.tasks.findIndex(function (x) {
       return x.taskId === id;
     });
 
-    var task = _this.tasks[taskId];
-    var internalId = task._id;
+    data.task = _this.tasks[taskId];
+    data._id = data.task._id;
 
-    if (task.editView == false) {
+    if (data.task.editView == false) {
       _this.tasks.forEach(function (task) {
         return task.editView = false;
       });
 
-      task.editView = true;
+      data.task.editView = true;
       return _this.tasks;
-    } else if (task.editView == true) {
-      delete task.editView;
-      delete task._id;
-      task.taskLabel = value;
-      return _this.putData(url, internalId, task, token);
+    } else if (data.task.editView == true) {
+      delete data.task.editView;
+      delete data.task._id;
+      data.task.taskLabel = taskTitle;
+      return data;
     }
   });
 

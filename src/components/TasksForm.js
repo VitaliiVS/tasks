@@ -13,35 +13,45 @@ class TasksForm extends React.Component {
         this.handleTasksChange = this.handleTasksChange.bind(this)
 
         this.tasksUrl = 'http://127.0.0.1:3000/tasks'
-        this.state = { taskTitle: '' }
+        this.state = {
+            tasks: [],
+            taskTitle: ''
+        }
     }
 
     async componentDidMount() {
         const tasks = await store.getData(this.tasksUrl, this.props.token)
-        this.props.onTasksChange(tasks)
+
+        if (tasks instanceof Error) {
+            this.handleLogout()
+            alert('Not authorized')
+        } else {
+            this.setState({ tasks })
+        }
     }
 
     async handleAddTask() {
         if (this.state.taskTitle.trim() !== '') {
             const tasks = await store.postData(this.state.taskTitle, this.tasksUrl, this.props.token)
-            this.props.onTasksChange(tasks)
-            this.setState({ taskTitle: '' })
+
+            if (tasks instanceof Error) {
+                this.handleLogout()
+                alert('Not authorized')
+            } else {
+                this.setState({ tasks })
+                this.setState({ taskTitle: '' })
+            }
         }
     }
 
     async handleTasksChange(action, taskId, taskTitle) {
-        if (action === 'delete-button') {
-            const tasks = await store.deleteTask(taskId, this.tasksUrl, this.props.token)
-            this.props.onTasksChange(tasks)
-        } else if (action === 'comp-button') {
-            const tasks = await store.completeTask(taskId, this.tasksUrl, this.props.token)
-            this.props.onTasksChange(tasks)
-        } else if (action === 'edit-button' || action === 'save-button' || action === 'edit-view') {
-            const tasks = await store.editTask(taskId, taskTitle, this.tasksUrl, this.props.token)
-            this.props.onTasksChange(tasks)
-        } else if (action === 'cancel') {
-            const tasks = store.cancelEdit()
-            this.props.onTasksChange(tasks)
+        const tasks = await store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle)
+
+        if (tasks instanceof Error) {
+            this.handleLogout()
+            alert('Not authorized')
+        } else {
+            this.setState({ tasks })
         }
     }
 
@@ -52,7 +62,7 @@ class TasksForm extends React.Component {
     }
 
     render() {
-        const tasks = this.props.tasks
+        const tasks = this.state.tasks
         const listItems = tasks.map(task =>
             <Task
                 onTasksChange={this.handleTasksChange}
