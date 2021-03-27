@@ -23,8 +23,10 @@ export class Store {
             this.tasks.forEach(x => x.editView = false)
 
             return this.tasks
+        } else if (response.status === 401) {
+            return 'Not authorized'
         } else {
-            return new Error('Not authorized')
+            throw Error(response.status)
         }
     }
 
@@ -38,8 +40,10 @@ export class Store {
             this.tasks = content
             this.tasks.forEach(x => x.editView = false)
             return this.tasks
+        } else if (response.status === 401) {
+            return 'Not authorized'
         } else {
-            return new Error('Not authorized')
+            throw Error(response.status)
         }
     }
 
@@ -76,8 +80,10 @@ export class Store {
             this.tasks.forEach(x => x.editView = false)
 
             return this.tasks
+        } else if (response.status === 401) {
+            return 'Not authorized'
         } else {
-            return new Error('Not authorized')
+            throw Error(response.status)
         }
     }
 

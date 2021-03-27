@@ -1,6 +1,7 @@
 import React from 'react'
 import Task from './TaskCard'
 import { Store } from './store.js'
+import { debounce } from 'lodash'
 
 const store = new Store()
 
@@ -9,7 +10,7 @@ class TasksForm extends React.Component {
         super(props)
 
         this.handleLogout = this.handleLogout.bind(this)
-        this.handleAddTask = this.handleAddTask.bind(this)
+        this.handleAddTaskDebounced = debounce(this.handleAddTask.bind(this), 200)
         this.handleTasksChange = this.handleTasksChange.bind(this)
 
         this.tasksUrl = 'http://127.0.0.1:3000/tasks'
@@ -22,7 +23,7 @@ class TasksForm extends React.Component {
     async componentDidMount() {
         const tasks = await store.getData(this.tasksUrl, this.props.token)
 
-        if (tasks instanceof Error) {
+        if (tasks === 'Not authorized') {
             this.handleLogout()
             alert('Not authorized')
         } else {
@@ -34,7 +35,7 @@ class TasksForm extends React.Component {
         if (this.state.taskTitle.trim() !== '') {
             const tasks = await store.postData(this.state.taskTitle, this.tasksUrl, this.props.token)
 
-            if (tasks instanceof Error) {
+            if (tasks === 'Not authorized') {
                 this.handleLogout()
                 alert('Not authorized')
             } else {
@@ -47,7 +48,7 @@ class TasksForm extends React.Component {
     async handleTasksChange(action, taskId, taskTitle) {
         const tasks = await store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle)
 
-        if (tasks instanceof Error) {
+        if (tasks === 'Not authorized') {
             this.handleLogout()
             alert('Not authorized')
         } else {
@@ -82,11 +83,11 @@ class TasksForm extends React.Component {
                     <input
                         value={this.state.taskTitle}
                         onChange={(e) => this.setState({ taskTitle: e.target.value })}
-                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleAddTask() }}
+                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleAddTaskDebounced() }}
                         className="task-input"
                         placeholder="What you want to do?"
                     />
-                    <button onClick={this.handleAddTask} className={"create-button far fa-plus-square"} />
+                    <button onClick={this.handleAddTaskDebounced} className={"create-button far fa-plus-square"} />
                     <ul className="tasks-list">
                         {listItems}
                     </ul>
