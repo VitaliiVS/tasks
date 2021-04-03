@@ -41,7 +41,7 @@ class TaskCard extends React.Component {
                 editButtonClassNames: "edit-button far fa-edit disabled"
             },
             false: {
-                taskClassNames: "task",
+                taskClassNames: this.state.editView ? "edit-view" : "task",
                 editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
             }
         }
@@ -64,7 +64,7 @@ class TaskCard extends React.Component {
         const { deleteButtonClassNames, compButtonClassNames } = editView[edit]
 
         const task = this.state.editView
-            ? <input onKeyUp={this.handleKeyUpDebounced} value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className="edit-view" type="text" />
+            ? <input onKeyUp={this.handleKeyUpDebounced} value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className={taskClassNames} type="text" />
             : <p className={taskClassNames}>{this.props.taskTitle}</p>
 
         return (

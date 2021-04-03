@@ -391,7 +391,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
           editButtonClassNames: "edit-button far fa-edit disabled"
         },
         false: {
-          taskClassNames: "task",
+          taskClassNames: this.state.editView ? "edit-view" : "task",
           editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
         }
       };
@@ -421,7 +421,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
             taskTitle: e.target.value
           });
         },
-        className: "edit-view",
+        className: taskClassNames,
         type: "text"
       }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
         className: taskClassNames
