@@ -7,9 +7,11 @@ class TaskCard extends React.Component {
 
         this.handleChangeDebounced = debounce(this.handleChange.bind(this), 200)
         this.handleKeyUpDebounced = debounce(this.handleKeyUp.bind(this), 200)
+        this.handleEdit = this.handleEdit.bind(this)
 
         this.state = {
-            taskTitle: this.props.taskTitle
+            taskTitle: this.props.taskTitle,
+            editView: false
         }
     }
 
@@ -17,16 +19,19 @@ class TaskCard extends React.Component {
         const classNames = e.target.className.split(' ')
         const action = classNames[0]
         this.props.onTasksChange(action, this.props.taskId, this.state.taskTitle)
+        this.setState({ editView: false })
     }
 
     handleKeyUp(e) {
         if (e.key === 'Enter') {
             this.handleChange(e)
         } else if (e.key === 'Escape') {
-            const action = 'cancel'
-            this.props.onTasksChange(action)
-            this.setState({ taskTitle: this.props.taskTitle })
+            this.setState({ taskTitle: this.props.taskTitle, editView: false })
         }
+    }
+
+    handleEdit() {
+        this.setState({ editView: true })
     }
 
     render() {
@@ -37,7 +42,7 @@ class TaskCard extends React.Component {
             },
             false: {
                 taskClassNames: "task",
-                editButtonClassNames: this.props.editView ? "save-button far fa-save" : "edit-button far fa-edit"
+                editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
             }
         }
 
@@ -55,19 +60,19 @@ class TaskCard extends React.Component {
         const completed = this.props.isCompleted
         const { taskClassNames, editButtonClassNames } = isCompleted[completed]
 
-        const edit = this.props.editView
+        const edit = this.state.editView
         const { deleteButtonClassNames, compButtonClassNames } = editView[edit]
 
-        const task = this.props.editView
+        const task = this.state.editView
             ? <input onKeyUp={this.handleKeyUpDebounced} value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className="edit-view" type="text" />
             : <p className={taskClassNames}>{this.props.taskTitle}</p>
 
         return (
             <li className="task-container">
-                <input onChange={this.handleChangeDebounced} className={compButtonClassNames} type="checkbox" checked={this.props.isCompleted} disabled={this.props.editView} />
+                <input onChange={this.handleChangeDebounced} className={compButtonClassNames} type="checkbox" checked={this.props.isCompleted} disabled={this.state.editView} />
                 {task}
-                <button onClick={this.handleChangeDebounced} className={editButtonClassNames} />
-                <button onClick={this.handleChangeDebounced} className={deleteButtonClassNames} disabled={this.props.editView} />
+                <button onClick={this.state.editView ? this.handleChangeDebounced : this.handleEdit} className={editButtonClassNames} />
+                <button onClick={this.handleChangeDebounced} className={deleteButtonClassNames} disabled={this.state.editView} />
             </li>
         )
     }

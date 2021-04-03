@@ -74,7 +74,6 @@ class TasksForm extends React.Component {
             <Task
                 onTasksChange={this.handleTasksChange}
                 isCompleted={task.isCompleted}
-                editView={task.editView}
                 key={task.taskId}
                 taskId={task.taskId}
                 taskTitle={task.taskLabel}

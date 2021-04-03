@@ -343,8 +343,10 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.handleChangeDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.debounce)(_this.handleChange.bind(_assertThisInitialized(_this)), 200);
     _this.handleKeyUpDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.debounce)(_this.handleKeyUp.bind(_assertThisInitialized(_this)), 200);
+    _this.handleEdit = _this.handleEdit.bind(_assertThisInitialized(_this));
     _this.state = {
-      taskTitle: _this.props.taskTitle
+      taskTitle: _this.props.taskTitle,
+      editView: false
     };
     return _this;
   }
@@ -355,6 +357,9 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
       var classNames = e.target.className.split(' ');
       var action = classNames[0];
       this.props.onTasksChange(action, this.props.taskId, this.state.taskTitle);
+      this.setState({
+        editView: false
+      });
     }
   }, {
     key: "handleKeyUp",
@@ -362,12 +367,18 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
       if (e.key === 'Enter') {
         this.handleChange(e);
       } else if (e.key === 'Escape') {
-        var action = 'cancel';
-        this.props.onTasksChange(action);
         this.setState({
-          taskTitle: this.props.taskTitle
+          taskTitle: this.props.taskTitle,
+          editView: false
         });
       }
+    }
+  }, {
+    key: "handleEdit",
+    value: function handleEdit() {
+      this.setState({
+        editView: true
+      });
     }
   }, {
     key: "render",
@@ -381,7 +392,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
         },
         false: {
           taskClassNames: "task",
-          editButtonClassNames: this.props.editView ? "save-button far fa-save" : "edit-button far fa-edit"
+          editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
         }
       };
       var editView = {
@@ -398,11 +409,11 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
       var _isCompleted$complete = isCompleted[completed],
           taskClassNames = _isCompleted$complete.taskClassNames,
           editButtonClassNames = _isCompleted$complete.editButtonClassNames;
-      var edit = this.props.editView;
+      var edit = this.state.editView;
       var _editView$edit = editView[edit],
           deleteButtonClassNames = _editView$edit.deleteButtonClassNames,
           compButtonClassNames = _editView$edit.compButtonClassNames;
-      var task = this.props.editView ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+      var task = this.state.editView ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         onKeyUp: this.handleKeyUpDebounced,
         value: this.state.taskTitle,
         onChange: function onChange(e) {
@@ -422,14 +433,14 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
         className: compButtonClassNames,
         type: "checkbox",
         checked: this.props.isCompleted,
-        disabled: this.props.editView
+        disabled: this.state.editView
       }), task, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-        onClick: this.handleChangeDebounced,
+        onClick: this.state.editView ? this.handleChangeDebounced : this.handleEdit,
         className: editButtonClassNames
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleChangeDebounced,
         className: deleteButtonClassNames,
-        disabled: this.props.editView
+        disabled: this.state.editView
       }));
     }
   }]);
@@ -601,12 +612,29 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
+                tasks = {};
+
+                if (!(action === 'delete-button')) {
+                  _context3.next = 7;
+                  break;
+                }
+
+                _context3.next = 4;
+                return store.deleteData(this.tasksUrl, taskId, this.props.token);
+
+              case 4:
+                tasks = _context3.sent;
+                _context3.next = 10;
+                break;
+
+              case 7:
+                _context3.next = 9;
                 return store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle);
 
-              case 2:
+              case 9:
                 tasks = _context3.sent;
 
+              case 10:
                 if (tasks === 'Not authorized') {
                   this.handleLogout();
                   alert('Not authorized');
@@ -616,7 +644,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
                   });
                 }
 
-              case 4:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -647,7 +675,6 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TaskCard__WEBPACK_IMPORTED_MODULE_1__.default, {
           onTasksChange: _this2.handleTasksChange,
           isCompleted: task.isCompleted,
-          editView: task.editView,
           key: task.taskId,
           taskId: task.taskId,
           taskTitle: task.taskLabel
@@ -710,7 +737,10 @@ var ApiCall = function ApiCall(method, body, token) {
     'Content-Type': 'application/json',
     'authorization': "Bearer ".concat(token)
   };
-  this.body = JSON.stringify(body);
+
+  if (body !== null) {
+    this.body = JSON.stringify(body);
+  }
 };
 
 /***/ }),
@@ -875,20 +905,13 @@ var Store = function Store() {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return fetch(url, {
-                method: 'GET',
-                cache: 'no-cache',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'authorization': "Bearer ".concat(token)
-                }
-              });
+              return fetch(url, new _api_js__WEBPACK_IMPORTED_MODULE_0__.ApiCall('GET', null, token));
 
             case 2:
               response = _context.sent;
 
               if (!response.ok) {
-                _context.next = 12;
+                _context.next = 11;
                 break;
               }
 
@@ -898,25 +921,20 @@ var Store = function Store() {
             case 6:
               content = _context.sent;
               _this.tasks = content;
-
-              _this.tasks.forEach(function (x) {
-                return x.editView = false;
-              });
-
               return _context.abrupt("return", _this.tasks);
 
-            case 12:
+            case 11:
               if (!(response.status === 401)) {
-                _context.next = 16;
+                _context.next = 15;
                 break;
               }
 
               return _context.abrupt("return", 'Not authorized');
 
-            case 16:
+            case 15:
               throw Error(response.status);
 
-            case 17:
+            case 16:
             case "end":
               return _context.stop();
           }
@@ -945,7 +963,7 @@ var Store = function Store() {
               response = _context2.sent;
 
               if (!response.ok) {
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
               }
 
@@ -955,25 +973,20 @@ var Store = function Store() {
             case 8:
               content = _context2.sent;
               _this.tasks = content;
-
-              _this.tasks.forEach(function (x) {
-                return x.editView = false;
-              });
-
               return _context2.abrupt("return", _this.tasks);
 
-            case 14:
+            case 13:
               if (!(response.status === 401)) {
-                _context2.next = 18;
+                _context2.next = 17;
                 break;
               }
 
               return _context2.abrupt("return", 'Not authorized');
 
-            case 18:
+            case 17:
               throw Error(response.status);
 
-            case 19:
+            case 18:
             case "end":
               return _context2.stop();
           }
@@ -988,104 +1001,56 @@ var Store = function Store() {
 
   _defineProperty(this, "putData", /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(url, id, token, action, taskTitle) {
-      var data, task, _task, tasks, _task2, _tasks, response, content;
+      var taskId, task, _id, response, content;
 
       return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              data = {};
+              taskId = _this.tasks.findIndex(function (x) {
+                return x.taskId === id;
+              });
+              task = _this.tasks[taskId];
+              _id = task._id;
+              delete task._id;
 
-              if (!(action === 'delete-button')) {
-                _context3.next = 7;
-                break;
+              if (action === 'comp-button') {
+                task.isCompleted ? task.isCompleted = false : task.isCompleted = true;
+              } else if (action === 'save-button' || action === 'edit-view') {
+                task.taskLabel = taskTitle;
               }
 
-              task = _this.deleteTask(id);
-              data.task = task.task;
-              data._id = task._id;
-              _context3.next = 27;
-              break;
+              _context3.next = 7;
+              return fetch("".concat(url, "/").concat(_id), new _api_js__WEBPACK_IMPORTED_MODULE_0__.ApiCall('PUT', task, token));
 
             case 7:
-              if (!(action === 'comp-button')) {
-                _context3.next = 13;
-                break;
-              }
-
-              _task = _this.completeTask(id);
-              data.task = _task.task;
-              data._id = _task._id;
-              _context3.next = 27;
-              break;
-
-            case 13:
-              if (!(action === 'edit-button')) {
-                _context3.next = 18;
-                break;
-              }
-
-              tasks = _this.editTask(id);
-              return _context3.abrupt("return", tasks);
-
-            case 18:
-              if (!(action === 'save-button' || action === 'edit-view')) {
-                _context3.next = 24;
-                break;
-              }
-
-              _task2 = _this.editTask(id, taskTitle);
-              data.task = _task2.task;
-              data._id = _task2._id;
-              _context3.next = 27;
-              break;
-
-            case 24:
-              if (!(action === 'cancel')) {
-                _context3.next = 27;
-                break;
-              }
-
-              _tasks = _this.cancelEdit();
-              return _context3.abrupt("return", _tasks);
-
-            case 27:
-              _context3.next = 29;
-              return fetch("".concat(url, "/").concat(data._id), new _api_js__WEBPACK_IMPORTED_MODULE_0__.ApiCall('PUT', data.task, token));
-
-            case 29:
               response = _context3.sent;
 
               if (!response.ok) {
-                _context3.next = 39;
+                _context3.next = 16;
                 break;
               }
 
-              _context3.next = 33;
+              _context3.next = 11;
               return response.json();
 
-            case 33:
+            case 11:
               content = _context3.sent;
               _this.tasks = content;
-
-              _this.tasks.forEach(function (x) {
-                return x.editView = false;
-              });
-
               return _context3.abrupt("return", _this.tasks);
 
-            case 39:
+            case 16:
               if (!(response.status === 401)) {
-                _context3.next = 43;
+                _context3.next = 20;
                 break;
               }
 
               return _context3.abrupt("return", 'Not authorized');
 
-            case 43:
+            case 20:
               throw Error(response.status);
 
-            case 44:
+            case 21:
             case "end":
               return _context3.stop();
           }
@@ -1098,74 +1063,62 @@ var Store = function Store() {
     };
   }());
 
-  _defineProperty(this, "deleteTask", function (id) {
-    var data = {};
+  _defineProperty(this, "deleteData", /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(url, id, token) {
+      var taskId, task, _id, response, content;
 
-    var taskId = _this.tasks.findIndex(function (x) {
-      return x.taskId === id;
-    });
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              taskId = _this.tasks.findIndex(function (x) {
+                return x.taskId === id;
+              });
+              task = _this.tasks[taskId];
+              _id = task._id;
+              delete task._id;
+              _context4.next = 6;
+              return fetch("".concat(url, "/").concat(_id), new _api_js__WEBPACK_IMPORTED_MODULE_0__.ApiCall('DELETE', null, token));
 
-    data.task = _this.tasks[taskId];
-    data._id = data.task._id;
-    data.task.isDeleted = true;
-    delete data.task.editView;
-    delete data.task._id;
-    return data;
-  });
+            case 6:
+              response = _context4.sent;
 
-  _defineProperty(this, "completeTask", function (id) {
-    var data = {};
+              if (!response.ok) {
+                _context4.next = 15;
+                break;
+              }
 
-    var taskId = _this.tasks.findIndex(function (x) {
-      return x.taskId === id;
-    });
+              _context4.next = 10;
+              return response.json();
 
-    data.task = _this.tasks[taskId];
-    data._id = data.task._id;
-    delete data.task.editView;
-    delete data.task._id;
+            case 10:
+              content = _context4.sent;
+              _this.tasks = content;
+              return _context4.abrupt("return", _this.tasks);
 
-    if (data.task.isCompleted == true) {
-      data.task.isCompleted = false;
-      return data;
-    } else if (data.task.isCompleted == false) {
-      data.task.isCompleted = true;
-      return data;
-    }
-  });
+            case 15:
+              if (!(response.status === 401)) {
+                _context4.next = 19;
+                break;
+              }
 
-  _defineProperty(this, "editTask", function (id, taskTitle) {
-    var data = {};
+              return _context4.abrupt("return", 'Not authorized');
 
-    var taskId = _this.tasks.findIndex(function (x) {
-      return x.taskId === id;
-    });
+            case 19:
+              throw Error(response.status);
 
-    data.task = _this.tasks[taskId];
-    data._id = data.task._id;
+            case 20:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
 
-    if (data.task.editView == false) {
-      _this.tasks.forEach(function (task) {
-        return task.editView = false;
-      });
-
-      data.task.editView = true;
-      return _this.tasks;
-    } else if (data.task.editView == true) {
-      delete data.task.editView;
-      delete data.task._id;
-      data.task.taskLabel = taskTitle;
-      return data;
-    }
-  });
-
-  _defineProperty(this, "cancelEdit", function () {
-    _this.tasks.forEach(function (task) {
-      return task.editView = false;
-    });
-
-    return _this.tasks;
-  });
+    return function (_x11, _x12, _x13) {
+      return _ref4.apply(this, arguments);
+    };
+  }());
 
   this.tasks = [];
 };
