@@ -680,6 +680,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
           taskTitle: task.taskLabel
         });
       });
+      var createButtonClassNames = this.state.taskTitle.trim().length === 0 ? "create-button far fa-plus-square disabled" : "create-button far fa-plus-square";
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", {
         className: "header"
       }, "Tasks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
@@ -701,7 +702,8 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
         placeholder: "What you want to do?"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleAddTaskDebounced,
-        className: "create-button far fa-plus-square"
+        className: createButtonClassNames,
+        disabled: this.state.taskTitle.trim().length === 0
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("ul", {
         className: "tasks-list"
       }, listItems)));
