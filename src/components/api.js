@@ -1,11 +1,13 @@
 export class ApiCall {
-    constructor(method, body, token) {
+    constructor(method, token, body) {
         this.method = method
         this.cache = 'no-cache'
         this.headers = {
             'Content-Type': 'application/json',
             'authorization': `Bearer ${token}`
         }
-        this.body = JSON.stringify(body)
+        if (body) {
+            this.body = JSON.stringify(body)
+        }
     }
 }

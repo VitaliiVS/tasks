@@ -46,7 +46,13 @@ class TasksForm extends React.Component {
     }
 
     async handleTasksChange(action, taskId, taskTitle) {
-        const tasks = await store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle)
+        let tasks = {}
+
+        if (action === 'delete-button') {
+            tasks = await store.deleteData(this.tasksUrl, taskId, this.props.token)
+        } else {
+            tasks = await store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle)
+        }
 
         if (tasks === 'Not authorized') {
             this.handleLogout()
