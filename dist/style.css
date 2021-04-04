@@ -20,7 +20,7 @@ button {
   font-size: 1.5em;
   text-decoration: none;
   cursor: pointer; }
-  button:hover {
+  button:hover:not([disabled]) {
     -webkit-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
     background-color: #c3c7c7;
@@ -161,12 +161,6 @@ button {
       width: 101px;
       top: 10px;
       right: 0; } }
-
-.disabled {
-  color: #d9d9d9;
-  pointer-events: none; }
-  .disabled:after {
-    border: 2px solid #aca3a3; }
 
 .completed {
   text-decoration: line-through;

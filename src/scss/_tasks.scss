@@ -2,11 +2,9 @@
     display: grid;
     justify-content: center;
     align-items: center;
-
     @include sm-min {
         grid-template-columns: 300px 20px;
     }
-
     @include sm {
         grid-template-columns: 240px 45px;
         overflow: hidden;
@@ -27,12 +25,10 @@
     grid-template-columns: repeat(4, 1fr);
     padding-bottom: 5px;
     border-bottom: 1px solid #c3c7c7;
-
     @include sm-min {
         width: 370px;
         margin: 10px 0;
     }
-
     @include sm {
         width: 290px;
         margin: 5px 0;
@@ -42,17 +38,14 @@
 .task {
     margin: 0px;
     padding: 5px;
-
     font-size: 1.125em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-
     @include sm-min {
         min-width: 245px;
         max-width: 245px;
     }
-
     @include sm {
         min-width: 160px;
         max-width: 160px;
@@ -62,15 +55,12 @@
 .edit-view {
     margin: 0px 1px 0px 0px;
     padding: 5px;
-
     font-size: 1.125em;
     overflow: hidden;
-
     @include sm-min {
         min-width: 240px;
         max-width: 240px;
     }
-
     @include sm {
         min-width: 157px;
         max-width: 157px;
@@ -84,7 +74,6 @@
 .comp-button {
     margin: 10px 15px 0px 10px;
     cursor: pointer;
-
     &:after {
         line-height: 1.5em;
         content: "";
@@ -97,7 +86,6 @@
         border: 2px solid black;
         background-color: white;
     }
-
     &:checked:after {
         border-top: none;
         border-left: none;
@@ -114,26 +102,15 @@
 
 .logout-button {
     position: absolute;
-
     @include sm-min {
         width: 150px;
         top: 20px;
         right: 30px;
     }
-
     @include sm {
         width: 101px;
         top: 10px;
         right: 0;
-    }
-}
-
-.disabled {
-    color: #d9d9d9;
-    pointer-events: none;
-
-    &:after {
-        border: 2px solid rgb(172, 163, 163);
     }
 }
 

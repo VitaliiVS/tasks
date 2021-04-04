@@ -388,31 +388,17 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
       var isCompleted = {
         true: {
           taskClassNames: "task completed",
-          editButtonClassNames: "edit-button far fa-edit disabled"
+          editButtonClassNames: "edit-button far fa-edit"
         },
         false: {
           taskClassNames: this.state.editView ? "edit-view" : "task",
           editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
         }
       };
-      var editView = {
-        true: {
-          deleteButtonClassNames: "delete-button far fa-trash-alt disabled",
-          compButtonClassNames: "comp-button disabled"
-        },
-        false: {
-          deleteButtonClassNames: "delete-button far fa-trash-alt",
-          compButtonClassNames: "comp-button"
-        }
-      };
       var completed = this.props.isCompleted;
       var _isCompleted$complete = isCompleted[completed],
           taskClassNames = _isCompleted$complete.taskClassNames,
           editButtonClassNames = _isCompleted$complete.editButtonClassNames;
-      var edit = this.state.editView;
-      var _editView$edit = editView[edit],
-          deleteButtonClassNames = _editView$edit.deleteButtonClassNames,
-          compButtonClassNames = _editView$edit.compButtonClassNames;
       var task = this.state.editView ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         onKeyUp: this.handleKeyUpDebounced,
         value: this.state.taskTitle,
@@ -430,16 +416,17 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
         className: "task-container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         onChange: this.handleChangeDebounced,
-        className: compButtonClassNames,
+        className: "comp-button",
         type: "checkbox",
         checked: this.props.isCompleted,
         disabled: this.state.editView
       }), task, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.state.editView ? this.handleChangeDebounced : this.handleEdit,
-        className: editButtonClassNames
+        className: editButtonClassNames,
+        disabled: this.props.isCompleted
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleChangeDebounced,
-        className: deleteButtonClassNames,
+        className: "delete-button far fa-trash-alt",
         disabled: this.state.editView
       }));
     }
@@ -680,7 +667,6 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
           taskTitle: task.taskLabel
         });
       });
-      var createButtonClassNames = this.state.taskTitle.trim().length === 0 ? "create-button far fa-plus-square disabled" : "create-button far fa-plus-square";
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", {
         className: "header"
       }, "Tasks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
@@ -702,7 +688,7 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
         placeholder: "What you want to do?"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleAddTaskDebounced,
-        className: createButtonClassNames,
+        className: "create-button far fa-plus-square",
         disabled: this.state.taskTitle.trim().length === 0
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("ul", {
         className: "tasks-list"

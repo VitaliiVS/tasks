@@ -38,7 +38,7 @@ class TaskCard extends React.Component {
         const isCompleted = {
             true: {
                 taskClassNames: "task completed",
-                editButtonClassNames: "edit-button far fa-edit disabled"
+                editButtonClassNames: "edit-button far fa-edit"
             },
             false: {
                 taskClassNames: this.state.editView ? "edit-view" : "task",
@@ -46,22 +46,8 @@ class TaskCard extends React.Component {
             }
         }
 
-        const editView = {
-            true: {
-                deleteButtonClassNames: "delete-button far fa-trash-alt disabled",
-                compButtonClassNames: "comp-button disabled"
-            },
-            false: {
-                deleteButtonClassNames: "delete-button far fa-trash-alt",
-                compButtonClassNames: "comp-button"
-            }
-        }
-
         const completed = this.props.isCompleted
         const { taskClassNames, editButtonClassNames } = isCompleted[completed]
-
-        const edit = this.state.editView
-        const { deleteButtonClassNames, compButtonClassNames } = editView[edit]
 
         const task = this.state.editView
             ? <input onKeyUp={this.handleKeyUpDebounced} value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className={taskClassNames} type="text" />
@@ -69,10 +55,10 @@ class TaskCard extends React.Component {
 
         return (
             <li className="task-container">
-                <input onChange={this.handleChangeDebounced} className={compButtonClassNames} type="checkbox" checked={this.props.isCompleted} disabled={this.state.editView} />
+                <input onChange={this.handleChangeDebounced} className={"comp-button"} type="checkbox" checked={this.props.isCompleted} disabled={this.state.editView} />
                 {task}
-                <button onClick={this.state.editView ? this.handleChangeDebounced : this.handleEdit} className={editButtonClassNames} />
-                <button onClick={this.handleChangeDebounced} className={deleteButtonClassNames} disabled={this.state.editView} />
+                <button onClick={this.state.editView ? this.handleChangeDebounced : this.handleEdit} className={editButtonClassNames} disabled={this.props.isCompleted}/>
+                <button onClick={this.handleChangeDebounced} className={"delete-button far fa-trash-alt"} disabled={this.state.editView} />
             </li>
         )
     }

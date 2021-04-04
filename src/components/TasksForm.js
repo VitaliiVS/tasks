@@ -80,8 +80,6 @@ class TasksForm extends React.Component {
             />
         )
 
-        const createButtonClassNames = this.state.taskTitle.trim().length === 0 ? "create-button far fa-plus-square disabled" : "create-button far fa-plus-square"
-
         return (
             <div>
                 <h1 className="header">Tasks</h1>
@@ -96,7 +94,7 @@ class TasksForm extends React.Component {
                     />
                     <button
                         onClick={this.handleAddTaskDebounced}
-                        className={createButtonClassNames}
+                        className={"create-button far fa-plus-square"}
                         disabled={this.state.taskTitle.trim().length === 0}
                     />
                     <ul className="tasks-list">
