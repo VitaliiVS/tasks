@@ -364,7 +364,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "handleKeyUp",
     value: function handleKeyUp(e) {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && this.state.taskTitle.trim().length > 0) {
         this.handleChange(e);
       } else if (e.key === 'Escape') {
         this.setState({
