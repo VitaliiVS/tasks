@@ -423,7 +423,7 @@ var TaskCard = /*#__PURE__*/function (_React$Component) {
       }), task, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.state.editView ? this.handleChangeDebounced : this.handleEdit,
         className: editButtonClassNames,
-        disabled: this.props.isCompleted
+        disabled: this.props.isCompleted || this.state.taskTitle.trim().length === 0
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleChangeDebounced,
         className: "delete-button far fa-trash-alt",
