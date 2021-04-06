@@ -148,6 +148,8 @@ button {
     width: 14px;
     margin-top: -9px;
     margin-left: 0px; }
+  .comp-button:disabled:after {
+    border: 2px solid #aca3a3; }
 
 .logout-button {
   position: absolute; }

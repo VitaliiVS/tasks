@@ -171,15 +171,10 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!(this.state.username !== '' && this.state.password !== '')) {
-                  _context.next = 5;
-                  break;
-                }
-
-                _context.next = 3;
+                _context.next = 2;
                 return session.login(this.loginUrl, this.state.username, this.state.password);
 
-              case 3:
+              case 2:
                 login = _context.sent;
 
                 if (login !== undefined) {
@@ -188,7 +183,7 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
                   alert('Incorrect username or password');
                 }
 
-              case 5:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -211,15 +206,10 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(this.state.username !== '' && this.state.password !== '')) {
-                  _context2.next = 5;
-                  break;
-                }
-
-                _context2.next = 3;
+                _context2.next = 2;
                 return session.register(this.registerUrl, this.state.username, this.state.password);
 
-              case 3:
+              case 2:
                 register = _context2.sent;
 
                 if (register !== undefined) {
@@ -228,7 +218,7 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
                   alert('User already exist');
                 }
 
-              case 5:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -279,10 +269,12 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
         placeholder: "Password"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleLoginDebounced,
-        className: "login-button"
+        className: "login-button",
+        disabled: this.state.username.trim().length === 0 || this.state.password.trim().length === 0
       }, "Login"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleRegisterDebounced,
-        className: "register-button"
+        className: "register-button",
+        disabled: this.state.username.trim().length === 0 || this.state.password.trim().length === 0
       }, "Register")));
     }
   }]);
