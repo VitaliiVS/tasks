@@ -57,7 +57,7 @@ class TaskCard extends React.Component {
             <li className="task-container">
                 <input onChange={this.handleChangeDebounced} className={"comp-button"} type="checkbox" checked={this.props.isCompleted} disabled={this.state.editView} />
                 {task}
-                <button onClick={this.state.editView ? this.handleChangeDebounced : this.handleEdit} className={editButtonClassNames} disabled={this.props.isCompleted || this.state.taskTitle.trim().length === 0}/>
+                <button onClick={this.state.editView ? this.handleChangeDebounced : this.handleEdit} className={editButtonClassNames} disabled={this.props.isCompleted || this.state.taskTitle.trim().length === 0} />
                 <button onClick={this.handleChangeDebounced} className={"delete-button far fa-trash-alt"} disabled={this.state.editView} />
             </li>
         )

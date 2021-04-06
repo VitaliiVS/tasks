@@ -21,21 +21,21 @@ class LoginForm extends React.Component {
     }
 
     async handleLogin() {
-            const login = await session.login(this.loginUrl, this.state.username, this.state.password)
-            if (login !== undefined) {
-                this.props.onTokenChange(login)
-            } else {
-                alert('Incorrect username or password')
-            }
+        const login = await session.login(this.loginUrl, this.state.username, this.state.password)
+        if (login !== undefined) {
+            this.props.onTokenChange(login)
+        } else {
+            alert('Incorrect username or password')
+        }
     }
 
     async handleRegister() {
-            const register = await session.register(this.registerUrl, this.state.username, this.state.password)
-            if (register !== undefined) {
-                this.props.onTokenChange(register)
-            } else {
-                alert('User already exist')
-            }
+        const register = await session.register(this.registerUrl, this.state.username, this.state.password)
+        if (register !== undefined) {
+            this.props.onTokenChange(register)
+        } else {
+            alert('User already exist')
+        }
     }
 
     render() {
@@ -59,7 +59,7 @@ class LoginForm extends React.Component {
                         type="password"
                         placeholder="Password"
                     />
-                    <button 
+                    <button
                         onClick={this.handleLoginDebounced}
                         className={"login-button"}
                         disabled={this.state.username.trim().length === 0 || this.state.password.trim().length === 0}>
