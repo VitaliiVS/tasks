@@ -109,6 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _session_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./session.js */ "./src/components/session.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _config_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./config.js */ "./src/components/config.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -135,6 +136,9 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -151,10 +155,81 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, LoginForm);
 
     _this = _super.call(this, props);
-    _this.handleLoginDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(_this.handleLogin.bind(_assertThisInitialized(_this)), 200);
-    _this.handleRegisterDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(_this.handleRegister.bind(_assertThisInitialized(_this)), 200);
-    _this.loginUrl = 'http://127.0.0.1:3000/auth';
-    _this.registerUrl = 'http://127.0.0.1:3000/register';
+
+    _defineProperty(_assertThisInitialized(_this), "handleLogin", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var login;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return session.login(_this.loginUrl, _this.state.username, _this.state.password);
+
+            case 2:
+              login = _context.sent;
+
+              if (login !== undefined) {
+                _this.props.onTokenChange(login);
+              } else {
+                alert('Incorrect username or password');
+              }
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })));
+
+    _defineProperty(_assertThisInitialized(_this), "handleRegister", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var register;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return session.register(_this.registerUrl, _this.state.username, _this.state.password);
+
+            case 2:
+              register = _context2.sent;
+
+              if (register !== undefined) {
+                _this.props.onTokenChange(register);
+              } else {
+                alert('User already exist');
+              }
+
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    })));
+
+    _defineProperty(_assertThisInitialized(_this), "handleUsernameChange", function (e) {
+      _this.setState({
+        username: e.target.value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handlePasswordChange", function (e) {
+      _this.setState({
+        password: e.target.value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleKeyUp", function (e) {
+      if (e.key === 'Enter') {
+        _this.handleLoginDebounced();
+      }
+    });
+
+    _this.loginUrl = _config_js__WEBPACK_IMPORTED_MODULE_3__.loginUrl;
+    _this.registerUrl = _config_js__WEBPACK_IMPORTED_MODULE_3__.registerUrl;
+    _this.handleLoginDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(_this.handleLogin, 200);
+    _this.handleRegisterDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(_this.handleRegister, 200);
     _this.state = {
       username: '',
       password: ''
@@ -163,118 +238,38 @@ var LoginForm = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(LoginForm, [{
-    key: "handleLogin",
-    value: function () {
-      var _handleLogin = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var login;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return session.login(this.loginUrl, this.state.username, this.state.password);
-
-              case 2:
-                login = _context.sent;
-
-                if (login !== undefined) {
-                  this.props.onTokenChange(login);
-                } else {
-                  alert('Incorrect username or password');
-                }
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function handleLogin() {
-        return _handleLogin.apply(this, arguments);
-      }
-
-      return handleLogin;
-    }()
-  }, {
-    key: "handleRegister",
-    value: function () {
-      var _handleRegister = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var register;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return session.register(this.registerUrl, this.state.username, this.state.password);
-
-              case 2:
-                register = _context2.sent;
-
-                if (register !== undefined) {
-                  this.props.onTokenChange(register);
-                } else {
-                  alert('User already exist');
-                }
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function handleRegister() {
-        return _handleRegister.apply(this, arguments);
-      }
-
-      return handleRegister;
-    }()
-  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
+      var _this$state = this.state,
+          username = _this$state.username,
+          password = _this$state.password;
+      var disabled = this.state.username.trim().length === 0 || this.state.password.trim().length === 0;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", {
         className: "header"
       }, "Login or Register"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         className: "login-container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        value: this.state.username,
-        onChange: function onChange(e) {
-          return _this2.setState({
-            username: e.target.value
-          });
-        },
-        onKeyUp: function onKeyUp(e) {
-          if (e.key === 'Enter') _this2.handleLoginDebounced();
-        },
+        value: username,
+        onChange: this.handleUsernameChange,
+        onKeyUp: this.handleKeyUp,
         className: "name-input",
         type: "text",
         placeholder: "Username"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        value: this.state.password,
-        onChange: function onChange(e) {
-          return _this2.setState({
-            password: e.target.value
-          });
-        },
-        onKeyUp: function onKeyUp(e) {
-          if (e.key === 'Enter') _this2.handleLoginDebounced();
-        },
+        value: password,
+        onChange: this.handlePasswordChange,
+        onKeyUp: this.handleKeyUp,
         className: "pass-input",
         type: "password",
         placeholder: "Password"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleLoginDebounced,
         className: "login-button",
-        disabled: this.state.username.trim().length === 0 || this.state.password.trim().length === 0
+        disabled: disabled
       }, "Login"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleRegisterDebounced,
         className: "register-button",
-        disabled: this.state.username.trim().length === 0 || this.state.password.trim().length === 0
+        disabled: disabled
       }, "Register")));
     }
   }]);
@@ -297,6 +292,155 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _TaskTitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TaskTitle */ "./src/components/TaskTitle.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var TaskCard = /*#__PURE__*/function (_React$Component) {
+  _inherits(TaskCard, _React$Component);
+
+  var _super = _createSuper(TaskCard);
+
+  function TaskCard(props) {
+    var _this;
+
+    _classCallCheck(this, TaskCard);
+
+    _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "handleTaskChange", function (e) {
+      var classNames = e.target.className.split(' ');
+      var action = classNames[0];
+
+      _this.props.onTasksChange(action, _this.props.taskId, _this.state.taskName);
+
+      _this.setState({
+        editView: false
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleKeyUp", function (e) {
+      if (e.key === 'Enter' && _this.state.taskName.trim().length > 0) {
+        _this.handleTaskChange(e);
+      } else if (e.key === 'Escape') {
+        _this.setState({
+          taskName: _this.props.taskTitle,
+          editView: false
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleEditViewChange", function () {
+      _this.setState({
+        editView: true
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleTaskNameChange", function (e) {
+      _this.setState({
+        taskName: e.target.value
+      });
+    });
+
+    _this.state = {
+      taskName: _this.props.taskTitle,
+      editView: false
+    };
+    return _this;
+  }
+
+  _createClass(TaskCard, [{
+    key: "render",
+    value: function render() {
+      var handleTaskChangeDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.debounce)(this.handleTaskChange, 200);
+      var handleKeyUpDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.debounce)(this.handleKeyUp, 200);
+      var isCompleted = this.props.isCompleted;
+      var _this$state = this.state,
+          taskName = _this$state.taskName,
+          editView = _this$state.editView;
+      var isCompletedClassNames = {
+        true: {
+          taskClassNames: "task completed",
+          editButtonClassNames: "edit-button far fa-edit"
+        },
+        false: {
+          taskClassNames: editView ? "edit-view" : "task",
+          editButtonClassNames: editView ? "save-button far fa-save" : "edit-button far fa-edit"
+        }
+      };
+      var completed = isCompleted;
+      var _isCompletedClassName = isCompletedClassNames[completed],
+          taskClassNames = _isCompletedClassName.taskClassNames,
+          editButtonClassNames = _isCompletedClassName.editButtonClassNames;
+      var disableSave = isCompleted || taskName.trim().length === 0;
+      var saveButtonAction = editView ? handleTaskChangeDebounced : this.handleEditViewChange;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
+        className: "task-container"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+        onChange: handleTaskChangeDebounced,
+        className: "comp-button",
+        type: "checkbox",
+        checked: isCompleted,
+        disabled: editView
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TaskTitle__WEBPACK_IMPORTED_MODULE_2__.default, {
+        editView: editView,
+        handleKeyUp: handleKeyUpDebounced,
+        taskName: taskName,
+        onChange: this.handleTaskNameChange,
+        classNames: taskClassNames
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+        onClick: saveButtonAction,
+        className: editButtonClassNames,
+        disabled: disableSave
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+        onClick: handleTaskChangeDebounced,
+        className: "delete-button far fa-trash-alt",
+        disabled: editView
+      }));
+    }
+  }]);
+
+  return TaskCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (TaskCard);
+
+/***/ }),
+
+/***/ "./src/components/TaskTitle.js":
+/*!*************************************!*\
+  !*** ./src/components/TaskTitle.js ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -321,113 +465,47 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var TaskTitle = /*#__PURE__*/function (_React$Component) {
+  _inherits(TaskTitle, _React$Component);
 
-var TaskCard = /*#__PURE__*/function (_React$Component) {
-  _inherits(TaskCard, _React$Component);
+  var _super = _createSuper(TaskTitle);
 
-  var _super = _createSuper(TaskCard);
+  function TaskTitle() {
+    _classCallCheck(this, TaskTitle);
 
-  function TaskCard(props) {
-    var _this;
-
-    _classCallCheck(this, TaskCard);
-
-    _this = _super.call(this, props);
-    _this.handleChangeDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.debounce)(_this.handleChange.bind(_assertThisInitialized(_this)), 200);
-    _this.handleKeyUpDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.debounce)(_this.handleKeyUp.bind(_assertThisInitialized(_this)), 200);
-    _this.handleEdit = _this.handleEdit.bind(_assertThisInitialized(_this));
-    _this.state = {
-      taskTitle: _this.props.taskTitle,
-      editView: false
-    };
-    return _this;
+    return _super.apply(this, arguments);
   }
 
-  _createClass(TaskCard, [{
-    key: "handleChange",
-    value: function handleChange(e) {
-      var classNames = e.target.className.split(' ');
-      var action = classNames[0];
-      this.props.onTasksChange(action, this.props.taskId, this.state.taskTitle);
-      this.setState({
-        editView: false
-      });
-    }
-  }, {
-    key: "handleKeyUp",
-    value: function handleKeyUp(e) {
-      if (e.key === 'Enter' && this.state.taskTitle.trim().length > 0) {
-        this.handleChange(e);
-      } else if (e.key === 'Escape') {
-        this.setState({
-          taskTitle: this.props.taskTitle,
-          editView: false
-        });
-      }
-    }
-  }, {
-    key: "handleEdit",
-    value: function handleEdit() {
-      this.setState({
-        editView: true
-      });
-    }
-  }, {
+  _createClass(TaskTitle, [{
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this$props = this.props,
+          editView = _this$props.editView,
+          handleKeyUp = _this$props.handleKeyUp,
+          taskName = _this$props.taskName,
+          onChange = _this$props.onChange,
+          classNames = _this$props.classNames;
 
-      var isCompleted = {
-        true: {
-          taskClassNames: "task completed",
-          editButtonClassNames: "edit-button far fa-edit"
-        },
-        false: {
-          taskClassNames: this.state.editView ? "edit-view" : "task",
-          editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
-        }
-      };
-      var completed = this.props.isCompleted;
-      var _isCompleted$complete = isCompleted[completed],
-          taskClassNames = _isCompleted$complete.taskClassNames,
-          editButtonClassNames = _isCompleted$complete.editButtonClassNames;
-      var task = this.state.editView ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        onKeyUp: this.handleKeyUpDebounced,
-        value: this.state.taskTitle,
-        onChange: function onChange(e) {
-          return _this2.setState({
-            taskTitle: e.target.value
-          });
-        },
-        className: taskClassNames,
-        type: "text"
-      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
-        className: taskClassNames
-      }, this.props.taskTitle);
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
-        className: "task-container"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        onChange: this.handleChangeDebounced,
-        className: "comp-button",
-        type: "checkbox",
-        checked: this.props.isCompleted,
-        disabled: this.state.editView
-      }), task, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-        onClick: this.state.editView ? this.handleChangeDebounced : this.handleEdit,
-        className: editButtonClassNames,
-        disabled: this.props.isCompleted || this.state.taskTitle.trim().length === 0
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-        onClick: this.handleChangeDebounced,
-        className: "delete-button far fa-trash-alt",
-        disabled: this.state.editView
-      }));
+      if (editView === true) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+          onKeyUp: handleKeyUp,
+          value: taskName,
+          onChange: onChange,
+          className: classNames,
+          type: "text"
+        });
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
+          className: classNames
+        }, taskName);
+      }
     }
   }]);
 
-  return TaskCard;
+  return TaskTitle;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ __webpack_exports__["default"] = (TaskCard);
+/* harmony default export */ __webpack_exports__["default"] = (TaskTitle);
 
 /***/ }),
 
@@ -444,6 +522,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store.js */ "./src/components/store.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./config */ "./src/components/config.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -470,6 +549,9 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -487,10 +569,124 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, TasksForm);
 
     _this = _super.call(this, props);
-    _this.handleLogout = _this.handleLogout.bind(_assertThisInitialized(_this));
-    _this.handleAddTaskDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.debounce)(_this.handleAddTask.bind(_assertThisInitialized(_this)), 200);
-    _this.handleTasksChange = _this.handleTasksChange.bind(_assertThisInitialized(_this));
-    _this.tasksUrl = 'http://127.0.0.1:3000/tasks';
+
+    _defineProperty(_assertThisInitialized(_this), "handleLogout", function () {
+      var token = '';
+      document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+
+      _this.props.onTokenChange(token);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleTasksChange", /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(action, taskId, taskTitle) {
+        var tasks, token;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                tasks = {};
+                token = _this.props.token;
+
+                if (!(action === 'delete-button')) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _context.next = 5;
+                return store.deleteData(_this.tasksUrl, taskId, token);
+
+              case 5:
+                tasks = _context.sent;
+                _context.next = 11;
+                break;
+
+              case 8:
+                _context.next = 10;
+                return store.putData(_this.tasksUrl, taskId, token, action, taskTitle);
+
+              case 10:
+                tasks = _context.sent;
+
+              case 11:
+                if (tasks === 'Not authorized') {
+                  _this.handleLogout();
+
+                  alert('Not authorized');
+                } else {
+                  _this.setState({
+                    tasks: tasks
+                  });
+                }
+
+              case 12:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x, _x2, _x3) {
+        return _ref.apply(this, arguments);
+      };
+    }());
+
+    _defineProperty(_assertThisInitialized(_this), "handleAddTask", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var taskTitle, token, tasks;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              taskTitle = _this.state.taskTitle;
+              token = _this.props.token;
+
+              if (!(taskTitle.trim() !== '')) {
+                _context2.next = 7;
+                break;
+              }
+
+              _context2.next = 5;
+              return store.postData(taskTitle, _this.tasksUrl, token);
+
+            case 5:
+              tasks = _context2.sent;
+
+              if (tasks === 'Not authorized') {
+                _this.handleLogout();
+
+                alert('Not authorized');
+              } else {
+                _this.setState({
+                  tasks: tasks
+                });
+
+                _this.setState({
+                  taskTitle: ''
+                });
+              }
+
+            case 7:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    })));
+
+    _defineProperty(_assertThisInitialized(_this), "handleNewTaskChange", function (e) {
+      _this.setState({
+        taskTitle: e.target.value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleKeyUp", function (e) {
+      if (e.key === 'Enter') {
+        _this.handleAddTaskDebounced();
+      }
+    });
+
+    _this.tasksUrl = _config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl;
+    _this.handleAddTaskDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.debounce)(_this.handleAddTask, 200);
     _this.state = {
       tasks: [],
       taskTitle: ''
@@ -501,17 +697,18 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
   _createClass(TasksForm, [{
     key: "componentDidMount",
     value: function () {
-      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var tasks;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+        var token, tasks;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context.next = 2;
-                return store.getData(this.tasksUrl, this.props.token);
+                token = this.props.token;
+                _context3.next = 3;
+                return store.getData(this.tasksUrl, token);
 
-              case 2:
-                tasks = _context.sent;
+              case 3:
+                tasks = _context3.sent;
 
                 if (tasks === 'Not authorized') {
                   this.handleLogout();
@@ -522,12 +719,12 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
                   });
                 }
 
-              case 4:
+              case 5:
               case "end":
-                return _context.stop();
+                return _context3.stop();
             }
           }
-        }, _callee, this);
+        }, _callee3, this);
       }));
 
       function componentDidMount() {
@@ -537,128 +734,14 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
       return componentDidMount;
     }()
   }, {
-    key: "handleAddTask",
-    value: function () {
-      var _handleAddTask = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var tasks;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!(this.state.taskTitle.trim() !== '')) {
-                  _context2.next = 5;
-                  break;
-                }
-
-                _context2.next = 3;
-                return store.postData(this.state.taskTitle, this.tasksUrl, this.props.token);
-
-              case 3:
-                tasks = _context2.sent;
-
-                if (tasks === 'Not authorized') {
-                  this.handleLogout();
-                  alert('Not authorized');
-                } else {
-                  this.setState({
-                    tasks: tasks
-                  });
-                  this.setState({
-                    taskTitle: ''
-                  });
-                }
-
-              case 5:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function handleAddTask() {
-        return _handleAddTask.apply(this, arguments);
-      }
-
-      return handleAddTask;
-    }()
-  }, {
-    key: "handleTasksChange",
-    value: function () {
-      var _handleTasksChange = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action, taskId, taskTitle) {
-        var tasks;
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                tasks = {};
-
-                if (!(action === 'delete-button')) {
-                  _context3.next = 7;
-                  break;
-                }
-
-                _context3.next = 4;
-                return store.deleteData(this.tasksUrl, taskId, this.props.token);
-
-              case 4:
-                tasks = _context3.sent;
-                _context3.next = 10;
-                break;
-
-              case 7:
-                _context3.next = 9;
-                return store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle);
-
-              case 9:
-                tasks = _context3.sent;
-
-              case 10:
-                if (tasks === 'Not authorized') {
-                  this.handleLogout();
-                  alert('Not authorized');
-                } else {
-                  this.setState({
-                    tasks: tasks
-                  });
-                }
-
-              case 11:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function handleTasksChange(_x, _x2, _x3) {
-        return _handleTasksChange.apply(this, arguments);
-      }
-
-      return handleTasksChange;
-    }()
-  }, {
-    key: "handleLogout",
-    value: function handleLogout() {
-      var token = '';
-      document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-      this.props.onTokenChange(token);
-    }
-  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
-      var tasks = this.state.tasks;
-      var listItems = tasks.map(function (task) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TaskCard__WEBPACK_IMPORTED_MODULE_1__.default, {
-          onTasksChange: _this2.handleTasksChange,
-          isCompleted: task.isCompleted,
-          key: task.taskId,
-          taskId: task.taskId,
-          taskTitle: task.taskLabel
-        });
-      });
+      var _this$state = this.state,
+          tasks = _this$state.tasks,
+          taskTitle = _this$state.taskTitle;
+      var disabled = taskTitle.trim().length === 0;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", {
         className: "header"
       }, "Tasks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
@@ -667,24 +750,26 @@ var TasksForm = /*#__PURE__*/function (_React$Component) {
       }, "Log out"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         className: "container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        value: this.state.taskTitle,
-        onChange: function onChange(e) {
-          return _this2.setState({
-            taskTitle: e.target.value
-          });
-        },
-        onKeyUp: function onKeyUp(e) {
-          if (e.key === 'Enter') _this2.handleAddTaskDebounced();
-        },
+        value: taskTitle,
+        onChange: this.handleNewTaskChange,
+        onKeyUp: this.handleKeyUp,
         className: "task-input",
         placeholder: "What you want to do?"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
         onClick: this.handleAddTaskDebounced,
         className: "create-button far fa-plus-square",
-        disabled: this.state.taskTitle.trim().length === 0
+        disabled: disabled
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("ul", {
         className: "tasks-list"
-      }, listItems)));
+      }, tasks.map(function (task) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TaskCard__WEBPACK_IMPORTED_MODULE_1__.default, {
+          onTasksChange: _this2.handleTasksChange,
+          isCompleted: task.isCompleted,
+          key: task.taskId,
+          taskId: task.taskId,
+          taskTitle: task.taskLabel
+        });
+      }))));
     }
   }]);
 
@@ -722,6 +807,25 @@ var ApiCall = function ApiCall(method, body, token) {
     this.body = JSON.stringify(body);
   }
 };
+
+/***/ }),
+
+/***/ "./src/components/config.js":
+/*!**********************************!*\
+  !*** ./src/components/config.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "tasksUrl": function() { return /* binding */ tasksUrl; },
+/* harmony export */   "loginUrl": function() { return /* binding */ loginUrl; },
+/* harmony export */   "registerUrl": function() { return /* binding */ registerUrl; }
+/* harmony export */ });
+var tasksUrl = 'http://127.0.0.1:3000/tasks',
+    loginUrl = 'http://127.0.0.1:3000/auth',
+    registerUrl = 'http://127.0.0.1:3000/register';
 
 /***/ }),
 

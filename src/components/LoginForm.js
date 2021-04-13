@@ -1,6 +1,7 @@
 import React from 'react'
 import { Session } from './session.js'
 import { debounce } from 'lodash'
+import { loginUrl, registerUrl } from './config.js'
 
 const session = new Session()
 
@@ -8,11 +9,11 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props)
 
-        this.handleLoginDebounced = debounce(this.handleLogin.bind(this), 200)
-        this.handleRegisterDebounced = debounce(this.handleRegister.bind(this), 200)
+        this.loginUrl = loginUrl
+        this.registerUrl = registerUrl
 
-        this.loginUrl = 'http://127.0.0.1:3000/auth'
-        this.registerUrl = 'http://127.0.0.1:3000/register'
+        this.handleLoginDebounced = debounce(this.handleLogin, 200)
+        this.handleRegisterDebounced = debounce(this.handleRegister, 200)
 
         this.state = {
             username: '',
@@ -20,7 +21,7 @@ class LoginForm extends React.Component {
         }
     }
 
-    async handleLogin() {
+    handleLogin = async () => {
         const login = await session.login(this.loginUrl, this.state.username, this.state.password)
         if (login !== undefined) {
             this.props.onTokenChange(login)
@@ -29,7 +30,7 @@ class LoginForm extends React.Component {
         }
     }
 
-    async handleRegister() {
+    handleRegister = async () => {
         const register = await session.register(this.registerUrl, this.state.username, this.state.password)
         if (register !== undefined) {
             this.props.onTokenChange(register)
@@ -38,37 +39,54 @@ class LoginForm extends React.Component {
         }
     }
 
+    handleUsernameChange = (e) => {
+        this.setState({ username: e.target.value })
+    }
+
+    handlePasswordChange = (e) => {
+        this.setState({ password: e.target.value })
+    }
+
+    handleKeyUp = (e) => {
+        if (e.key === 'Enter') {
+            this.handleLoginDebounced()
+        }
+    }
+
     render() {
+        const {username, password} = this.state
+        const disabled = this.state.username.trim().length === 0 || this.state.password.trim().length === 0
+
         return (
             <div>
                 <h1 className="header">Login or Register</h1>
                 <div className="login-container">
                     <input
-                        value={this.state.username}
-                        onChange={(e) => this.setState({ username: e.target.value })}
-                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleLoginDebounced() }}
+                        value={username}
+                        onChange={this.handleUsernameChange}
+                        onKeyUp={this.handleKeyUp}
                         className="name-input"
                         type="text"
                         placeholder="Username"
                     />
                     <input
-                        value={this.state.password}
-                        onChange={(e) => this.setState({ password: e.target.value })}
-                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleLoginDebounced() }}
+                        value={password}
+                        onChange={this.handlePasswordChange}
+                        onKeyUp={this.handleKeyUp}
                         className="pass-input"
                         type="password"
                         placeholder="Password"
                     />
                     <button
                         onClick={this.handleLoginDebounced}
-                        className={"login-button"}
-                        disabled={this.state.username.trim().length === 0 || this.state.password.trim().length === 0}>
+                        className="login-button"
+                        disabled={disabled}>
                         Login
                     </button>
                     <button
                         onClick={this.handleRegisterDebounced}
-                        className={"register-button"}
-                        disabled={this.state.username.trim().length === 0 || this.state.password.trim().length === 0}>
+                        className="register-button"
+                        disabled={disabled}>
                         Register
                     </button>
                 </div>

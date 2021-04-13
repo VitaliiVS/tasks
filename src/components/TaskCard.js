@@ -1,64 +1,86 @@
 import React from 'react'
 import { debounce } from 'lodash'
+import TaskTitle from './TaskTitle'
 
 class TaskCard extends React.Component {
     constructor(props) {
         super(props)
 
-        this.handleChangeDebounced = debounce(this.handleChange.bind(this), 200)
-        this.handleKeyUpDebounced = debounce(this.handleKeyUp.bind(this), 200)
-        this.handleEdit = this.handleEdit.bind(this)
-
         this.state = {
-            taskTitle: this.props.taskTitle,
+            taskName: this.props.taskTitle,
             editView: false
         }
     }
 
-    handleChange(e) {
+    handleTaskChange = (e) => {
         const classNames = e.target.className.split(' ')
         const action = classNames[0]
-        this.props.onTasksChange(action, this.props.taskId, this.state.taskTitle)
+        this.props.onTasksChange(action, this.props.taskId, this.state.taskName)
         this.setState({ editView: false })
     }
 
-    handleKeyUp(e) {
-        if (e.key === 'Enter' && this.state.taskTitle.trim().length > 0) {
-            this.handleChange(e)
+    handleKeyUp = (e) => {
+        if (e.key === 'Enter' && this.state.taskName.trim().length > 0) {
+            this.handleTaskChange(e)
         } else if (e.key === 'Escape') {
-            this.setState({ taskTitle: this.props.taskTitle, editView: false })
+            this.setState({ taskName: this.props.taskTitle, editView: false })
         }
     }
 
-    handleEdit() {
+    handleEditViewChange = () => {
         this.setState({ editView: true })
     }
 
+    handleTaskNameChange = (e) => {
+        this.setState({ taskName: e.target.value })
+    }
+
     render() {
-        const isCompleted = {
+        const handleTaskChangeDebounced = debounce(this.handleTaskChange, 200)
+        const handleKeyUpDebounced = debounce(this.handleKeyUp, 200)
+        const { isCompleted } = this.props
+        const { taskName, editView} = this.state
+        const isCompletedClassNames = {
             true: {
                 taskClassNames: "task completed",
                 editButtonClassNames: "edit-button far fa-edit"
             },
             false: {
-                taskClassNames: this.state.editView ? "edit-view" : "task",
-                editButtonClassNames: this.state.editView ? "save-button far fa-save" : "edit-button far fa-edit"
+                taskClassNames: editView ? "edit-view" : "task",
+                editButtonClassNames: editView ? "save-button far fa-save" : "edit-button far fa-edit"
             }
         }
-
-        const completed = this.props.isCompleted
-        const { taskClassNames, editButtonClassNames } = isCompleted[completed]
-
-        const task = this.state.editView
-            ? <input onKeyUp={this.handleKeyUpDebounced} value={this.state.taskTitle} onChange={(e) => this.setState({ taskTitle: e.target.value })} className={taskClassNames} type="text" />
-            : <p className={taskClassNames}>{this.props.taskTitle}</p>
+        const completed = isCompleted
+        const { taskClassNames, editButtonClassNames } = isCompletedClassNames[completed]
+        const disableSave = isCompleted || taskName.trim().length === 0
+        const saveButtonAction = editView ? handleTaskChangeDebounced : this.handleEditViewChange
 
         return (
             <li className="task-container">
-                <input onChange={this.handleChangeDebounced} className={"comp-button"} type="checkbox" checked={this.props.isCompleted} disabled={this.state.editView} />
-                {task}
-                <button onClick={this.state.editView ? this.handleChangeDebounced : this.handleEdit} className={editButtonClassNames} disabled={this.props.isCompleted || this.state.taskTitle.trim().length === 0} />
-                <button onClick={this.handleChangeDebounced} className={"delete-button far fa-trash-alt"} disabled={this.state.editView} />
+                <input
+                    onChange={handleTaskChangeDebounced}
+                    className="comp-button"
+                    type="checkbox"
+                    checked={isCompleted}
+                    disabled={editView}
+                />
+                <TaskTitle
+                    editView={editView}
+                    handleKeyUp={handleKeyUpDebounced}
+                    taskName={taskName}
+                    onChange={this.handleTaskNameChange}
+                    classNames={taskClassNames}
+                />
+                <button
+                    onClick={saveButtonAction}
+                    className={editButtonClassNames}
+                    disabled={disableSave}
+                />
+                <button
+                    onClick={handleTaskChangeDebounced}
+                    className="delete-button far fa-trash-alt"
+                    disabled={editView}
+                />
             </li>
         )
     }

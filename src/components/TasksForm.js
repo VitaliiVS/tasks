@@ -2,6 +2,7 @@ import React from 'react'
 import Task from './TaskCard'
 import { Store } from './store.js'
 import { debounce } from 'lodash'
+import { tasksUrl } from './config'
 
 const store = new Store()
 
@@ -9,11 +10,10 @@ class TasksForm extends React.Component {
     constructor(props) {
         super(props)
 
-        this.handleLogout = this.handleLogout.bind(this)
-        this.handleAddTaskDebounced = debounce(this.handleAddTask.bind(this), 200)
-        this.handleTasksChange = this.handleTasksChange.bind(this)
+        this.tasksUrl = tasksUrl
 
-        this.tasksUrl = 'http://127.0.0.1:3000/tasks'
+        this.handleAddTaskDebounced = debounce(this.handleAddTask, 200)
+
         this.state = {
             tasks: [],
             taskTitle: ''
@@ -21,7 +21,8 @@ class TasksForm extends React.Component {
     }
 
     async componentDidMount() {
-        const tasks = await store.getData(this.tasksUrl, this.props.token)
+        const { token } = this.props
+        const tasks = await store.getData(this.tasksUrl, token)
 
         if (tasks === 'Not authorized') {
             this.handleLogout()
@@ -31,9 +32,36 @@ class TasksForm extends React.Component {
         }
     }
 
-    async handleAddTask() {
-        if (this.state.taskTitle.trim() !== '') {
-            const tasks = await store.postData(this.state.taskTitle, this.tasksUrl, this.props.token)
+    handleLogout = () => {
+        const token = ''
+        document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
+        this.props.onTokenChange(token)
+    }
+
+    handleTasksChange = async (action, taskId, taskTitle) => {
+        let tasks = {}
+        const { token } = this.props
+
+        if (action === 'delete-button') {
+            tasks = await store.deleteData(this.tasksUrl, taskId, token)
+        } else {
+            tasks = await store.putData(this.tasksUrl, taskId, token, action, taskTitle)
+        }
+
+        if (tasks === 'Not authorized') {
+            this.handleLogout()
+            alert('Not authorized')
+        } else {
+            this.setState({ tasks })
+        }
+    }
+
+    handleAddTask = async () => {
+        const { taskTitle } = this.state
+        const { token } = this.props
+
+        if (taskTitle.trim() !== '') {
+            const tasks = await store.postData(taskTitle, this.tasksUrl, token)
 
             if (tasks === 'Not authorized') {
                 this.handleLogout()
@@ -45,40 +73,20 @@ class TasksForm extends React.Component {
         }
     }
 
-    async handleTasksChange(action, taskId, taskTitle) {
-        let tasks = {}
 
-        if (action === 'delete-button') {
-            tasks = await store.deleteData(this.tasksUrl, taskId, this.props.token)
-        } else {
-            tasks = await store.putData(this.tasksUrl, taskId, this.props.token, action, taskTitle)
-        }
-
-        if (tasks === 'Not authorized') {
-            this.handleLogout()
-            alert('Not authorized')
-        } else {
-            this.setState({ tasks })
-        }
+    handleNewTaskChange = (e) => {
+        this.setState({ taskTitle: e.target.value })
     }
-
-    handleLogout() {
-        const token = ''
-        document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
-        this.props.onTokenChange(token)
+    
+    handleKeyUp = (e) => {
+        if (e.key === 'Enter') {
+            this.handleAddTaskDebounced()
+        }
     }
 
     render() {
-        const tasks = this.state.tasks
-        const listItems = tasks.map(task =>
-            <Task
-                onTasksChange={this.handleTasksChange}
-                isCompleted={task.isCompleted}
-                key={task.taskId}
-                taskId={task.taskId}
-                taskTitle={task.taskLabel}
-            />
-        )
+        const { tasks, taskTitle } = this.state
+        const disabled = taskTitle.trim().length === 0
 
         return (
             <div>
@@ -86,19 +94,27 @@ class TasksForm extends React.Component {
                 <button onClick={this.handleLogout} className={"logout-button"}>Log out</button>
                 <div className="container">
                     <input
-                        value={this.state.taskTitle}
-                        onChange={(e) => this.setState({ taskTitle: e.target.value })}
-                        onKeyUp={(e) => { if (e.key === 'Enter') this.handleAddTaskDebounced() }}
+                        value={taskTitle}
+                        onChange={this.handleNewTaskChange}
+                        onKeyUp={this.handleKeyUp}
                         className="task-input"
                         placeholder="What you want to do?"
                     />
                     <button
                         onClick={this.handleAddTaskDebounced}
-                        className={"create-button far fa-plus-square"}
-                        disabled={this.state.taskTitle.trim().length === 0}
+                        className="create-button far fa-plus-square"
+                        disabled={disabled}
                     />
                     <ul className="tasks-list">
-                        {listItems}
+                    {tasks.map(task =>
+                        <Task
+                            onTasksChange={this.handleTasksChange}
+                            isCompleted={task.isCompleted}
+                            key={task.taskId}
+                            taskId={task.taskId}
+                            taskTitle={task.taskLabel}
+                        />
+                    )}
                     </ul>
                 </div>
             </div>
