@@ -1,10 +1,13 @@
 export class ApiCall {
 	method: string
 	cache: string
-	headers: any
-	body: any
+	headers: {
+		'Content-Type': string
+		authorization: string
+	}
+	body: unknown
 
-	constructor(method: string, body: any, token: string | null) {
+	constructor(method: string, body: unknown, token: string | null) {
 		this.method = method
 		this.cache = 'no-cache'
 		this.headers = {

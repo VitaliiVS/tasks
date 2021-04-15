@@ -17,8 +17,8 @@ interface LoginState {
 class LoginForm extends React.Component<LoginProps, LoginState> {
 	loginUrl: string
 	registerUrl: string
-	handleLoginDebounced: any
-	handleRegisterDebounced: any
+	handleLoginDebounced: () => void
+	handleRegisterDebounced: () => void
 
 	constructor(props: LoginProps) {
 		super(props)
