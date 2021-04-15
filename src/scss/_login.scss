@@ -1,37 +1,37 @@
 .login-container {
-    display: grid;
-    grid-template-areas: "a1 a1" "a2 a2" "a3 a4";
-    grid-gap: 10px;
+	display: grid;
+	grid-template-areas: 'a1 a1' 'a2 a2' 'a3 a4';
+	grid-gap: 10px;
 
-    justify-content: center;
-    align-items: center;
+	justify-content: center;
+	align-items: center;
 
-    margin-top: 50px;
+	margin-top: 50px;
 }
 
 .name-input {
-    @include input;
+	@include input;
 
-    grid-area: a1;
+	grid-area: a1;
 }
 
 .pass-input {
-    @include input;
+	@include input;
 
-    grid-area: a2;
+	grid-area: a2;
 }
 
 .login-button {
-    grid-area: a3;
+	grid-area: a3;
 }
 
 .register-button {
-    grid-area: a4;
+	grid-area: a4;
 }
 
 .login-button,
 .register-button {
-    margin: 0 10px;
-    width: 120px;
-    height: 40px;
+	margin: 0 10px;
+	width: 120px;
+	height: 40px;
 }

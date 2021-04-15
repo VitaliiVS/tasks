@@ -8,7 +8,7 @@
 body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: "Roboto", sans-serif; }
+  font-family: 'Roboto', sans-serif; }
 
 button {
   width: 40px;
@@ -127,7 +127,7 @@ button {
   cursor: pointer; }
   .comp-button:after {
     line-height: 1.5em;
-    content: "";
+    content: '';
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -170,7 +170,7 @@ button {
 
 .login-container {
   display: grid;
-  grid-template-areas: "a1 a1" "a2 a2" "a3 a4";
+  grid-template-areas: 'a1 a1' 'a2 a2' 'a3 a4';
   grid-gap: 10px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
