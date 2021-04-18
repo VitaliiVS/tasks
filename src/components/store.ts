@@ -1,6 +1,6 @@
 import { ApiCall } from './api'
 import { Task } from './task'
-import { uuid } from './uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 export class Store {
 	tasks: any[]
@@ -26,7 +26,7 @@ export class Store {
 	}
 
 	postData = async (taskTitle: string, url: string, token: string) => {
-		const taskId = uuid()
+		const taskId = uuidv4()
 		const task = new Task(taskId, taskTitle)
 		const apiCall: any = new ApiCall('POST', task, token)
 

@@ -1,5 +1,6 @@
 const path = require('path')
 const miniCss = require('mini-css-extract-plugin')
+const PrettierPlugin = require("prettier-webpack-plugin")
 
 module.exports = {
 	mode: 'development',
@@ -55,7 +56,8 @@ module.exports = {
 	plugins: [
 		new miniCss({
 			filename: 'style.css'
-		})
+		}),
+		new PrettierPlugin()
 	],
 	devtool: 'source-map'
 }

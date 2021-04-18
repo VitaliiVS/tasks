@@ -1,5 +1,5 @@
 import { ApiCall } from './api'
-import { uuid } from './uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 export class Session {
 	login = async (url: string, username: string, password: string) => {
@@ -28,7 +28,7 @@ export class Session {
 		const data = {
 			username: username.toLowerCase(),
 			password: password,
-			userId: uuid()
+			userId: uuidv4()
 		}
 		const apiCall: any = new ApiCall('POST', data, null)
 		const response = await fetch(registerUrl, apiCall)
