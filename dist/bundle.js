@@ -49262,6 +49262,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _LoginForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LoginForm */ "./src/components/LoginForm.tsx");
 /* harmony import */ var _TasksForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksForm */ "./src/components/TasksForm.tsx");
+/* harmony import */ var _TasksContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TasksContext */ "./src/components/TasksContext.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -49277,6 +49278,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 
 
 
@@ -49301,12 +49303,13 @@ var App = /** @class */ (function (_super) {
         }
     };
     App.prototype.render = function () {
+        var handleTokenChange = this.handleTokenChange;
         var token = this.state.token;
         if (token !== '') {
-            return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksForm__WEBPACK_IMPORTED_MODULE_3__.default, { token: token, onTokenChange: this.handleTokenChange }, void 0));
+            return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksContext__WEBPACK_IMPORTED_MODULE_4__.TasksProvider, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksForm__WEBPACK_IMPORTED_MODULE_3__.default, { token: token, onTokenChange: handleTokenChange }, void 0) }, void 0));
         }
         else {
-            return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_LoginForm__WEBPACK_IMPORTED_MODULE_2__.default, { onTokenChange: this.handleTokenChange }, void 0);
+            return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_LoginForm__WEBPACK_IMPORTED_MODULE_2__.default, { onTokenChange: handleTokenChange }, void 0);
         }
     };
     return App;
@@ -49403,36 +49406,48 @@ var LoginForm = /** @class */ (function (_super) {
     function LoginForm(props) {
         var _this = _super.call(this, props) || this;
         _this.handleLogin = function () { return __awaiter(_this, void 0, void 0, function () {
-            var login;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, session.login(this.loginUrl, this.state.username, this.state.password)];
+            var onTokenChange, _a, username, password, login, e_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        onTokenChange = this.props.onTokenChange;
+                        _a = this.state, username = _a.username, password = _a.password;
+                        _b.label = 1;
                     case 1:
-                        login = _a.sent();
-                        if (login !== undefined) {
-                            this.props.onTokenChange(login);
-                        }
-                        else {
-                            alert('Incorrect username or password');
-                        }
-                        return [2 /*return*/];
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, session.login(this.loginUrl, username, password)];
+                    case 2:
+                        login = _b.sent();
+                        onTokenChange(login);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _b.sent();
+                        alert(e_1.message);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
         _this.handleRegister = function () { return __awaiter(_this, void 0, void 0, function () {
-            var register;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, session.register(this.registerUrl, this.state.username, this.state.password)];
+            var onTokenChange, _a, username, password, register, e_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        onTokenChange = this.props.onTokenChange;
+                        _a = this.state, username = _a.username, password = _a.password;
+                        _b.label = 1;
                     case 1:
-                        register = _a.sent();
-                        if (register !== undefined) {
-                            this.props.onTokenChange(register);
-                        }
-                        else {
-                            alert('User already exist');
-                        }
-                        return [2 /*return*/];
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, session.register(this.registerUrl, username, password)];
+                    case 2:
+                        register = _b.sent();
+                        onTokenChange(register);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _b.sent();
+                        alert(e_2.message);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
@@ -49458,14 +49473,14 @@ var LoginForm = /** @class */ (function (_super) {
         return _this;
     }
     LoginForm.prototype.render = function () {
-        var _a = this.state, username = _a.username, password = _a.password;
-        var disabled = this.state.username.trim().length === 0 ||
-            this.state.password.trim().length === 0;
+        var _a = this, handleUsernameChange = _a.handleUsernameChange, handlePasswordChange = _a.handlePasswordChange, handleKeyUp = _a.handleKeyUp, handleLoginDebounced = _a.handleLoginDebounced, handleRegisterDebounced = _a.handleRegisterDebounced;
+        var _b = this.state, username = _b.username, password = _b.password;
+        var disabled = username.trim().length === 0 || password.trim().length === 0;
         return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "header" }, { children: "Login or Register" }), void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: username, onChange: this.handleUsernameChange, onKeyUp: this.handleKeyUp, className: "name-input", type: "text", placeholder: "Username" }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: password, onChange: this.handlePasswordChange, onKeyUp: this.handleKeyUp, className: "pass-input", type: "password", placeholder: "Password" }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: this.handleLoginDebounced, className: "login-button", disabled: disabled }, { children: "Login" }), void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: this.handleRegisterDebounced, className: "register-button", disabled: disabled }, { children: "Register" }), void 0)] }), void 0)] }, void 0));
+                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: username, onChange: handleUsernameChange, onKeyUp: handleKeyUp, className: "name-input", type: "text", placeholder: "Username" }, void 0),
+                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: password, onChange: handlePasswordChange, onKeyUp: handleKeyUp, className: "pass-input", type: "password", placeholder: "Password" }, void 0),
+                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleLoginDebounced, className: "login-button", disabled: disabled }, { children: "Login" }), void 0),
+                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleRegisterDebounced, className: "register-button", disabled: disabled }, { children: "Register" }), void 0)] }), void 0)] }, void 0));
     };
     return LoginForm;
 }(react__WEBPACK_IMPORTED_MODULE_1__.Component));
@@ -49522,17 +49537,21 @@ var TaskCard = /** @class */ (function (_super) {
     function TaskCard(props) {
         var _this = _super.call(this, props) || this;
         _this.handleTaskChange = function (e) {
+            var _a = _this.props, taskId = _a.taskId, onTasksChange = _a.onTasksChange;
+            var taskName = _this.state.taskName;
             var classNames = e.target.className.split(' ');
             var action = classNames[0];
-            _this.props.onTasksChange(action, _this.props.taskId, _this.state.taskName);
+            onTasksChange(action, taskId, taskName);
             _this.setState({ editView: false });
         };
         _this.handleKeyUp = function (e) {
-            if (e.key === 'Enter' && _this.state.taskName.trim().length > 0) {
+            var taskTitle = _this.props.taskTitle;
+            var taskName = _this.state.taskName;
+            if (e.key === 'Enter' && taskName.trim().length > 0) {
                 _this.handleTaskChange(e);
             }
             else if (e.key === 'Escape') {
-                _this.setState({ taskName: _this.props.taskTitle, editView: false });
+                _this.setState({ taskName: taskTitle, editView: false });
             }
         };
         _this.handleEditViewChange = function () {
@@ -49550,8 +49569,9 @@ var TaskCard = /** @class */ (function (_super) {
     TaskCard.prototype.render = function () {
         var handleTaskChangeDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(this.handleTaskChange, 200);
         var handleKeyUpDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(this.handleKeyUp, 200);
+        var _a = this, handleEditViewChange = _a.handleEditViewChange, handleTaskNameChange = _a.handleTaskNameChange;
         var isCompleted = this.props.isCompleted;
-        var _a = this.state, taskName = _a.taskName, editView = _a.editView;
+        var _b = this.state, taskName = _b.taskName, editView = _b.editView;
         var isCompletedClassNames = {
             1: {
                 taskClassNames: 'task completed',
@@ -49565,13 +49585,13 @@ var TaskCard = /** @class */ (function (_super) {
             }
         };
         var completed = isCompleted ? 1 : 0;
-        var _b = isCompletedClassNames[completed], taskClassNames = _b.taskClassNames, editButtonClassNames = _b.editButtonClassNames;
+        var _c = isCompletedClassNames[completed], taskClassNames = _c.taskClassNames, editButtonClassNames = _c.editButtonClassNames;
         var disableSave = isCompleted || taskName.trim().length === 0;
         var saveButtonAction = editView
             ? handleTaskChangeDebounced
-            : this.handleEditViewChange;
+            : handleEditViewChange;
         return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("li", __assign({ className: "task-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { onChange: handleTaskChangeDebounced, className: "comp-button", type: "checkbox", checked: isCompleted, disabled: editView }, void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskTitle__WEBPACK_IMPORTED_MODULE_3__.default, { editView: editView, handleKeyUp: handleKeyUpDebounced, taskName: taskName, onChange: this.handleTaskNameChange, classNames: taskClassNames }, void 0),
+                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskTitle__WEBPACK_IMPORTED_MODULE_3__.default, { editView: editView, handleKeyUp: handleKeyUpDebounced, taskName: taskName, onChange: handleTaskNameChange, classNames: taskClassNames }, void 0),
                 (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: saveButtonAction, className: editButtonClassNames, disabled: disableSave }, void 0),
                 (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: handleTaskChangeDebounced, className: "delete-button far fa-trash-alt", disabled: editView }, void 0)] }), void 0));
     };
@@ -49641,6 +49661,245 @@ var TaskTitle = /** @class */ (function (_super) {
 
 /***/ }),
 
+/***/ "./src/components/TasksContext.tsx":
+/*!*****************************************!*\
+  !*** ./src/components/TasksContext.tsx ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TasksProvider": function() { return /* binding */ TasksProvider; }
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./api */ "./src/components/api.ts");
+/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./task */ "./src/components/task.ts");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+var TasksContext = react__WEBPACK_IMPORTED_MODULE_1__.createContext(null);
+var TasksProvider = /** @class */ (function (_super) {
+    __extends(TasksProvider, _super);
+    function TasksProvider(props) {
+        var _this = _super.call(this, props) || this;
+        _this.getTasks = function (url, token) { return __awaiter(_this, void 0, void 0, function () {
+            var apiCall, response, content;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('GET', null, token);
+                        return [4 /*yield*/, fetch(url, apiCall)];
+                    case 1:
+                        response = _a.sent();
+                        if (!response.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, response.json()];
+                    case 2:
+                        content = _a.sent();
+                        this.setState({ tasks: content });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        if (response.status === 401) {
+                            throw new Error("" + response.statusText);
+                        }
+                        else {
+                            throw new Error("" + response.statusText);
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.postTask = function (taskTitle, url, token) { return __awaiter(_this, void 0, void 0, function () {
+            var taskId, task, apiCall, response, content;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        taskId = (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)();
+                        task = new _task__WEBPACK_IMPORTED_MODULE_3__.Task(taskId, taskTitle);
+                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('POST', task, token);
+                        return [4 /*yield*/, fetch(url, apiCall)];
+                    case 1:
+                        response = _a.sent();
+                        if (!response.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, response.json()];
+                    case 2:
+                        content = _a.sent();
+                        this.setState({ tasks: content });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        if (response.status === 401) {
+                            throw new Error("" + response.statusText);
+                        }
+                        else {
+                            throw new Error("" + response.statusText);
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.putTask = function (url, id, token, action, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
+            var tasks, taskId, task, _id, apiCall, response, content;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        tasks = this.state.tasks;
+                        taskId = tasks.findIndex(function (x) { return x.taskId === id; });
+                        task = tasks[taskId];
+                        _id = task._id;
+                        delete task._id;
+                        if (action === 'comp-button') {
+                            task.isCompleted ? (task.isCompleted = false) : (task.isCompleted = true);
+                        }
+                        else if (action === 'save-button' || action === 'edit-view') {
+                            task.taskLabel = taskTitle;
+                        }
+                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('PUT', task, token);
+                        return [4 /*yield*/, fetch(url + "/" + _id, apiCall)];
+                    case 1:
+                        response = _a.sent();
+                        if (!response.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, response.json()];
+                    case 2:
+                        content = _a.sent();
+                        this.setState({ tasks: content });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        if (response.status === 401) {
+                            throw new Error("" + response.statusText);
+                        }
+                        else {
+                            throw new Error("" + response.statusText);
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.deleteTask = function (url, id, token) { return __awaiter(_this, void 0, void 0, function () {
+            var tasks, taskId, task, _id, apiCall, response, content;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        tasks = this.state.tasks;
+                        taskId = tasks.findIndex(function (x) { return x.taskId === id; });
+                        task = tasks[taskId];
+                        _id = task._id;
+                        delete task._id;
+                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('DELETE', null, token);
+                        return [4 /*yield*/, fetch(url + "/" + _id, apiCall)];
+                    case 1:
+                        response = _a.sent();
+                        if (!response.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, response.json()];
+                    case 2:
+                        content = _a.sent();
+                        this.setState({ tasks: content });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        if (response.status === 401) {
+                            throw new Error("" + response.statusText);
+                        }
+                        else {
+                            throw new Error("" + response.statusText);
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.state = {
+            tasks: []
+        };
+        return _this;
+    }
+    TasksProvider.prototype.render = function () {
+        var _a = this, getTasks = _a.getTasks, postTask = _a.postTask, putTask = _a.putTask, deleteTask = _a.deleteTask;
+        var children = this.props.children;
+        var tasks = this.state.tasks;
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(TasksContext.Provider, __assign({ value: {
+                tasks: tasks,
+                getTasks: getTasks,
+                postTask: postTask,
+                putTask: putTask,
+                deleteTask: deleteTask
+            } }, { children: children }), void 0));
+    };
+    return TasksProvider;
+}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+/* harmony default export */ __webpack_exports__["default"] = (TasksContext);
+
+
+
+/***/ }),
+
 /***/ "./src/components/TasksForm.tsx":
 /*!**************************************!*\
   !*** ./src/components/TasksForm.tsx ***!
@@ -49652,7 +49911,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _TaskCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TaskCard */ "./src/components/TaskCard.tsx");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./src/components/store.ts");
+/* harmony import */ var _TasksContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksContext */ "./src/components/TasksContext.tsx");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./config */ "./src/components/config.ts");
@@ -49724,69 +49983,82 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var store = new _store__WEBPACK_IMPORTED_MODULE_3__.Store();
 var TasksForm = /** @class */ (function (_super) {
     __extends(TasksForm, _super);
     function TasksForm(props) {
         var _this = _super.call(this, props) || this;
         _this.handleLogout = function () {
+            var onTokenChange = _this.props.onTokenChange;
             var token = '';
             document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-            _this.props.onTokenChange(token);
+            onTokenChange(token);
         };
         _this.handleTasksChange = function (action, taskId, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
-            var tasks, token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a, deleteTask, putTask, token, e_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        tasks = {};
+                        _a = this.context, deleteTask = _a.deleteTask, putTask = _a.putTask;
                         token = this.props.token;
-                        if (!(action === 'delete-button')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, store.deleteData(this.tasksUrl, taskId, token)];
+                        _b.label = 1;
                     case 1:
-                        tasks = _a.sent();
-                        return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, store.putData(this.tasksUrl, taskId, token, action, taskTitle)];
-                    case 3:
-                        tasks = _a.sent();
-                        _a.label = 4;
+                        _b.trys.push([1, 6, , 7]);
+                        if (!(action === 'delete-button')) return [3 /*break*/, 3];
+                        return [4 /*yield*/, deleteTask(this.tasksUrl, taskId, token)];
+                    case 2:
+                        _b.sent();
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, putTask(this.tasksUrl, taskId, token, action, taskTitle)];
                     case 4:
-                        if (tasks === 'Not authorized') {
+                        _b.sent();
+                        _b.label = 5;
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        e_1 = _b.sent();
+                        if (e_1.message === 'Unauthorized') {
+                            alert(e_1);
                             this.handleLogout();
-                            alert('Not authorized');
                         }
                         else {
-                            this.setState({ tasks: tasks });
+                            alert(e_1);
                         }
-                        return [2 /*return*/];
+                        return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
                 }
             });
         }); };
         _this.handleAddTask = function () { return __awaiter(_this, void 0, void 0, function () {
-            var taskTitle, token, tasks;
+            var postTask, taskTitle, token, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        postTask = this.context.postTask;
                         taskTitle = this.state.taskTitle;
                         token = this.props.token;
-                        if (!(taskTitle.trim() !== '')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, store.postData(taskTitle, this.tasksUrl, token)];
+                        if (!(taskTitle.trim() !== '')) return [3 /*break*/, 4];
+                        _a.label = 1;
                     case 1:
-                        tasks = _a.sent();
-                        if (tasks === 'Not authorized') {
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, postTask(taskTitle, this.tasksUrl, token)];
+                    case 2:
+                        _a.sent();
+                        this.setState({ taskTitle: '' });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        if (e_2.message === 'Unauthorized') {
+                            alert(e_2);
                             this.handleLogout();
-                            alert('Not authorized');
                         }
                         else {
-                            this.setState({ tasks: tasks });
-                            this.setState({ taskTitle: '' });
+                            alert(e_2);
                         }
-                        _a.label = 2;
-                    case 2: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
-        _this.handleNewTaskChange = function (e) {
+        _this.handleTaskNameChange = function (e) {
             _this.setState({ taskTitle: e.target.value });
         };
         _this.handleKeyUp = function (e) {
@@ -49797,43 +50069,52 @@ var TasksForm = /** @class */ (function (_super) {
         _this.tasksUrl = _config__WEBPACK_IMPORTED_MODULE_5__.tasksUrl;
         _this.handleAddTaskDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_4__.debounce)(_this.handleAddTask, 200);
         _this.state = {
-            tasks: [],
             taskTitle: ''
         };
         return _this;
     }
     TasksForm.prototype.componentDidMount = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var token, tasks;
+            var getTasks, token, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        getTasks = this.context.getTasks;
                         token = this.props.token;
-                        return [4 /*yield*/, store.getData(this.tasksUrl, token)];
+                        _a.label = 1;
                     case 1:
-                        tasks = _a.sent();
-                        if (tasks === 'Not authorized') {
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, getTasks(this.tasksUrl, token)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_3 = _a.sent();
+                        if (e_3.message === 'Unauthorized') {
+                            alert(e_3);
                             this.handleLogout();
-                            alert('Not authorized');
                         }
                         else {
-                            this.setState({ tasks: tasks });
+                            alert(e_3);
                         }
-                        return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     TasksForm.prototype.render = function () {
-        var _this = this;
-        var _a = this.state, tasks = _a.tasks, taskTitle = _a.taskTitle;
+        var _a = this, handleLogout = _a.handleLogout, handleTaskNameChange = _a.handleTaskNameChange, handleKeyUp = _a.handleKeyUp, handleAddTaskDebounced = _a.handleAddTaskDebounced, handleTasksChange = _a.handleTasksChange;
+        var tasks = this.context.tasks;
+        var taskTitle = this.state.taskTitle;
         var disabled = taskTitle.trim().length === 0;
         return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "header" }, { children: "Tasks" }), void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: this.handleLogout, className: 'logout-button' }, { children: "Log out" }), void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: taskTitle, onChange: this.handleNewTaskChange, onKeyUp: this.handleKeyUp, className: "task-input", placeholder: "What you want to do?" }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: this.handleAddTaskDebounced, className: "create-button far fa-plus-square", disabled: disabled }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("ul", __assign({ className: "tasks-list" }, { children: tasks.map(function (task) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskCard__WEBPACK_IMPORTED_MODULE_2__.default, { onTasksChange: _this.handleTasksChange, isCompleted: task.isCompleted, taskId: task.taskId, taskTitle: task.taskLabel }, task.taskId)); }) }), void 0)] }), void 0)] }, void 0));
+                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleLogout, className: 'logout-button' }, { children: "Log out" }), void 0),
+                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: taskTitle, onChange: handleTaskNameChange, onKeyUp: handleKeyUp, className: "task-input", placeholder: "What you want to do?" }, void 0),
+                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: handleAddTaskDebounced, className: "create-button far fa-plus-square", disabled: disabled }, void 0),
+                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("ul", __assign({ className: "tasks-list" }, { children: tasks.map(function (task) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskCard__WEBPACK_IMPORTED_MODULE_2__.default, { onTasksChange: handleTasksChange, isCompleted: task.isCompleted, taskId: task.taskId, taskTitle: task.taskLabel }, task.taskId)); }) }), void 0)] }), void 0)] }, void 0));
     };
+    TasksForm.contextType = _TasksContext__WEBPACK_IMPORTED_MODULE_3__.default;
     return TasksForm;
 }(react__WEBPACK_IMPORTED_MODULE_1__.Component));
 /* harmony default export */ __webpack_exports__["default"] = (TasksForm);
@@ -49962,7 +50243,15 @@ var Session = /** @class */ (function () {
                         content = _a.sent();
                         document.cookie = "token=" + content.token;
                         return [2 /*return*/, content.token];
-                    case 3: return [2 /*return*/];
+                    case 3:
+                        if (response.status === 400) {
+                            throw new Error('Incorrect username or password');
+                        }
+                        else {
+                            throw new Error("" + response.statusText);
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
@@ -49986,203 +50275,20 @@ var Session = /** @class */ (function () {
                         content = _a.sent();
                         document.cookie = "token=" + content.token;
                         return [2 /*return*/, content.token];
-                    case 3: return [2 /*return*/];
+                    case 3:
+                        if (response.status === 409) {
+                            throw new Error('Username already in use');
+                        }
+                        else {
+                            throw new Error("" + response.statusText);
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
     }
     return Session;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/components/store.ts":
-/*!*********************************!*\
-  !*** ./src/components/store.ts ***!
-  \*********************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Store": function() { return /* binding */ Store; }
-/* harmony export */ });
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api */ "./src/components/api.ts");
-/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./task */ "./src/components/task.ts");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-var Store = /** @class */ (function () {
-    function Store() {
-        var _this = this;
-        this.getData = function (url, token) { return __awaiter(_this, void 0, void 0, function () {
-            var apiCall, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('GET', null, token);
-                        return [4 /*yield*/, fetch(url, apiCall)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.tasks = content;
-                        return [2 /*return*/, this.tasks];
-                    case 3:
-                        if (response.status === 401) {
-                            return [2 /*return*/, 'Not authorized'];
-                        }
-                        else {
-                            throw new Error("" + response.status);
-                        }
-                        _a.label = 4;
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.postData = function (taskTitle, url, token) { return __awaiter(_this, void 0, void 0, function () {
-            var taskId, task, apiCall, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        taskId = (0,uuid__WEBPACK_IMPORTED_MODULE_2__.default)();
-                        task = new _task__WEBPACK_IMPORTED_MODULE_1__.Task(taskId, taskTitle);
-                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('POST', task, token);
-                        return [4 /*yield*/, fetch(url, apiCall)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.tasks = content;
-                        return [2 /*return*/, this.tasks];
-                    case 3:
-                        if (response.status === 401) {
-                            return [2 /*return*/, 'Not authorized'];
-                        }
-                        else {
-                            throw Error("" + response.status);
-                        }
-                        _a.label = 4;
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.putData = function (url, id, token, action, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
-            var taskId, task, _id, apiCall, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        taskId = this.tasks.findIndex(function (x) { return x.taskId === id; });
-                        task = this.tasks[taskId];
-                        _id = task._id;
-                        delete task._id;
-                        if (action === 'comp-button') {
-                            task.isCompleted
-                                ? (task.isCompleted = false)
-                                : (task.isCompleted = true);
-                        }
-                        else if (action === 'save-button' || action === 'edit-view') {
-                            task.taskLabel = taskTitle;
-                        }
-                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('PUT', task, token);
-                        return [4 /*yield*/, fetch(url + "/" + _id, apiCall)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.tasks = content;
-                        return [2 /*return*/, this.tasks];
-                    case 3:
-                        if (response.status === 401) {
-                            return [2 /*return*/, 'Not authorized'];
-                        }
-                        else {
-                            throw Error("" + response.status);
-                        }
-                        _a.label = 4;
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.deleteData = function (url, id, token) { return __awaiter(_this, void 0, void 0, function () {
-            var taskId, task, _id, apiCall, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        taskId = this.tasks.findIndex(function (x) { return x.taskId === id; });
-                        task = this.tasks[taskId];
-                        _id = task._id;
-                        delete task._id;
-                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('DELETE', null, token);
-                        return [4 /*yield*/, fetch(url + "/" + _id, apiCall)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.tasks = content;
-                        return [2 /*return*/, this.tasks];
-                    case 3:
-                        if (response.status === 401) {
-                            return [2 /*return*/, 'Not authorized'];
-                        }
-                        else {
-                            throw Error("" + response.status);
-                        }
-                        _a.label = 4;
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.tasks = [];
-    }
-    return Store;
 }());
 
 

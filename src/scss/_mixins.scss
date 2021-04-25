@@ -1,16 +1,16 @@
 @mixin input {
-	height: 30px;
-	font-size: 1.125em;
+  height: 30px;
+  font-size: 1.125em;
 
-	&::placeholder {
-		color: rgba(0, 0, 0, 0.5);
-	}
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+  }
 
-	@include sm-min {
-		width: 300px;
-	}
+  @include sm-min {
+    width: 300px;
+  }
 
-	@include sm {
-		min-width: 230px;
-	}
+  @include sm {
+    min-width: 230px;
+  }
 }
