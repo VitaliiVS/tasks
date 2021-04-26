@@ -1,13 +1,20 @@
+import { Task } from './task'
+
+interface authBody {
+  username: string
+  password: string
+}
+
 export class ApiCall {
   method: string
-  cache: string
+  cache: RequestCache
   headers: {
     'Content-Type': string
     authorization: string
   }
-  body: unknown
+  body?: BodyInit | null
 
-  constructor(method: string, body: unknown, token: string | null) {
+  constructor(method: string, body: authBody | Task | null, token?: string) {
     this.method = method
     this.cache = 'no-cache'
     this.headers = {

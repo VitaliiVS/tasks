@@ -7,7 +7,7 @@ export class Session {
       username: username.toLowerCase(),
       password: password
     }
-    const apiCall: any = new ApiCall('POST', data, null)
+    const apiCall = new ApiCall('POST', data)
     const response = await fetch(url, apiCall)
 
     if (response.ok) {
@@ -32,7 +32,7 @@ export class Session {
       password: password,
       userId: uuidv4()
     }
-    const apiCall: any = new ApiCall('POST', data, null)
+    const apiCall = new ApiCall('POST', data)
     const response = await fetch(registerUrl, apiCall)
 
     if (response.ok) {

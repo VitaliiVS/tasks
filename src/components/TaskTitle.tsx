@@ -2,9 +2,12 @@ import React from 'react'
 
 interface TaskTitleProps {
   editView: boolean
-  handleKeyUp: (e: any) => void
+  handleKeyUp: (
+    e: React.KeyboardEvent<HTMLInputElement> &
+      React.ChangeEvent<HTMLInputElement>
+  ) => void
   taskName: string
-  onChange: (e: any) => void
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   classNames: string
 }
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import Task from './TaskCard'
+import TaskCard from './TaskCard'
 import TasksContext from './TasksContext'
+import { Task } from './task'
 import { debounce } from 'lodash'
-import { tasksUrl } from './config'
 
 interface TasksFormProps {
   token: string
@@ -14,13 +14,11 @@ interface TasksFormState {
 }
 
 class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
-  tasksUrl: string
-  handleAddTaskDebounced: any
+  handleAddTaskDebounced: () => void
 
   constructor(props: TasksFormProps) {
     super(props)
 
-    this.tasksUrl = tasksUrl
     this.handleAddTaskDebounced = debounce(this.handleAddTask, 200)
     this.state = {
       taskTitle: ''
@@ -34,7 +32,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     const { token } = this.props
 
     try {
-      await getTasks(this.tasksUrl, token)
+      await getTasks(token)
     } catch (e) {
       if (e.message === 'Unauthorized') {
         alert(e)
@@ -62,9 +60,9 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
 
     try {
       if (action === 'delete-button') {
-        await deleteTask(this.tasksUrl, taskId, token)
+        await deleteTask(taskId, token)
       } else {
-        await putTask(this.tasksUrl, taskId, token, action, taskTitle)
+        await putTask(taskId, token, action, taskTitle)
       }
     } catch (e) {
       if (e.message === 'Unauthorized') {
@@ -83,7 +81,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
 
     if (taskTitle.trim() !== '') {
       try {
-        await postTask(taskTitle, this.tasksUrl, token)
+        await postTask(taskTitle, token)
         this.setState({ taskTitle: '' })
       } catch (e) {
         if (e.message === 'Unauthorized') {
@@ -96,11 +94,11 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     }
   }
 
-  handleTaskNameChange = (e: any) => {
+  handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ taskTitle: e.target.value })
   }
 
-  handleKeyUp = (e: any) => {
+  handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       this.handleAddTaskDebounced()
     }
@@ -138,8 +136,8 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
             disabled={disabled}
           />
           <ul className="tasks-list">
-            {tasks.map((task: any) => (
-              <Task
+            {tasks.map((task: Task) => (
+              <TaskCard
                 onTasksChange={handleTasksChange}
                 isCompleted={task.isCompleted}
                 key={task.taskId}

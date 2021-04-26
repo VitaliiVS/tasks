@@ -49676,7 +49676,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./api */ "./src/components/api.ts");
 /* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./task */ "./src/components/task.ts");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./config */ "./src/components/config.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -49744,18 +49745,19 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var TasksContext = react__WEBPACK_IMPORTED_MODULE_1__.createContext(null);
+
+var TasksContext = react__WEBPACK_IMPORTED_MODULE_1__.createContext({});
 var TasksProvider = /** @class */ (function (_super) {
     __extends(TasksProvider, _super);
     function TasksProvider(props) {
         var _this = _super.call(this, props) || this;
-        _this.getTasks = function (url, token) { return __awaiter(_this, void 0, void 0, function () {
+        _this.getTasks = function (token) { return __awaiter(_this, void 0, void 0, function () {
             var apiCall, response, content;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('GET', null, token);
-                        return [4 /*yield*/, fetch(url, apiCall)];
+                        return [4 /*yield*/, fetch(_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl, apiCall)];
                     case 1:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 3];
@@ -49764,27 +49766,20 @@ var TasksProvider = /** @class */ (function (_super) {
                         content = _a.sent();
                         this.setState({ tasks: content });
                         return [3 /*break*/, 4];
-                    case 3:
-                        if (response.status === 401) {
-                            throw new Error("" + response.statusText);
-                        }
-                        else {
-                            throw new Error("" + response.statusText);
-                        }
-                        _a.label = 4;
+                    case 3: throw new Error("" + response.statusText);
                     case 4: return [2 /*return*/];
                 }
             });
         }); };
-        _this.postTask = function (taskTitle, url, token) { return __awaiter(_this, void 0, void 0, function () {
+        _this.postTask = function (taskTitle, token) { return __awaiter(_this, void 0, void 0, function () {
             var taskId, task, apiCall, response, content;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        taskId = (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)();
+                        taskId = (0,uuid__WEBPACK_IMPORTED_MODULE_5__.default)();
                         task = new _task__WEBPACK_IMPORTED_MODULE_3__.Task(taskId, taskTitle);
                         apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('POST', task, token);
-                        return [4 /*yield*/, fetch(url, apiCall)];
+                        return [4 /*yield*/, fetch(_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl, apiCall)];
                     case 1:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 3];
@@ -49793,19 +49788,12 @@ var TasksProvider = /** @class */ (function (_super) {
                         content = _a.sent();
                         this.setState({ tasks: content });
                         return [3 /*break*/, 4];
-                    case 3:
-                        if (response.status === 401) {
-                            throw new Error("" + response.statusText);
-                        }
-                        else {
-                            throw new Error("" + response.statusText);
-                        }
-                        _a.label = 4;
+                    case 3: throw new Error("" + response.statusText);
                     case 4: return [2 /*return*/];
                 }
             });
         }); };
-        _this.putTask = function (url, id, token, action, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
+        _this.putTask = function (id, token, action, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
             var tasks, taskId, task, _id, apiCall, response, content;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -49822,7 +49810,7 @@ var TasksProvider = /** @class */ (function (_super) {
                             task.taskLabel = taskTitle;
                         }
                         apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('PUT', task, token);
-                        return [4 /*yield*/, fetch(url + "/" + _id, apiCall)];
+                        return [4 /*yield*/, fetch(_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl + "/" + _id, apiCall)];
                     case 1:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 3];
@@ -49831,19 +49819,12 @@ var TasksProvider = /** @class */ (function (_super) {
                         content = _a.sent();
                         this.setState({ tasks: content });
                         return [3 /*break*/, 4];
-                    case 3:
-                        if (response.status === 401) {
-                            throw new Error("" + response.statusText);
-                        }
-                        else {
-                            throw new Error("" + response.statusText);
-                        }
-                        _a.label = 4;
+                    case 3: throw new Error("" + response.statusText);
                     case 4: return [2 /*return*/];
                 }
             });
         }); };
-        _this.deleteTask = function (url, id, token) { return __awaiter(_this, void 0, void 0, function () {
+        _this.deleteTask = function (id, token) { return __awaiter(_this, void 0, void 0, function () {
             var tasks, taskId, task, _id, apiCall, response, content;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -49854,7 +49835,7 @@ var TasksProvider = /** @class */ (function (_super) {
                         _id = task._id;
                         delete task._id;
                         apiCall = new _api__WEBPACK_IMPORTED_MODULE_2__.ApiCall('DELETE', null, token);
-                        return [4 /*yield*/, fetch(url + "/" + _id, apiCall)];
+                        return [4 /*yield*/, fetch(_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl + "/" + _id, apiCall)];
                     case 1:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 3];
@@ -49863,14 +49844,7 @@ var TasksProvider = /** @class */ (function (_super) {
                         content = _a.sent();
                         this.setState({ tasks: content });
                         return [3 /*break*/, 4];
-                    case 3:
-                        if (response.status === 401) {
-                            throw new Error("" + response.statusText);
-                        }
-                        else {
-                            throw new Error("" + response.statusText);
-                        }
-                        _a.label = 4;
+                    case 3: throw new Error("" + response.statusText);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -49914,7 +49888,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TasksContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksContext */ "./src/components/TasksContext.tsx");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./config */ "./src/components/config.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -49982,7 +49955,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
 var TasksForm = /** @class */ (function (_super) {
     __extends(TasksForm, _super);
     function TasksForm(props) {
@@ -50004,11 +49976,11 @@ var TasksForm = /** @class */ (function (_super) {
                     case 1:
                         _b.trys.push([1, 6, , 7]);
                         if (!(action === 'delete-button')) return [3 /*break*/, 3];
-                        return [4 /*yield*/, deleteTask(this.tasksUrl, taskId, token)];
+                        return [4 /*yield*/, deleteTask(taskId, token)];
                     case 2:
                         _b.sent();
                         return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, putTask(this.tasksUrl, taskId, token, action, taskTitle)];
+                    case 3: return [4 /*yield*/, putTask(taskId, token, action, taskTitle)];
                     case 4:
                         _b.sent();
                         _b.label = 5;
@@ -50039,7 +50011,7 @@ var TasksForm = /** @class */ (function (_super) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, postTask(taskTitle, this.tasksUrl, token)];
+                        return [4 /*yield*/, postTask(taskTitle, token)];
                     case 2:
                         _a.sent();
                         this.setState({ taskTitle: '' });
@@ -50066,7 +50038,6 @@ var TasksForm = /** @class */ (function (_super) {
                 _this.handleAddTaskDebounced();
             }
         };
-        _this.tasksUrl = _config__WEBPACK_IMPORTED_MODULE_5__.tasksUrl;
         _this.handleAddTaskDebounced = (0,lodash__WEBPACK_IMPORTED_MODULE_4__.debounce)(_this.handleAddTask, 200);
         _this.state = {
             taskTitle: ''
@@ -50084,7 +50055,7 @@ var TasksForm = /** @class */ (function (_super) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, getTasks(this.tasksUrl, token)];
+                        return [4 /*yield*/, getTasks(token)];
                     case 2:
                         _a.sent();
                         return [3 /*break*/, 4];
@@ -50233,7 +50204,7 @@ var Session = /** @class */ (function () {
                             username: username.toLowerCase(),
                             password: password
                         };
-                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('POST', data, null);
+                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('POST', data);
                         return [4 /*yield*/, fetch(url, apiCall)];
                     case 1:
                         response = _a.sent();
@@ -50265,7 +50236,7 @@ var Session = /** @class */ (function () {
                             password: password,
                             userId: (0,uuid__WEBPACK_IMPORTED_MODULE_1__.default)()
                         };
-                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('POST', data, null);
+                        apiCall = new _api__WEBPACK_IMPORTED_MODULE_0__.ApiCall('POST', data);
                         return [4 /*yield*/, fetch(registerUrl, apiCall)];
                     case 1:
                         response = _a.sent();

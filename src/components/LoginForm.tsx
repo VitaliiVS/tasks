@@ -63,15 +63,15 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     }
   }
 
-  handleUsernameChange = (e: any) => {
+  handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ username: e.target.value })
   }
 
-  handlePasswordChange = (e: any) => {
+  handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ password: e.target.value })
   }
 
-  handleKeyUp = (e: any) => {
+  handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       this.handleLoginDebounced()
     }

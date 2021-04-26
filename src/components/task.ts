@@ -3,6 +3,7 @@ export class Task {
   taskLabel: string
   isCompleted: boolean
   isDeleted: boolean
+  _id?: string
 
   constructor(id: string, input: string) {
     this.taskId = id
