@@ -27,7 +27,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
 
   static contextType = TasksContext
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     const { getTasks } = this.context
     const { token } = this.props
 
@@ -43,7 +43,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     }
   }
 
-  handleLogout = () => {
+  handleLogout = (): void => {
     const { onTokenChange } = this.props
     const token = ''
     document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
@@ -54,7 +54,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     action: string,
     taskId: string,
     taskTitle: string
-  ) => {
+  ): Promise<void> => {
     const { deleteTask, putTask } = this.context
     const { token } = this.props
 
@@ -74,7 +74,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     }
   }
 
-  handleAddTask = async () => {
+  handleAddTask = async (): Promise<void> => {
     const { postTask } = this.context
     const { taskTitle } = this.state
     const { token } = this.props
@@ -94,17 +94,17 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     }
   }
 
-  handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ taskTitle: e.target.value })
   }
 
-  handleKeyUp = (e: React.KeyboardEvent) => {
+  handleKeyUp = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
       this.handleAddTaskDebounced()
     }
   }
 
-  render() {
+  render(): React.ReactNode {
     const {
       handleLogout,
       handleTaskNameChange,

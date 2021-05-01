@@ -12,7 +12,7 @@ interface TaskTitleProps {
 }
 
 class TaskTitle extends React.Component<TaskTitleProps> {
-  render() {
+  render(): React.ReactNode {
     const { editView, handleKeyUp, taskName, onChange, classNames } = this.props
 
     if (editView === true) {

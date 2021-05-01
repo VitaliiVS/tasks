@@ -24,7 +24,7 @@ class TaskCard extends React.Component<TaskCardProps, TaskCardState> {
     }
   }
 
-  handleTaskChange = (e: React.BaseSyntheticEvent) => {
+  handleTaskChange = (e: React.BaseSyntheticEvent): void => {
     const { taskId, onTasksChange } = this.props
     const { taskName } = this.state
     const classNames = e.target.className.split(' ')
@@ -34,7 +34,7 @@ class TaskCard extends React.Component<TaskCardProps, TaskCardState> {
     this.setState({ editView: false })
   }
 
-  handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     const { taskTitle } = this.props
     const { taskName } = this.state
 
@@ -45,15 +45,15 @@ class TaskCard extends React.Component<TaskCardProps, TaskCardState> {
     }
   }
 
-  handleEditViewChange = () => {
+  handleEditViewChange = (): void => {
     this.setState({ editView: true })
   }
 
-  handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ taskName: e.target.value })
   }
 
-  render() {
+  render(): React.ReactNode {
     const handleTaskChangeDebounced = debounce(this.handleTaskChange, 200)
     const handleKeyUpDebounced = debounce(this.handleKeyUp, 200)
     const { handleEditViewChange, handleTaskNameChange } = this

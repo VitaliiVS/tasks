@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "webpack serve",
     "build": "webpack",
-    "start": "webpack --watch"
+    "start": "webpack --watch",
+    "eslint": "npx eslint ./src/."
   },
   "browserslist": [
     "defaults",

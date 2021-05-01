@@ -16,7 +16,7 @@ class App extends React.Component<unknown, State> {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     if (document.cookie !== '') {
       const cookie = document.cookie
       const token = cookie.toString().slice(6)
@@ -24,11 +24,11 @@ class App extends React.Component<unknown, State> {
     }
   }
 
-  handleTokenChange = (token: string) => {
+  handleTokenChange = (token: string): void => {
     this.setState({ token })
   }
 
-  render() {
+  render(): React.ReactNode {
     const { handleTokenChange } = this
     const { token } = this.state
 

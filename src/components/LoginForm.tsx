@@ -35,7 +35,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     }
   }
 
-  handleLogin = async () => {
+  handleLogin = async (): Promise<void> => {
     const { onTokenChange } = this.props
     const { username, password } = this.state
 
@@ -47,7 +47,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     }
   }
 
-  handleRegister = async () => {
+  handleRegister = async (): Promise<void> => {
     const { onTokenChange } = this.props
     const { username, password } = this.state
 
@@ -63,21 +63,21 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     }
   }
 
-  handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ username: e.target.value })
   }
 
-  handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ password: e.target.value })
   }
 
-  handleKeyUp = (e: React.KeyboardEvent) => {
+  handleKeyUp = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
       this.handleLoginDebounced()
     }
   }
 
-  render() {
+  render(): React.ReactNode {
     const {
       handleUsernameChange,
       handlePasswordChange,

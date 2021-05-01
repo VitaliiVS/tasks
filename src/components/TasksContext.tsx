@@ -32,7 +32,7 @@ class TasksProvider extends React.Component<unknown, State> {
     }
   }
 
-  getTasks = async (token: string) => {
+  getTasks = async (token: string): Promise<void> => {
     const apiCall = new ApiCall('GET', null, token)
     const response = await fetch(tasksUrl, apiCall)
 
@@ -44,7 +44,7 @@ class TasksProvider extends React.Component<unknown, State> {
     }
   }
 
-  postTask = async (taskTitle: string, token: string) => {
+  postTask = async (taskTitle: string, token: string): Promise<void> => {
     const taskId = uuidv4()
     const task = new Task(taskId, taskTitle)
     const apiCall = new ApiCall('POST', task, token)
@@ -64,7 +64,7 @@ class TasksProvider extends React.Component<unknown, State> {
     token: string,
     action: string,
     taskTitle: string
-  ) => {
+  ): Promise<void> => {
     const { tasks } = this.state
     const taskId = tasks.findIndex((x) => x.taskId === id)
     const task = tasks[taskId]
@@ -88,7 +88,7 @@ class TasksProvider extends React.Component<unknown, State> {
     }
   }
 
-  deleteTask = async (id: string, token: string) => {
+  deleteTask = async (id: string, token: string): Promise<void> => {
     const { tasks } = this.state
     const taskId = tasks.findIndex((x) => x.taskId === id)
 
@@ -108,7 +108,7 @@ class TasksProvider extends React.Component<unknown, State> {
     }
   }
 
-  render() {
+  render(): React.ReactNode {
     const { getTasks, postTask, putTask, deleteTask } = this
     const { children } = this.props
     const { tasks } = this.state

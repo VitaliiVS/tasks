@@ -2,7 +2,11 @@ import { ApiCall } from './api'
 import { v4 as uuidv4 } from 'uuid'
 
 export class Session {
-  login = async (url: string, username: string, password: string) => {
+  login = async (
+    url: string,
+    username: string,
+    password: string
+  ): Promise<string> => {
     const data = {
       username: username.toLowerCase(),
       password: password
@@ -26,7 +30,7 @@ export class Session {
     registerUrl: string,
     username: string,
     password: string
-  ) => {
+  ): Promise<string> => {
     const data = {
       username: username.toLowerCase(),
       password: password,
