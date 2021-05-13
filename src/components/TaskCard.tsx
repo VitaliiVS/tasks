@@ -1,5 +1,5 @@
 import React from 'react'
-import { debounce } from 'lodash'
+import { debounce } from '../common/helpers'
 import TaskTitle from './TaskTitle'
 
 interface TaskCardProps {

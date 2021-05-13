@@ -1,7 +1,7 @@
 import React from 'react'
 import { Session } from './session'
-import { debounce } from 'lodash'
-import { loginUrl, registerUrl } from './config'
+import { debounce } from '../common/helpers'
+import { loginUrl, registerUrl } from '../common/config'
 
 const session = new Session()
 

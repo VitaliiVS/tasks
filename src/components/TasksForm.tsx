@@ -1,8 +1,8 @@
 import React from 'react'
 import TaskCard from './TaskCard'
 import TasksContext from './TasksContext'
-import { Task } from './task'
-import { debounce } from 'lodash'
+import { Task } from '../common/task'
+import { debounce } from '../common/helpers'
 
 interface TasksFormProps {
   token: string

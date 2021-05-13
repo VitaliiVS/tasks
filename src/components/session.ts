@@ -1,4 +1,4 @@
-import { ApiCall } from './api'
+import { ApiCall } from '../common/api'
 import { v4 as uuidv4 } from 'uuid'
 
 export class Session {

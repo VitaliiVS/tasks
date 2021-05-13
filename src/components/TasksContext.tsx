@@ -1,8 +1,8 @@
 import React from 'react'
-import { ApiCall } from './api'
-import { Task } from './task'
+import { ApiCall } from '../common/api'
+import { Task } from '../common/task'
 import { v4 as uuidv4 } from 'uuid'
-import { tasksUrl } from './config'
+import { tasksUrl } from '../common/config'
 
 interface Context {
   tasks: Task[]
