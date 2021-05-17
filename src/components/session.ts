@@ -1,6 +1,8 @@
 import { ApiCall } from '../common/api'
 import { v4 as uuidv4 } from 'uuid'
 
+const apiCall = new ApiCall()
+
 export class Session {
   login = async (
     url: string,
@@ -11,8 +13,7 @@ export class Session {
       username: username.toLowerCase(),
       password: password
     }
-    const apiCall = new ApiCall('POST', data)
-    const response = await fetch(url, apiCall)
+    const response = await apiCall.makeApiCall(url, 'POST', data)
 
     if (response.ok) {
       const content = await response.json()
@@ -27,7 +28,7 @@ export class Session {
   }
 
   register = async (
-    registerUrl: string,
+    url: string,
     username: string,
     password: string
   ): Promise<string> => {
@@ -36,8 +37,7 @@ export class Session {
       password: password,
       userId: uuidv4()
     }
-    const apiCall = new ApiCall('POST', data)
-    const response = await fetch(registerUrl, apiCall)
+    const response = await apiCall.makeApiCall(url, 'POST', data)
 
     if (response.ok) {
       const content = await response.json()

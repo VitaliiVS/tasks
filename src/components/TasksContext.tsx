@@ -22,6 +22,7 @@ interface State {
 }
 
 const TasksContext = React.createContext<Partial<Context>>({})
+const apiCall = new ApiCall()
 
 class TasksProvider extends React.Component<unknown, State> {
   constructor(props: unknown) {
@@ -33,8 +34,7 @@ class TasksProvider extends React.Component<unknown, State> {
   }
 
   getTasks = async (token: string): Promise<void> => {
-    const apiCall = new ApiCall('GET', null, token)
-    const response = await fetch(tasksUrl, apiCall)
+    const response = await apiCall.makeApiCall(tasksUrl, 'GET', null, token)
 
     if (response.ok) {
       const content = await response.json()
@@ -47,9 +47,7 @@ class TasksProvider extends React.Component<unknown, State> {
   postTask = async (taskTitle: string, token: string): Promise<void> => {
     const taskId = uuidv4()
     const task = new Task(taskId, taskTitle)
-    const apiCall = new ApiCall('POST', task, token)
-
-    const response = await fetch(tasksUrl, apiCall)
+    const response = await apiCall.makeApiCall(tasksUrl, 'POST', task, token)
 
     if (response.ok) {
       const content = await response.json()
@@ -77,8 +75,12 @@ class TasksProvider extends React.Component<unknown, State> {
       task.taskLabel = taskTitle
     }
 
-    const apiCall = new ApiCall('PUT', task, token)
-    const response = await fetch(`${tasksUrl}/${_id}`, apiCall)
+    const response = await apiCall.makeApiCall(
+      `${tasksUrl}/${_id}`,
+      'PUT',
+      task,
+      token
+    )
 
     if (response.ok) {
       const content = await response.json()
@@ -97,8 +99,12 @@ class TasksProvider extends React.Component<unknown, State> {
 
     delete task._id
 
-    const apiCall = new ApiCall('DELETE', null, token)
-    const response = await fetch(`${tasksUrl}/${_id}`, apiCall)
+    const response = await apiCall.makeApiCall(
+      `${tasksUrl}/${_id}`,
+      'DELETE',
+      null,
+      token
+    )
 
     if (response.ok) {
       const content = await response.json()

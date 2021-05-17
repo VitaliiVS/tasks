@@ -6,23 +6,24 @@ interface authBody {
 }
 
 export class ApiCall {
-  method: string
-  cache: RequestCache
-  headers: {
-    'Content-Type': string
-    authorization: string
-  }
-  body?: BodyInit | null
+  constructor() {}
 
-  constructor(method: string, body: authBody | Task | null, token?: string) {
-    this.method = method
-    this.cache = 'no-cache'
-    this.headers = {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`
-    }
-    if (body !== null) {
-      this.body = JSON.stringify(body)
-    }
+  makeApiCall = async (
+    url: string,
+    method: string,
+    body: authBody | Task | null,
+    token?: string
+  ) => {
+    const response = await fetch(url, {
+      method: method,
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      },
+      body: body !== null ? JSON.stringify(body) : null
+    })
+
+    return response
   }
 }
