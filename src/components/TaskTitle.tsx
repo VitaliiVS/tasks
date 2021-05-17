@@ -11,23 +11,21 @@ interface TaskTitleProps {
   classNames: string
 }
 
-class TaskTitle extends React.Component<TaskTitleProps> {
-  render(): React.ReactNode {
-    const { editView, handleKeyUp, taskName, onChange, classNames } = this.props
+const TaskTitle = (props: TaskTitleProps): JSX.Element => {
+  const { editView, handleKeyUp, taskName, onChange, classNames } = props
 
-    if (editView === true) {
-      return (
-        <input
-          onKeyUp={handleKeyUp}
-          value={taskName}
-          onChange={onChange}
-          className={classNames}
-          type="text"
-        />
-      )
-    } else {
-      return <p className={classNames}>{taskName}</p>
-    }
+  if (editView === true) {
+    return (
+      <input
+        onKeyUp={handleKeyUp}
+        value={taskName}
+        onChange={onChange}
+        className={classNames}
+        type="text"
+      />
+    )
+  } else {
+    return <p className={classNames}>{taskName}</p>
   }
 }
 
