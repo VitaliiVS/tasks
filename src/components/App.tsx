@@ -29,17 +29,16 @@ class App extends React.Component<unknown, State> {
   }
 
   render(): React.ReactNode {
-    const { handleTokenChange } = this
     const { token } = this.state
 
     if (token !== '') {
       return (
         <TasksProvider>
-          <TasksForm token={token} onTokenChange={handleTokenChange} />
+          <TasksForm token={token} onTokenChange={this.handleTokenChange} />
         </TasksProvider>
       )
     } else {
-      return <LoginForm onTokenChange={handleTokenChange} />
+      return <LoginForm onTokenChange={this.handleTokenChange} />
     }
   }
 }
