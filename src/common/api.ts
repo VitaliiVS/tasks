@@ -6,14 +6,12 @@ interface authBody {
 }
 
 export class ApiCall {
-  constructor() {}
-
   makeApiCall = async (
     url: string,
     method: string,
     body: authBody | Task | null,
     token?: string
-  ) => {
+  ): Promise<Response> => {
     const response = await fetch(url, {
       method: method,
       cache: 'no-cache',

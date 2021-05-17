@@ -1,45 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LoginForm from './LoginForm'
 import TasksForm from './TasksForm'
 import { TasksProvider } from './TasksContext'
 
-interface State {
-  token: string
-}
+const App = (): JSX.Element => {
+  const [token, setToken] = useState('')
 
-class App extends React.Component<unknown, State> {
-  constructor(props: unknown) {
-    super(props)
-
-    this.state = {
-      token: ''
-    }
-  }
-
-  componentDidMount(): void {
+  useEffect(() => {
     if (document.cookie !== '') {
       const cookie = document.cookie
       const token = cookie.toString().slice(6)
-      this.setState({ token })
+      setToken(token)
     }
+  })
+
+  const handleTokenChange = (token: string): void => {
+    setToken(token)
   }
 
-  handleTokenChange = (token: string): void => {
-    this.setState({ token })
-  }
-
-  render(): React.ReactNode {
-    const { token } = this.state
-
-    if (token !== '') {
-      return (
-        <TasksProvider>
-          <TasksForm token={token} onTokenChange={this.handleTokenChange} />
-        </TasksProvider>
-      )
-    } else {
-      return <LoginForm onTokenChange={this.handleTokenChange} />
-    }
+  if (token !== '') {
+    return (
+      <TasksProvider>
+        <TasksForm token={token} onTokenChange={handleTokenChange} />
+      </TasksProvider>
+    )
+  } else {
+    return <LoginForm onTokenChange={handleTokenChange} />
   }
 }
 
