@@ -32,7 +32,7 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
     fetch()
   }, [])
 
-  const handleLogout = (): void => {
+  const handleLogout = () => {
     const { onTokenChange } = props
     const token = ''
     document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
@@ -81,14 +81,12 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
     }
   }
 
-  const handleTaskNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  const handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.target.value)
     setDisabled(taskTitle.trim().length === 0)
   }
 
-  const handleKeyUp = (e: React.KeyboardEvent): void => {
+  const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleAddTaskDebounced()
     }

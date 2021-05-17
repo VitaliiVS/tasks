@@ -14,7 +14,7 @@ const App = (): JSX.Element => {
     }
   }, [])
 
-  const handleTokenChange = (token: string): void => {
+  const handleTokenChange = (token: string) => {
     setToken(token)
   }
 

@@ -35,19 +35,15 @@ const LoginForm = (props: LoginProps): JSX.Element => {
     }
   }
 
-  const handleUsernameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value)
   }
 
-  const handlePasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
   }
 
-  const handleKeyUp = (e: React.KeyboardEvent): void => {
+  const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleLoginDebounced()
     }
