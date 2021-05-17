@@ -12,7 +12,7 @@ const App = (): JSX.Element => {
       const token = cookie.toString().slice(6)
       setToken(token)
     }
-  })
+  }, [])
 
   const handleTokenChange = (token: string): void => {
     setToken(token)

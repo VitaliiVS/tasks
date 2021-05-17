@@ -4,7 +4,7 @@ import { Task } from '../common/task'
 import { v4 as uuidv4 } from 'uuid'
 import { tasksUrl } from '../common/config'
 
-interface Context {
+export interface Context {
   tasks: Task[]
   getTasks: (token: string) => Promise<void>
   postTask: (taskTitle: string, token: string) => Promise<void>

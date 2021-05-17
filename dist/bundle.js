@@ -32200,56 +32200,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LoginForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LoginForm */ "./src/components/LoginForm.tsx");
 /* harmony import */ var _TasksForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksForm */ "./src/components/TasksForm.tsx");
 /* harmony import */ var _TasksContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TasksContext */ "./src/components/TasksContext.tsx");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
 
 
 
-var App = /** @class */ (function (_super) {
-    __extends(App, _super);
-    function App(props) {
-        var _this = _super.call(this, props) || this;
-        _this.handleTokenChange = function (token) {
-            _this.setState({ token: token });
-        };
-        _this.state = {
-            token: ''
-        };
-        return _this;
-    }
-    App.prototype.componentDidMount = function () {
+var App = function () {
+    var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''), token = _a[0], setToken = _a[1];
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
         if (document.cookie !== '') {
             var cookie = document.cookie;
-            var token = cookie.toString().slice(6);
-            this.setState({ token: token });
+            var token_1 = cookie.toString().slice(6);
+            setToken(token_1);
         }
+    }, []);
+    var handleTokenChange = function (token) {
+        setToken(token);
     };
-    App.prototype.render = function () {
-        var token = this.state.token;
-        if (token !== '') {
-            return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksContext__WEBPACK_IMPORTED_MODULE_4__.TasksProvider, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksForm__WEBPACK_IMPORTED_MODULE_3__.default, { token: token, onTokenChange: this.handleTokenChange }, void 0) }, void 0));
-        }
-        else {
-            return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_LoginForm__WEBPACK_IMPORTED_MODULE_2__.default, { onTokenChange: this.handleTokenChange }, void 0);
-        }
-    };
-    return App;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+    if (token !== '') {
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksContext__WEBPACK_IMPORTED_MODULE_4__.TasksProvider, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TasksForm__WEBPACK_IMPORTED_MODULE_3__.default, { token: token, onTokenChange: handleTokenChange }, void 0) }, void 0));
+    }
+    else {
+        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_LoginForm__WEBPACK_IMPORTED_MODULE_2__.default, { onTokenChange: handleTokenChange }, void 0);
+    }
+};
 /* harmony default export */ __webpack_exports__["default"] = (App);
 
 
@@ -32268,21 +32242,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _session__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./session */ "./src/components/session.ts");
 /* harmony import */ var _common_helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/helpers */ "./src/common/helpers.ts");
 /* harmony import */ var _common_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/config */ "./src/common/config.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -32336,89 +32295,73 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var session = new _session__WEBPACK_IMPORTED_MODULE_2__.Session();
-var LoginForm = /** @class */ (function (_super) {
-    __extends(LoginForm, _super);
-    function LoginForm(props) {
-        var _this = _super.call(this, props) || this;
-        _this.handleLogin = function () { return __awaiter(_this, void 0, void 0, function () {
-            var onTokenChange, _a, username, password, login, e_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        onTokenChange = this.props.onTokenChange;
-                        _a = this.state, username = _a.username, password = _a.password;
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, session.login(this.loginUrl, username, password)];
-                    case 2:
-                        login = _b.sent();
-                        onTokenChange(login);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_1 = _b.sent();
-                        alert(e_1.message);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.handleRegister = function () { return __awaiter(_this, void 0, void 0, function () {
-            var onTokenChange, _a, username, password, register, e_2;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        onTokenChange = this.props.onTokenChange;
-                        _a = this.state, username = _a.username, password = _a.password;
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, session.register(this.registerUrl, username, password)];
-                    case 2:
-                        register = _b.sent();
-                        onTokenChange(register);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_2 = _b.sent();
-                        alert(e_2.message);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.handleUsernameChange = function (e) {
-            _this.setState({ username: e.target.value });
-        };
-        _this.handlePasswordChange = function (e) {
-            _this.setState({ password: e.target.value });
-        };
-        _this.handleKeyUp = function (e) {
-            if (e.key === 'Enter') {
-                _this.handleLoginDebounced();
+var LoginForm = function (props) {
+    var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''), username = _a[0], setUsername = _a[1];
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''), password = _b[0], setPassword = _b[1];
+    var handleLogin = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var onTokenChange, login, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    onTokenChange = props.onTokenChange;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, session.login(_common_config__WEBPACK_IMPORTED_MODULE_4__.loginUrl, username, password)];
+                case 2:
+                    login = _a.sent();
+                    onTokenChange(login);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _a.sent();
+                    alert(e_1.message);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
-        };
-        _this.loginUrl = _common_config__WEBPACK_IMPORTED_MODULE_4__.loginUrl;
-        _this.registerUrl = _common_config__WEBPACK_IMPORTED_MODULE_4__.registerUrl;
-        _this.handleLoginDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_3__.debounce)(_this.handleLogin, 200);
-        _this.handleRegisterDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_3__.debounce)(_this.handleRegister, 200);
-        _this.state = {
-            username: '',
-            password: ''
-        };
-        return _this;
-    }
-    LoginForm.prototype.render = function () {
-        var _a = this, handleUsernameChange = _a.handleUsernameChange, handlePasswordChange = _a.handlePasswordChange, handleKeyUp = _a.handleKeyUp, handleLoginDebounced = _a.handleLoginDebounced, handleRegisterDebounced = _a.handleRegisterDebounced;
-        var _b = this.state, username = _b.username, password = _b.password;
-        var disabled = username.trim().length === 0 || password.trim().length === 0;
-        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "header" }, { children: "Login or Register" }), void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: username, onChange: handleUsernameChange, onKeyUp: handleKeyUp, className: "name-input", type: "text", placeholder: "Username" }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: password, onChange: handlePasswordChange, onKeyUp: handleKeyUp, className: "pass-input", type: "password", placeholder: "Password" }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleLoginDebounced, className: "login-button", disabled: disabled }, { children: "Login" }), void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleRegisterDebounced, className: "register-button", disabled: disabled }, { children: "Register" }), void 0)] }), void 0)] }, void 0));
+        });
+    }); };
+    var handleRegister = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var onTokenChange, register, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    onTokenChange = props.onTokenChange;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, session.register(_common_config__WEBPACK_IMPORTED_MODULE_4__.registerUrl, username, password)];
+                case 2:
+                    register = _a.sent();
+                    onTokenChange(register);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_2 = _a.sent();
+                    alert(e_2.message);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    var handleUsernameChange = function (e) {
+        setUsername(e.target.value);
     };
-    return LoginForm;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+    var handlePasswordChange = function (e) {
+        setPassword(e.target.value);
+    };
+    var handleKeyUp = function (e) {
+        if (e.key === 'Enter') {
+            handleLoginDebounced();
+        }
+    };
+    var handleLoginDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_3__.debounce)(handleLogin, 200);
+    var handleRegisterDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_3__.debounce)(handleRegister, 200);
+    var disabled = username.trim().length === 0 || password.trim().length === 0;
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "header" }, { children: "Login or Register" }), void 0),
+            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: username, onChange: handleUsernameChange, onKeyUp: handleKeyUp, className: "name-input", type: "text", placeholder: "Username" }, void 0),
+                    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: password, onChange: handlePasswordChange, onKeyUp: handleKeyUp, className: "pass-input", type: "password", placeholder: "Password" }, void 0),
+                    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleLoginDebounced, className: "login-button", disabled: disabled }, { children: "Login" }), void 0),
+                    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleRegisterDebounced, className: "register-button", disabled: disabled }, { children: "Register" }), void 0)] }), void 0)] }, void 0));
+};
 /* harmony default export */ __webpack_exports__["default"] = (LoginForm);
 
 
@@ -32436,21 +32379,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _common_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/helpers */ "./src/common/helpers.ts");
 /* harmony import */ var _TaskTitle__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TaskTitle */ "./src/components/TaskTitle.tsx");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -32466,71 +32394,58 @@ var __assign = (undefined && undefined.__assign) || function () {
 
 
 
-var TaskCard = /** @class */ (function (_super) {
-    __extends(TaskCard, _super);
-    function TaskCard(props) {
-        var _this = _super.call(this, props) || this;
-        _this.handleTaskChange = function (e) {
-            var _a = _this.props, taskId = _a.taskId, onTasksChange = _a.onTasksChange;
-            var taskName = _this.state.taskName;
-            var classNames = e.target.className.split(' ');
-            var action = classNames[0];
-            onTasksChange(action, taskId, taskName);
-            _this.setState({ editView: false });
-        };
-        _this.handleKeyUp = function (e) {
-            var taskTitle = _this.props.taskTitle;
-            var taskName = _this.state.taskName;
-            if (e.key === 'Enter' && taskName.trim().length > 0) {
-                _this.handleTaskChange(e);
-            }
-            else if (e.key === 'Escape') {
-                _this.setState({ taskName: taskTitle, editView: false });
-            }
-        };
-        _this.handleEditViewChange = function () {
-            _this.setState({ editView: true });
-        };
-        _this.handleTaskNameChange = function (e) {
-            _this.setState({ taskName: e.target.value });
-        };
-        _this.state = {
-            taskName: _this.props.taskTitle,
-            editView: false
-        };
-        return _this;
-    }
-    TaskCard.prototype.render = function () {
-        var handleTaskChangeDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_2__.debounce)(this.handleTaskChange, 200);
-        var handleKeyUpDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_2__.debounce)(this.handleKeyUp, 200);
-        var _a = this, handleEditViewChange = _a.handleEditViewChange, handleTaskNameChange = _a.handleTaskNameChange;
-        var isCompleted = this.props.isCompleted;
-        var _b = this.state, taskName = _b.taskName, editView = _b.editView;
-        var isCompletedClassNames = {
-            1: {
-                taskClassNames: 'task completed',
-                editButtonClassNames: 'edit-button far fa-edit'
-            },
-            0: {
-                taskClassNames: editView ? 'edit-view' : 'task',
-                editButtonClassNames: editView
-                    ? 'save-button far fa-save'
-                    : 'edit-button far fa-edit'
-            }
-        };
-        var completed = isCompleted ? 1 : 0;
-        var _c = isCompletedClassNames[completed], taskClassNames = _c.taskClassNames, editButtonClassNames = _c.editButtonClassNames;
-        var disableSave = isCompleted || taskName.trim().length === 0;
-        var saveButtonAction = editView
-            ? handleTaskChangeDebounced
-            : handleEditViewChange;
-        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("li", __assign({ className: "task-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { onChange: handleTaskChangeDebounced, className: "comp-button", type: "checkbox", checked: isCompleted, disabled: editView }, void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskTitle__WEBPACK_IMPORTED_MODULE_3__.default, { editView: editView, handleKeyUp: handleKeyUpDebounced, taskName: taskName, onChange: handleTaskNameChange, classNames: taskClassNames }, void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: saveButtonAction, className: editButtonClassNames, disabled: disableSave }, void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: handleTaskChangeDebounced, className: "delete-button far fa-trash-alt", disabled: editView }, void 0)] }), void 0));
+var TaskCard = function (props) {
+    var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(props.taskTitle), taskName = _a[0], setTaskName = _a[1];
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false), editView = _b[0], setEditView = _b[1];
+    var handleTaskChange = function (e) {
+        var taskId = props.taskId, onTasksChange = props.onTasksChange;
+        var classNames = e.target.className.split(' ');
+        var action = classNames[0];
+        onTasksChange(action, taskId, taskName);
+        setEditView(false);
     };
-    return TaskCard;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+    var handleKeyUp = function (e) {
+        var taskTitle = props.taskTitle;
+        if (e.key === 'Enter' && taskName.trim().length > 0) {
+            handleTaskChange(e);
+        }
+        else if (e.key === 'Escape') {
+            setTaskName(taskTitle);
+            setEditView(false);
+        }
+    };
+    var handleEditViewChange = function () {
+        setEditView(true);
+    };
+    var handleTaskNameChange = function (e) {
+        setTaskName(e.target.value);
+    };
+    var handleTaskChangeDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_2__.debounce)(handleTaskChange, 200);
+    var handleKeyUpDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_2__.debounce)(handleKeyUp, 200);
+    var isCompleted = props.isCompleted;
+    var isCompletedClassNames = {
+        1: {
+            taskClassNames: 'task completed',
+            editButtonClassNames: 'edit-button far fa-edit'
+        },
+        0: {
+            taskClassNames: editView ? 'edit-view' : 'task',
+            editButtonClassNames: editView
+                ? 'save-button far fa-save'
+                : 'edit-button far fa-edit'
+        }
+    };
+    var completed = isCompleted ? 1 : 0;
+    var _c = isCompletedClassNames[completed], taskClassNames = _c.taskClassNames, editButtonClassNames = _c.editButtonClassNames;
+    var disableSave = isCompleted || taskName.trim().length === 0;
+    var saveButtonAction = editView
+        ? handleTaskChangeDebounced
+        : handleEditViewChange;
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("li", __assign({ className: "task-container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { onChange: handleTaskChangeDebounced, className: "comp-button", type: "checkbox", checked: isCompleted, disabled: editView }, void 0),
+            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskTitle__WEBPACK_IMPORTED_MODULE_3__.default, { editView: editView, handleKeyUp: handleKeyUpDebounced, taskName: taskName, onChange: handleTaskNameChange, classNames: taskClassNames }, void 0),
+            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: saveButtonAction, className: editButtonClassNames, disabled: disableSave }, void 0),
+            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: handleTaskChangeDebounced, className: "delete-button far fa-trash-alt", disabled: editView }, void 0)] }), void 0));
+};
 /* harmony default export */ __webpack_exports__["default"] = (TaskCard);
 
 
@@ -32545,22 +32460,6 @@ var TaskCard = /** @class */ (function (_super) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -32573,23 +32472,15 @@ var __assign = (undefined && undefined.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 
-
-var TaskTitle = /** @class */ (function (_super) {
-    __extends(TaskTitle, _super);
-    function TaskTitle() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var TaskTitle = function (props) {
+    var editView = props.editView, handleKeyUp = props.handleKeyUp, taskName = props.taskName, onChange = props.onChange, classNames = props.classNames;
+    if (editView === true) {
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { onKeyUp: handleKeyUp, value: taskName, onChange: onChange, className: classNames, type: "text" }, void 0));
     }
-    TaskTitle.prototype.render = function () {
-        var _a = this.props, editView = _a.editView, handleKeyUp = _a.handleKeyUp, taskName = _a.taskName, onChange = _a.onChange, classNames = _a.classNames;
-        if (editView === true) {
-            return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { onKeyUp: handleKeyUp, value: taskName, onChange: onChange, className: classNames, type: "text" }, void 0));
-        }
-        else {
-            return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", __assign({ className: classNames }, { children: taskName }), void 0);
-        }
-    };
-    return TaskTitle;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+    else {
+        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", __assign({ className: classNames }, { children: taskName }), void 0);
+    }
+};
 /* harmony default export */ __webpack_exports__["default"] = (TaskTitle);
 
 
@@ -32817,21 +32708,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TaskCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TaskCard */ "./src/components/TaskCard.tsx");
 /* harmony import */ var _TasksContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksContext */ "./src/components/TasksContext.tsx");
 /* harmony import */ var _common_helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/helpers */ "./src/common/helpers.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -32884,142 +32760,122 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var TasksForm = /** @class */ (function (_super) {
-    __extends(TasksForm, _super);
-    function TasksForm(props) {
-        var _this = _super.call(this, props) || this;
-        _this.handleLogout = function () {
-            var onTokenChange = _this.props.onTokenChange;
-            var token = '';
-            document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-            onTokenChange(token);
-        };
-        _this.handleTasksChange = function (action, taskId, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, deleteTask, putTask, token, e_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+var TasksForm = function (props) {
+    var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''), taskTitle = _a[0], setTaskTitle = _a[1];
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(true), disabled = _b[0], setDisabled = _b[1];
+    var _c = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_TasksContext__WEBPACK_IMPORTED_MODULE_3__.default), tasks = _c.tasks, getTasks = _c.getTasks, postTask = _c.postTask, putTask = _c.putTask, deleteTask = _c.deleteTask;
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+        var fetch = function () { return __awaiter(void 0, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _a = this.context, deleteTask = _a.deleteTask, putTask = _a.putTask;
-                        token = this.props.token;
-                        _b.label = 1;
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, getTasks(props.token)];
                     case 1:
-                        _b.trys.push([1, 6, , 7]);
-                        if (!(action === 'delete-button')) return [3 /*break*/, 3];
-                        return [4 /*yield*/, deleteTask(taskId, token)];
+                        _a.sent();
+                        return [3 /*break*/, 3];
                     case 2:
-                        _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, putTask(taskId, token, action, taskTitle)];
-                    case 4:
-                        _b.sent();
-                        _b.label = 5;
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
-                        e_1 = _b.sent();
+                        e_1 = _a.sent();
                         if (e_1.message === 'Unauthorized') {
                             alert(e_1);
-                            this.handleLogout();
+                            handleLogout();
                         }
                         else {
                             alert(e_1);
                         }
-                        return [3 /*break*/, 7];
-                    case 7: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         }); };
-        _this.handleAddTask = function () { return __awaiter(_this, void 0, void 0, function () {
-            var postTask, taskTitle, token, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        postTask = this.context.postTask;
-                        taskTitle = this.state.taskTitle;
-                        token = this.props.token;
-                        if (!(taskTitle.trim() !== '')) return [3 /*break*/, 4];
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, postTask(taskTitle, token)];
-                    case 2:
-                        _a.sent();
-                        this.setState({ taskTitle: '', disabled: true });
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_2 = _a.sent();
-                        if (e_2.message === 'Unauthorized') {
-                            alert(e_2);
-                            this.handleLogout();
-                        }
-                        else {
-                            alert(e_2);
-                        }
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.handleTaskNameChange = function (e) {
-            _this.setState({
-                taskTitle: e.target.value,
-                disabled: _this.state.taskTitle.trim().length === 0
-            });
-        };
-        _this.handleKeyUp = function (e) {
-            if (e.key === 'Enter') {
-                _this.handleAddTaskDebounced();
+        fetch();
+    }, []);
+    var handleLogout = function () {
+        var onTokenChange = props.onTokenChange;
+        var token = '';
+        document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+        onTokenChange(token);
+    };
+    var handleTasksChange = function (action, taskId, taskTitle) { return __awaiter(void 0, void 0, void 0, function () {
+        var token, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    token = props.token;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
+                    if (!(action === 'delete-button')) return [3 /*break*/, 3];
+                    return [4 /*yield*/, deleteTask(taskId, token)];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 3: return [4 /*yield*/, putTask(taskId, token, action, taskTitle)];
+                case 4:
+                    _a.sent();
+                    _a.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    e_2 = _a.sent();
+                    if (e_2.message === 'Unauthorized') {
+                        alert(e_2);
+                        handleLogout();
+                    }
+                    else {
+                        alert(e_2);
+                    }
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
-        };
-        _this.handleAddTaskDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_4__.debounce)(_this.handleAddTask, 200);
-        _this.state = {
-            taskTitle: '',
-            disabled: true
-        };
-        return _this;
-    }
-    TasksForm.prototype.componentDidMount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var getTasks, token, e_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        getTasks = this.context.getTasks;
-                        token = this.props.token;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, getTasks(token)];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_3 = _a.sent();
-                        if (e_3.message === 'Unauthorized') {
-                            alert(e_3);
-                            this.handleLogout();
-                        }
-                        else {
-                            alert(e_3);
-                        }
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
         });
+    }); };
+    var handleAddTask = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var token, e_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    token = props.token;
+                    if (!(taskTitle.trim() !== '')) return [3 /*break*/, 4];
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, postTask(taskTitle, token)];
+                case 2:
+                    _a.sent();
+                    setTaskTitle('');
+                    setDisabled(true);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_3 = _a.sent();
+                    if (e_3.message === 'Unauthorized') {
+                        alert(e_3);
+                        handleLogout();
+                    }
+                    else {
+                        alert(e_3);
+                    }
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    var handleTaskNameChange = function (e) {
+        setTaskTitle(e.target.value);
+        setDisabled(taskTitle.trim().length === 0);
     };
-    TasksForm.prototype.render = function () {
-        var _a = this, handleLogout = _a.handleLogout, handleTaskNameChange = _a.handleTaskNameChange, handleKeyUp = _a.handleKeyUp, handleAddTaskDebounced = _a.handleAddTaskDebounced, handleTasksChange = _a.handleTasksChange;
-        var tasks = this.context.tasks;
-        var _b = this.state, taskTitle = _b.taskTitle, disabled = _b.disabled;
-        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "header" }, { children: "Tasks" }), void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleLogout, className: 'logout-button' }, { children: "Log out" }), void 0),
-                (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: taskTitle, onChange: handleTaskNameChange, onKeyUp: handleKeyUp, className: "task-input", placeholder: "What you want to do?" }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: handleAddTaskDebounced, className: "create-button far fa-plus-square", disabled: disabled }, void 0),
-                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("ul", __assign({ className: "tasks-list" }, { children: tasks.map(function (task) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskCard__WEBPACK_IMPORTED_MODULE_2__.default, { onTasksChange: handleTasksChange, isCompleted: task.isCompleted, taskId: task.taskId, taskTitle: task.taskLabel }, task.taskId)); }) }), void 0)] }), void 0)] }, void 0));
+    var handleKeyUp = function (e) {
+        if (e.key === 'Enter') {
+            handleAddTaskDebounced();
+        }
     };
-    TasksForm.contextType = _TasksContext__WEBPACK_IMPORTED_MODULE_3__.default;
-    return TasksForm;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+    var handleAddTaskDebounced = (0,_common_helpers__WEBPACK_IMPORTED_MODULE_4__.debounce)(handleAddTask, 200);
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "header" }, { children: "Tasks" }), void 0),
+            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: handleLogout, className: 'logout-button' }, { children: "Log out" }), void 0),
+            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "container" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { value: taskTitle, onChange: handleTaskNameChange, onKeyUp: handleKeyUp, className: "task-input", placeholder: "What you want to do?" }, void 0),
+                    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: handleAddTaskDebounced, className: "create-button far fa-plus-square", disabled: disabled }, void 0),
+                    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("ul", __assign({ className: "tasks-list" }, { children: tasks.map(function (task) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TaskCard__WEBPACK_IMPORTED_MODULE_2__.default, { onTasksChange: handleTasksChange, isCompleted: task.isCompleted, taskId: task.taskId, taskTitle: task.taskLabel }, task.taskId)); }) }), void 0)] }), void 0)] }, void 0));
+};
 /* harmony default export */ __webpack_exports__["default"] = (TasksForm);
 
 

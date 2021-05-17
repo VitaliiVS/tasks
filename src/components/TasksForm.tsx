@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import TaskCard from './TaskCard'
-import TasksContext from './TasksContext'
+import TasksContext, { Context } from './TasksContext'
 import { Task } from '../common/task'
 import { debounce } from '../common/helpers'
 
@@ -9,56 +9,42 @@ interface TasksFormProps {
   onTokenChange: (token: string) => void
 }
 
-interface TasksFormState {
-  taskTitle: string
-  disabled: boolean
-}
+const TasksForm = (props: TasksFormProps): JSX.Element => {
+  const [taskTitle, setTaskTitle] = useState('')
+  const [disabled, setDisabled] = useState(true)
+  const { tasks, getTasks, postTask, putTask, deleteTask } = useContext(
+    TasksContext
+  ) as Context
 
-class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
-  handleAddTaskDebounced: () => void
-
-  constructor(props: TasksFormProps) {
-    super(props)
-
-    this.handleAddTaskDebounced = debounce(this.handleAddTask, 200)
-    this.state = {
-      taskTitle: '',
-      disabled: true
-    }
-  }
-
-  static contextType = TasksContext
-
-  async componentDidMount(): Promise<void> {
-    const { getTasks } = this.context
-    const { token } = this.props
-
-    try {
-      await getTasks(token)
-    } catch (e) {
-      if (e.message === 'Unauthorized') {
-        alert(e)
-        this.handleLogout()
-      } else {
-        alert(e)
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        await getTasks(props.token)
+      } catch (e) {
+        if (e.message === 'Unauthorized') {
+          alert(e)
+          handleLogout()
+        } else {
+          alert(e)
+        }
       }
     }
-  }
+    fetch()
+  }, [])
 
-  handleLogout = (): void => {
-    const { onTokenChange } = this.props
+  const handleLogout = (): void => {
+    const { onTokenChange } = props
     const token = ''
     document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
     onTokenChange(token)
   }
 
-  handleTasksChange = async (
+  const handleTasksChange = async (
     action: string,
     taskId: string,
     taskTitle: string
   ): Promise<void> => {
-    const { deleteTask, putTask } = this.context
-    const { token } = this.props
+    const { token } = props
 
     try {
       if (action === 'delete-button') {
@@ -69,26 +55,25 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     } catch (e) {
       if (e.message === 'Unauthorized') {
         alert(e)
-        this.handleLogout()
+        handleLogout()
       } else {
         alert(e)
       }
     }
   }
 
-  handleAddTask = async (): Promise<void> => {
-    const { postTask } = this.context
-    const { taskTitle } = this.state
-    const { token } = this.props
+  const handleAddTask = async (): Promise<void> => {
+    const { token } = props
 
     if (taskTitle.trim() !== '') {
       try {
         await postTask(taskTitle, token)
-        this.setState({ taskTitle: '', disabled: true })
+        setTaskTitle('')
+        setDisabled(true)
       } catch (e) {
         if (e.message === 'Unauthorized') {
           alert(e)
-          this.handleLogout()
+          handleLogout()
         } else {
           alert(e)
         }
@@ -96,64 +81,54 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     }
   }
 
-  handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({
-      taskTitle: e.target.value,
-      disabled: this.state.taskTitle.trim().length === 0
-    })
+  const handleTaskNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setTaskTitle(e.target.value)
+    setDisabled(taskTitle.trim().length === 0)
   }
 
-  handleKeyUp = (e: React.KeyboardEvent): void => {
+  const handleKeyUp = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
-      this.handleAddTaskDebounced()
+      handleAddTaskDebounced()
     }
   }
 
-  render(): React.ReactNode {
-    const {
-      handleLogout,
-      handleTaskNameChange,
-      handleKeyUp,
-      handleAddTaskDebounced,
-      handleTasksChange
-    } = this
-    const { tasks } = this.context
-    const { taskTitle, disabled } = this.state
+  const handleAddTaskDebounced = debounce(handleAddTask, 200)
 
-    return (
-      <div>
-        <h1 className="header">Tasks</h1>
-        <button onClick={handleLogout} className={'logout-button'}>
-          Log out
-        </button>
-        <div className="container">
-          <input
-            value={taskTitle}
-            onChange={handleTaskNameChange}
-            onKeyUp={handleKeyUp}
-            className="task-input"
-            placeholder="What you want to do?"
-          />
-          <button
-            onClick={handleAddTaskDebounced}
-            className="create-button far fa-plus-square"
-            disabled={disabled}
-          />
-          <ul className="tasks-list">
-            {tasks.map((task: Task) => (
-              <TaskCard
-                onTasksChange={handleTasksChange}
-                isCompleted={task.isCompleted}
-                key={task.taskId}
-                taskId={task.taskId}
-                taskTitle={task.taskLabel}
-              />
-            ))}
-          </ul>
-        </div>
+  return (
+    <div>
+      <h1 className="header">Tasks</h1>
+      <button onClick={handleLogout} className={'logout-button'}>
+        Log out
+      </button>
+      <div className="container">
+        <input
+          value={taskTitle}
+          onChange={handleTaskNameChange}
+          onKeyUp={handleKeyUp}
+          className="task-input"
+          placeholder="What you want to do?"
+        />
+        <button
+          onClick={handleAddTaskDebounced}
+          className="create-button far fa-plus-square"
+          disabled={disabled}
+        />
+        <ul className="tasks-list">
+          {tasks.map((task: Task) => (
+            <TaskCard
+              onTasksChange={handleTasksChange}
+              isCompleted={task.isCompleted}
+              key={task.taskId}
+              taskId={task.taskId}
+              taskTitle={task.taskLabel}
+            />
+          ))}
+        </ul>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default TasksForm
