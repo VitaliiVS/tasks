@@ -11,6 +11,7 @@ interface TasksFormProps {
 
 interface TasksFormState {
   taskTitle: string
+  disabled: boolean
 }
 
 class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
@@ -21,7 +22,8 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
 
     this.handleAddTaskDebounced = debounce(this.handleAddTask, 200)
     this.state = {
-      taskTitle: ''
+      taskTitle: '',
+      disabled: true
     }
   }
 
@@ -82,7 +84,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
     if (taskTitle.trim() !== '') {
       try {
         await postTask(taskTitle, token)
-        this.setState({ taskTitle: '' })
+        this.setState({ taskTitle: '', disabled: true })
       } catch (e) {
         if (e.message === 'Unauthorized') {
           alert(e)
@@ -95,7 +97,10 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
   }
 
   handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ taskTitle: e.target.value })
+    this.setState({
+      taskTitle: e.target.value,
+      disabled: this.state.taskTitle.trim().length === 0
+    })
   }
 
   handleKeyUp = (e: React.KeyboardEvent): void => {
@@ -113,8 +118,7 @@ class TasksForm extends React.Component<TasksFormProps, TasksFormState> {
       handleTasksChange
     } = this
     const { tasks } = this.context
-    const { taskTitle } = this.state
-    const disabled = taskTitle.trim().length === 0
+    const { taskTitle, disabled } = this.state
 
     return (
       <div>
