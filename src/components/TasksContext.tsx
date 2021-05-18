@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ApiCall } from '../common/api'
 import { Task } from '../common/task'
 import { v4 as uuidv4 } from 'uuid'
@@ -17,55 +17,49 @@ export interface Context {
   deleteTask: (id: string, token: string) => Promise<void>
 }
 
-interface State {
-  tasks: Task[]
+interface TasksProviderProps {
+  children: JSX.Element
 }
 
 const TasksContext = React.createContext<Partial<Context>>({})
 const apiCall = new ApiCall()
 
-class TasksProvider extends React.Component<unknown, State> {
-  constructor(props: unknown) {
-    super(props)
+const TasksProvider = (props: TasksProviderProps): JSX.Element => {
+  const [tasks, setTasks] = useState([])
+  const { children } = props
 
-    this.state = {
-      tasks: []
-    }
-  }
-
-  getTasks = async (token: string): Promise<void> => {
+  const getTasks = async (token: string): Promise<void> => {
     const response = await apiCall.makeApiCall(tasksUrl, 'GET', null, token)
 
     if (response.ok) {
       const content = await response.json()
-      this.setState({ tasks: content })
+      setTasks(content)
     } else {
       throw new Error(`${response.statusText}`)
     }
   }
 
-  postTask = async (taskTitle: string, token: string): Promise<void> => {
+  const postTask = async (taskTitle: string, token: string): Promise<void> => {
     const taskId = uuidv4()
     const task = new Task(taskId, taskTitle)
     const response = await apiCall.makeApiCall(tasksUrl, 'POST', task, token)
 
     if (response.ok) {
       const content = await response.json()
-      this.setState({ tasks: content })
+      setTasks(content)
     } else {
       throw new Error(`${response.statusText}`)
     }
   }
 
-  putTask = async (
+  const putTask = async (
     id: string,
     token: string,
     action: string,
     taskTitle: string
   ): Promise<void> => {
-    const { tasks } = this.state
-    const taskId = tasks.findIndex((x) => x.taskId === id)
-    const task = tasks[taskId]
+    const taskId = tasks.findIndex((x: Task) => x.taskId === id)
+    const task: Task = tasks[taskId]
     const _id = task._id
     delete task._id
 
@@ -84,17 +78,16 @@ class TasksProvider extends React.Component<unknown, State> {
 
     if (response.ok) {
       const content = await response.json()
-      this.setState({ tasks: content })
+      setTasks(content)
     } else {
       throw new Error(`${response.statusText}`)
     }
   }
 
-  deleteTask = async (id: string, token: string): Promise<void> => {
-    const { tasks } = this.state
-    const taskId = tasks.findIndex((x) => x.taskId === id)
+  const deleteTask = async (id: string, token: string): Promise<void> => {
+    const taskId = tasks.findIndex((x: Task) => x.taskId === id)
 
-    const task = tasks[taskId]
+    const task: Task = tasks[taskId]
     const _id = task._id
 
     delete task._id
@@ -108,31 +101,25 @@ class TasksProvider extends React.Component<unknown, State> {
 
     if (response.ok) {
       const content = await response.json()
-      this.setState({ tasks: content })
+      setTasks(content)
     } else {
       throw new Error(`${response.statusText}`)
     }
   }
 
-  render(): React.ReactNode {
-    const { getTasks, postTask, putTask, deleteTask } = this
-    const { children } = this.props
-    const { tasks } = this.state
-
-    return (
-      <TasksContext.Provider
-        value={{
-          tasks,
-          getTasks,
-          postTask,
-          putTask,
-          deleteTask
-        }}
-      >
-        {children}
-      </TasksContext.Provider>
-    )
-  }
+  return (
+    <TasksContext.Provider
+      value={{
+        tasks,
+        getTasks,
+        postTask,
+        putTask,
+        deleteTask
+      }}
+    >
+      {children}
+    </TasksContext.Provider>
+  )
 }
 
 export default TasksContext
