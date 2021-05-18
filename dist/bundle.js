@@ -32503,21 +32503,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_task__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/task */ "./src/common/task.ts");
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _common_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/config */ "./src/common/config.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -32573,122 +32558,108 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 var TasksContext = react__WEBPACK_IMPORTED_MODULE_1__.createContext({});
 var apiCall = new _common_api__WEBPACK_IMPORTED_MODULE_2__.ApiCall();
-var TasksProvider = /** @class */ (function (_super) {
-    __extends(TasksProvider, _super);
-    function TasksProvider(props) {
-        var _this = _super.call(this, props) || this;
-        _this.getTasks = function (token) { return __awaiter(_this, void 0, void 0, function () {
-            var response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl, 'GET', null, token)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.setState({ tasks: content });
-                        return [3 /*break*/, 4];
-                    case 3: throw new Error("" + response.statusText);
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.postTask = function (taskTitle, token) { return __awaiter(_this, void 0, void 0, function () {
-            var taskId, task, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        taskId = (0,uuid__WEBPACK_IMPORTED_MODULE_5__.default)();
-                        task = new _common_task__WEBPACK_IMPORTED_MODULE_3__.Task(taskId, taskTitle);
-                        return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl, 'POST', task, token)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.setState({ tasks: content });
-                        return [3 /*break*/, 4];
-                    case 3: throw new Error("" + response.statusText);
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.putTask = function (id, token, action, taskTitle) { return __awaiter(_this, void 0, void 0, function () {
-            var tasks, taskId, task, _id, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        tasks = this.state.tasks;
-                        taskId = tasks.findIndex(function (x) { return x.taskId === id; });
-                        task = tasks[taskId];
-                        _id = task._id;
-                        delete task._id;
-                        if (action === 'comp-button') {
-                            task.isCompleted ? (task.isCompleted = false) : (task.isCompleted = true);
-                        }
-                        else if (action === 'save-button' || action === 'edit-view') {
-                            task.taskLabel = taskTitle;
-                        }
-                        return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl + "/" + _id, 'PUT', task, token)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.setState({ tasks: content });
-                        return [3 /*break*/, 4];
-                    case 3: throw new Error("" + response.statusText);
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.deleteTask = function (id, token) { return __awaiter(_this, void 0, void 0, function () {
-            var tasks, taskId, task, _id, response, content;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        tasks = this.state.tasks;
-                        taskId = tasks.findIndex(function (x) { return x.taskId === id; });
-                        task = tasks[taskId];
-                        _id = task._id;
-                        delete task._id;
-                        return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl + "/" + _id, 'DELETE', null, token)];
-                    case 1:
-                        response = _a.sent();
-                        if (!response.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        content = _a.sent();
-                        this.setState({ tasks: content });
-                        return [3 /*break*/, 4];
-                    case 3: throw new Error("" + response.statusText);
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        _this.state = {
-            tasks: []
-        };
-        return _this;
-    }
-    TasksProvider.prototype.render = function () {
-        var _a = this, getTasks = _a.getTasks, postTask = _a.postTask, putTask = _a.putTask, deleteTask = _a.deleteTask;
-        var children = this.props.children;
-        var tasks = this.state.tasks;
-        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(TasksContext.Provider, __assign({ value: {
-                tasks: tasks,
-                getTasks: getTasks,
-                postTask: postTask,
-                putTask: putTask,
-                deleteTask: deleteTask
-            } }, { children: children }), void 0));
-    };
-    return TasksProvider;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+var TasksProvider = function (props) {
+    var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]), tasks = _a[0], setTasks = _a[1];
+    var children = props.children;
+    var getTasks = function (token) { return __awaiter(void 0, void 0, void 0, function () {
+        var response, content;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl, 'GET', null, token)];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    content = _a.sent();
+                    setTasks(content);
+                    return [3 /*break*/, 4];
+                case 3: throw new Error("" + response.statusText);
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    var postTask = function (taskTitle, token) { return __awaiter(void 0, void 0, void 0, function () {
+        var taskId, task, response, content;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    taskId = (0,uuid__WEBPACK_IMPORTED_MODULE_5__.default)();
+                    task = new _common_task__WEBPACK_IMPORTED_MODULE_3__.Task(taskId, taskTitle);
+                    return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl, 'POST', task, token)];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    content = _a.sent();
+                    setTasks(content);
+                    return [3 /*break*/, 4];
+                case 3: throw new Error("" + response.statusText);
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    var putTask = function (id, token, action, taskTitle) { return __awaiter(void 0, void 0, void 0, function () {
+        var taskId, task, _id, response, content;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    taskId = tasks.findIndex(function (x) { return x.taskId === id; });
+                    task = tasks[taskId];
+                    _id = task._id;
+                    delete task._id;
+                    if (action === 'comp-button') {
+                        task.isCompleted ? (task.isCompleted = false) : (task.isCompleted = true);
+                    }
+                    else if (action === 'save-button' || action === 'edit-view') {
+                        task.taskLabel = taskTitle;
+                    }
+                    return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl + "/" + _id, 'PUT', task, token)];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    content = _a.sent();
+                    setTasks(content);
+                    return [3 /*break*/, 4];
+                case 3: throw new Error("" + response.statusText);
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    var deleteTask = function (id, token) { return __awaiter(void 0, void 0, void 0, function () {
+        var taskId, task, _id, response, content;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    taskId = tasks.findIndex(function (x) { return x.taskId === id; });
+                    task = tasks[taskId];
+                    _id = task._id;
+                    delete task._id;
+                    return [4 /*yield*/, apiCall.makeApiCall(_common_config__WEBPACK_IMPORTED_MODULE_4__.tasksUrl + "/" + _id, 'DELETE', null, token)];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    content = _a.sent();
+                    setTasks(content);
+                    return [3 /*break*/, 4];
+                case 3: throw new Error("" + response.statusText);
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(TasksContext.Provider, __assign({ value: {
+            tasks: tasks,
+            getTasks: getTasks,
+            postTask: postTask,
+            putTask: putTask,
+            deleteTask: deleteTask
+        } }, { children: children }), void 0));
+};
 /* harmony default export */ __webpack_exports__["default"] = (TasksContext);
 
 
