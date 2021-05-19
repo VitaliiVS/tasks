@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import Typography from '@material-ui/core/Typography'
+import Container from '@material-ui/core/Container'
 import { Session } from './session'
 import { debounce } from '../common/helpers'
 import { loginUrl, registerUrl } from '../common/config'
+import useStyles from '../jss/LoginFormStyles'
 
 const session = new Session()
 
@@ -12,6 +15,7 @@ interface LoginProps {
 const LoginForm = (props: LoginProps): JSX.Element => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const classes = useStyles()
 
   const handleLogin = async (): Promise<void> => {
     const { onTokenChange } = props
@@ -55,7 +59,9 @@ const LoginForm = (props: LoginProps): JSX.Element => {
 
   return (
     <div>
-      <h1 className="header">Login or Register</h1>
+      <Typography className={classes.header} variant="h3" component="h1">
+        Login or Register
+      </Typography>
       <div className="login-container">
         <input
           value={username}
