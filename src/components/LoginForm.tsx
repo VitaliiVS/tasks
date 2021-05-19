@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
 import { Session } from './session'
 import { debounce } from '../common/helpers'
 import { loginUrl, registerUrl } from '../common/config'
@@ -15,7 +15,7 @@ interface LoginProps {
 const LoginForm = (props: LoginProps): JSX.Element => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const classes = useStyles()
+  const { header } = useStyles()
 
   const handleLogin = async (): Promise<void> => {
     const { onTokenChange } = props
@@ -59,41 +59,53 @@ const LoginForm = (props: LoginProps): JSX.Element => {
 
   return (
     <div>
-      <Typography className={classes.header} variant="h3" component="h1">
+      <Typography className={header} variant="h3" component="h1">
         Login or Register
       </Typography>
-      <div className="login-container">
-        <input
-          value={username}
-          onChange={handleUsernameChange}
-          onKeyUp={handleKeyUp}
-          className="name-input"
-          type="text"
-          placeholder="Username"
-        />
-        <input
-          value={password}
-          onChange={handlePasswordChange}
-          onKeyUp={handleKeyUp}
-          className="pass-input"
-          type="password"
-          placeholder="Password"
-        />
-        <button
-          onClick={handleLoginDebounced}
-          className="login-button"
-          disabled={disabled}
-        >
-          Login
-        </button>
-        <button
-          onClick={handleRegisterDebounced}
-          className="register-button"
-          disabled={disabled}
-        >
-          Register
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1}
+        direction="column"
+        alignContent="center"
+        justify="center"
+      >
+        <Grid item xs>
+          <input
+            value={username}
+            onChange={handleUsernameChange}
+            onKeyUp={handleKeyUp}
+            className="name-input"
+            type="text"
+            placeholder="Username"
+          />
+        </Grid>
+        <Grid item xs>
+          <input
+            value={password}
+            onChange={handlePasswordChange}
+            onKeyUp={handleKeyUp}
+            className="pass-input"
+            type="password"
+            placeholder="Password"
+          />
+        </Grid>
+        <Grid item xs>
+          <button
+            onClick={handleLoginDebounced}
+            className="login-button"
+            disabled={disabled}
+          >
+            Login
+          </button>
+          <button
+            onClick={handleRegisterDebounced}
+            className="register-button"
+            disabled={disabled}
+          >
+            Register
+          </button>
+        </Grid>
+      </Grid>
     </div>
   )
 }
