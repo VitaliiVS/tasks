@@ -48,13 +48,13 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
   const isCompletedClassNames = {
     1: {
       taskClassNames: 'task completed',
-      editButtonClassNames: 'edit-button far fa-edit'
+      editButtonClassNames: 'edit-button far fa-edit button'
     },
     0: {
       taskClassNames: editView ? 'edit-view' : 'task',
       editButtonClassNames: editView
-        ? 'save-button far fa-save'
-        : 'edit-button far fa-edit'
+        ? 'save-button far fa-save button'
+        : 'edit-button far fa-edit button'
     }
   }
   const completed = isCompleted ? 1 : 0
@@ -89,7 +89,7 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
       />
       <button
         onClick={handleTaskChangeDebounced}
-        className="delete-button far fa-trash-alt"
+        className="delete-button far fa-trash-alt button"
         disabled={editView}
       />
     </li>

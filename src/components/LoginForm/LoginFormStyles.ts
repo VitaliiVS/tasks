@@ -1,8 +1,11 @@
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
-  header: {
-    textAlign: 'center'
+  loginInput: {
+    width: 300
+  },
+  loginButton: {
+    width: 130
   }
 })
 

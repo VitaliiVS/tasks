@@ -97,7 +97,7 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
   return (
     <div>
       <h1 className="header">Tasks</h1>
-      <button onClick={handleLogout} className={'logout-button'}>
+      <button onClick={handleLogout} className={'logout-button button'}>
         Log out
       </button>
       <div className="container">
@@ -110,7 +110,7 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
         />
         <button
           onClick={handleAddTaskDebounced}
-          className="create-button far fa-plus-square"
+          className="create-button far fa-plus-square button"
           disabled={disabled}
         />
         <ul className="tasks-list">
