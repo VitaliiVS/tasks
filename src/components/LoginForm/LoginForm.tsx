@@ -66,12 +66,16 @@ const LoginForm = (props: LoginProps): JSX.Element => {
       <Grid
         container
         direction="column"
-        spacing={5}
+        spacing={2}
         justify="center"
         alignItems="center"
       >
         <Grid item xs>
-          <Typography variant="h3" component="h1">
+          <Typography
+            className={classes.loginHeader}
+            variant="h3"
+            component="h1"
+          >
             Login or Register
           </Typography>
         </Grid>
@@ -111,6 +115,7 @@ const LoginForm = (props: LoginProps): JSX.Element => {
                 <Grid item xs>
                   <Button
                     variant="contained"
+                    color="primary"
                     onClick={handleLoginDebounced}
                     className={classes.loginButton}
                     disabled={disabled}
@@ -121,6 +126,7 @@ const LoginForm = (props: LoginProps): JSX.Element => {
                 <Grid item xs>
                   <Button
                     variant="contained"
+                    color="secondary"
                     onClick={handleRegisterDebounced}
                     className={classes.loginButton}
                     disabled={disabled}
