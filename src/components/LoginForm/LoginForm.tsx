@@ -17,7 +17,12 @@ interface LoginProps {
 const LoginForm = (props: LoginProps): JSX.Element => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const classes = useStyles()
+  const [touched, setTouched] = useState({
+    username: false,
+    password: false
+  })
+
+  const { loginHeader, loginInput, loginButton } = useStyles()
 
   const handleLogin = async (): Promise<void> => {
     const { onTokenChange } = props
@@ -55,11 +60,17 @@ const LoginForm = (props: LoginProps): JSX.Element => {
     }
   }
 
+  const handleBlur = (field: string) => () => {
+    setTouched({ ...touched, [field]: true })
+  }
+
   const handleLoginDebounced = debounce(handleLogin, 200)
   const handleRegisterDebounced = debounce(handleRegister, 200)
   const disabled = username.trim().length === 0 || password.trim().length === 0
-  const loginEmpty = username.trim().length === 0
-  const passEmpty = password.trim().length === 0
+  const loginEmpty = username.trim().length === 0 && touched.username
+  const passEmpty = password.trim().length === 0 && touched.password
+  const loginHelperText = loginEmpty ? 'This field is required' : ''
+  const passHelperText = passEmpty ? 'This field is required' : ''
 
   return (
     <div>
@@ -71,11 +82,7 @@ const LoginForm = (props: LoginProps): JSX.Element => {
         alignItems="center"
       >
         <Grid item xs>
-          <Typography
-            className={classes.loginHeader}
-            variant="h3"
-            component="h1"
-          >
+          <Typography className={loginHeader} variant="h3" component="h1">
             Login or Register
           </Typography>
         </Grid>
@@ -95,7 +102,9 @@ const LoginForm = (props: LoginProps): JSX.Element => {
                 placeholder="Username"
                 onChange={handleUsernameChange}
                 onKeyUp={handleKeyUp}
-                className={classes.loginInput}
+                onBlur={handleBlur('username')}
+                className={loginInput}
+                helperText={loginHelperText}
               />
             </Grid>
             <Grid item xs>
@@ -107,7 +116,9 @@ const LoginForm = (props: LoginProps): JSX.Element => {
                 type="password"
                 onChange={handlePasswordChange}
                 onKeyUp={handleKeyUp}
-                className={classes.loginInput}
+                onBlur={handleBlur('password')}
+                className={loginInput}
+                helperText={passHelperText}
               />
             </Grid>
             <Grid item xs>
@@ -117,7 +128,7 @@ const LoginForm = (props: LoginProps): JSX.Element => {
                     variant="contained"
                     color="primary"
                     onClick={handleLoginDebounced}
-                    className={classes.loginButton}
+                    className={loginButton}
                     disabled={disabled}
                   >
                     Login
@@ -128,7 +139,7 @@ const LoginForm = (props: LoginProps): JSX.Element => {
                     variant="contained"
                     color="secondary"
                     onClick={handleRegisterDebounced}
-                    className={classes.loginButton}
+                    className={loginButton}
                     disabled={disabled}
                   >
                     Register
