@@ -27,7 +27,7 @@ const LoginForm = (props: LoginProps): JSX.Element => {
     password: false
   })
 
-  const { loginHeader, loginInput, loginButton } = useStyles()
+  const { loginContainer, loginHeader, loginInput, loginButton } = useStyles()
 
   const handleLogin = async (): Promise<void> => {
     const { onTokenChange } = props
@@ -84,11 +84,11 @@ const LoginForm = (props: LoginProps): JSX.Element => {
   const fieldType = showPassword ? 'text' : 'password'
 
   return (
-    <div>
+    <div className={loginContainer}>
       <Grid
         container
         direction="column"
-        spacing={2}
+        spacing={8}
         justify="center"
         alignItems="center"
       >

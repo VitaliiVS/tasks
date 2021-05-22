@@ -55247,7 +55247,7 @@ var LoginForm = function (props) {
         username: false,
         password: false
     }), touched = _d[0], setTouched = _d[1];
-    var _e = (0,_LoginFormStyles__WEBPACK_IMPORTED_MODULE_5__.default)(), loginHeader = _e.loginHeader, loginInput = _e.loginInput, loginButton = _e.loginButton;
+    var _e = (0,_LoginFormStyles__WEBPACK_IMPORTED_MODULE_5__.default)(), loginContainer = _e.loginContainer, loginHeader = _e.loginHeader, loginInput = _e.loginInput, loginButton = _e.loginButton;
     var handleLogin = function () { return __awaiter(void 0, void 0, void 0, function () {
         var onTokenChange, login, e_1;
         return __generator(this, function (_a) {
@@ -55319,13 +55319,13 @@ var LoginForm = function (props) {
     var passHelperText = passEmpty ? 'This field is required' : '';
     var showPass = showPassword ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_icons__WEBPACK_IMPORTED_MODULE_6__.default, {}, void 0) : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_icons__WEBPACK_IMPORTED_MODULE_7__.default, {}, void 0);
     var fieldType = showPassword ? 'text' : 'password';
-    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ container: true, direction: "column", spacing: 2, justify: "center", alignItems: "center" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_9__.default, __assign({ className: loginHeader, variant: "h3", component: "h1" }, { children: "Login or Register" }), void 0) }), void 0),
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: loginContainer }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ container: true, direction: "column", spacing: 8, justify: "center", alignItems: "center" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_9__.default, __assign({ className: loginHeader, variant: "h3", component: "h1" }, { children: "Login or Register" }), void 0) }), void 0),
                 (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ container: true, spacing: 3, direction: "column", justify: "flex-end", alignItems: "center" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__.default, { error: loginEmpty, label: "Username", value: username, placeholder: "Username", onChange: handleUsernameChange, onKeyUp: handleKeyUp, onBlur: handleBlur('username'), className: loginInput, helperText: loginHelperText }, void 0) }), void 0),
                             (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__.default, { error: passEmpty, label: "Password", value: password, placeholder: "Password", type: fieldType, onChange: handlePasswordChange, onKeyUp: handleKeyUp, onBlur: handleBlur('password'), className: loginInput, helperText: passHelperText, InputProps: {
                                         endAdornment: ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_InputAdornment__WEBPACK_IMPORTED_MODULE_11__.default, __assign({ position: "end" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_12__.default, __assign({ onClick: handleShowPassword }, { children: showPass }), void 0) }), void 0))
                                     } }, void 0) }), void 0),
                             (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ container: true, spacing: 4 }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_13__.default, __assign({ variant: "contained", color: "primary", onClick: handleLoginDebounced, className: loginButton, disabled: disabled }, { children: "Login" }), void 0) }), void 0),
-                                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_13__.default, __assign({ variant: "contained", color: "secondary", onClick: handleRegisterDebounced, className: loginButton, disabled: disabled }, { children: "Register" }), void 0) }), void 0)] }), void 0) }), void 0)] }), void 0) }), void 0)] }), void 0) }, void 0));
+                                        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__.default, __assign({ item: true, xs: true }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_13__.default, __assign({ variant: "contained", color: "secondary", onClick: handleRegisterDebounced, className: loginButton, disabled: disabled }, { children: "Register" }), void 0) }), void 0)] }), void 0) }), void 0)] }), void 0) }), void 0)] }), void 0) }), void 0));
 };
 /* harmony default export */ __webpack_exports__["default"] = (LoginForm);
 
@@ -55343,6 +55343,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-jss */ "./node_modules/react-jss/dist/react-jss.esm.js");
 
 var useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_0__.createUseStyles)({
+    loginContainer: {
+        minHeight: '70vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     loginHeader: {
         color: '#5d6161'
     },
