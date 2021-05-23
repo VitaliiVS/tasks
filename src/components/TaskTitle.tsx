@@ -1,4 +1,5 @@
 import React from 'react'
+import Input from '@material-ui/core/Input'
 
 interface TaskTitleProps {
   editView: boolean
@@ -16,7 +17,7 @@ const TaskTitle = (props: TaskTitleProps): JSX.Element => {
 
   if (editView === true) {
     return (
-      <input
+      <Input
         onKeyUp={handleKeyUp}
         value={taskName}
         onChange={onChange}
@@ -25,7 +26,7 @@ const TaskTitle = (props: TaskTitleProps): JSX.Element => {
       />
     )
   } else {
-    return <p className={classNames}>{taskName}</p>
+    return <span className={classNames}>{taskName}</span>
   }
 }
 

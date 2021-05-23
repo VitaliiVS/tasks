@@ -56265,6 +56265,7 @@ var useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_0__.createUseStyles)({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _material_ui_core_Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Input */ "./node_modules/@material-ui/core/esm/Input/Input.js");
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -56277,13 +56278,14 @@ var __assign = (undefined && undefined.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 
+
 var TaskTitle = function (props) {
     var editView = props.editView, handleKeyUp = props.handleKeyUp, taskName = props.taskName, onChange = props.onChange, classNames = props.classNames;
     if (editView === true) {
-        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { onKeyUp: handleKeyUp, value: taskName, onChange: onChange, className: classNames, type: "text" }, void 0));
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_material_ui_core_Input__WEBPACK_IMPORTED_MODULE_1__.default, { onKeyUp: handleKeyUp, value: taskName, onChange: onChange, className: classNames, type: "text" }, void 0));
     }
     else {
-        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", __assign({ className: classNames }, { children: taskName }), void 0);
+        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", __assign({ className: classNames }, { children: taskName }), void 0);
     }
 };
 /* harmony default export */ __webpack_exports__["default"] = (TaskTitle);
