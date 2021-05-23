@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import TaskCard from './TaskCard'
+import TaskCard from './TaskCard/TaskCard'
 import TasksContext, { Context } from './TasksContext'
 import { Task } from '../common/task'
 import { debounce } from '../common/helpers'
@@ -12,9 +12,7 @@ interface TasksFormProps {
 const TasksForm = (props: TasksFormProps): JSX.Element => {
   const [taskTitle, setTaskTitle] = useState('')
   const [disabled, setDisabled] = useState(true)
-  const { tasks, getTasks, postTask, putTask, deleteTask } = useContext(
-    TasksContext
-  ) as Context
+  const { tasks, getTasks, postTask } = useContext(TasksContext) as Context
 
   useEffect(() => {
     const fetch = async () => {
@@ -37,29 +35,6 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
     const token = ''
     document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
     onTokenChange(token)
-  }
-
-  const handleTasksChange = async (
-    action: string,
-    taskId: string,
-    taskTitle: string
-  ): Promise<void> => {
-    const { token } = props
-
-    try {
-      if (action === 'delete-button') {
-        await deleteTask(taskId, token)
-      } else {
-        await putTask(taskId, token, action, taskTitle)
-      }
-    } catch (e) {
-      if (e.message === 'Unauthorized') {
-        alert(e)
-        handleLogout()
-      } else {
-        alert(e)
-      }
-    }
   }
 
   const handleAddTask = async (): Promise<void> => {
@@ -116,7 +91,8 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
         <ul className="tasks-list">
           {tasks.map((task: Task) => (
             <TaskCard
-              onTasksChange={handleTasksChange}
+              token={props.token}
+              onLogout={handleLogout}
               isCompleted={task.isCompleted}
               key={task.taskId}
               taskId={task.taskId}

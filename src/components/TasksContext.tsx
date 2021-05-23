@@ -63,9 +63,9 @@ const TasksProvider = (props: TasksProviderProps): JSX.Element => {
     const _id = task._id
     delete task._id
 
-    if (action === 'comp-button') {
+    if (action === 'complete') {
       task.isCompleted ? (task.isCompleted = false) : (task.isCompleted = true)
-    } else if (action === 'save-button' || action === 'edit-view') {
+    } else if (action === 'save' || action === 'edit') {
       task.taskLabel = taskTitle
     }
 
