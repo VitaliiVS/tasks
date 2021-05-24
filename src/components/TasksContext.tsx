@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+
 import { ApiCall } from '../common/api'
 import { Task } from '../common/task'
 import { v4 as uuidv4 } from 'uuid'
 import { tasksUrl } from '../common/config'
 
-export interface Context {
+export interface TasksContextProps {
   tasks: Task[]
   getTasks: (token: string) => Promise<void>
   postTask: (taskTitle: string, token: string) => Promise<void>
@@ -17,16 +18,72 @@ export interface Context {
   deleteTask: (id: string, token: string) => Promise<void>
 }
 
+export interface SessionContextProps {
+  token: string
+  setToken: (token: string) => void
+  login: (url: string, username: string, password: string) => Promise<void>
+  register: (url: string, username: string, password: string) => Promise<void>
+}
+
 interface TasksProviderProps {
   children: JSX.Element
 }
 
-const TasksContext = React.createContext<Partial<Context>>({})
+const TasksContext = React.createContext<Partial<TasksContextProps>>({})
+const SessionContext = React.createContext<Partial<SessionContextProps>>({})
 const apiCall = new ApiCall()
 
-const TasksProvider = (props: TasksProviderProps): JSX.Element => {
+const ContextProvider = (props: TasksProviderProps): JSX.Element => {
   const [tasks, setTasks] = useState([])
+  const [token, setToken] = useState('')
   const { children } = props
+
+  const login = async (
+    url: string,
+    username: string,
+    password: string
+  ): Promise<void> => {
+    const data = {
+      username: username.toLowerCase(),
+      password: password
+    }
+    const response = await apiCall.makeApiCall(url, 'POST', data)
+
+    if (response.ok) {
+      const content = await response.json()
+      document.cookie = `token=${content.token}`
+
+      setToken(content.token)
+    } else if (response.status === 400) {
+      throw new Error('Incorrect username or password')
+    } else {
+      throw new Error(`${response.statusText}`)
+    }
+  }
+
+  const register = async (
+    url: string,
+    username: string,
+    password: string
+  ): Promise<void> => {
+    const data = {
+      username: username.toLowerCase(),
+      password: password,
+      userId: uuidv4()
+    }
+    const response = await apiCall.makeApiCall(url, 'POST', data)
+
+    if (response.ok) {
+      const content = await response.json()
+      document.cookie = `token=${content.token}`
+
+      setToken(content.token)
+    } else if (response.status === 409) {
+      throw new Error('Username already in use')
+    } else {
+      throw new Error(`${response.statusText}`)
+    }
+  }
 
   const getTasks = async (token: string): Promise<void> => {
     const response = await apiCall.makeApiCall(tasksUrl, 'GET', null, token)
@@ -117,11 +174,18 @@ const TasksProvider = (props: TasksProviderProps): JSX.Element => {
         deleteTask
       }}
     >
-      {children}
+      <SessionContext.Provider
+        value={{
+          token,
+          setToken,
+          login,
+          register
+        }}
+      >
+        {children}
+      </SessionContext.Provider>
     </TasksContext.Provider>
   )
 }
 
-export default TasksContext
-
-export { TasksProvider }
+export { TasksContext, SessionContext, ContextProvider }

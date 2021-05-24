@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
+
 import LoginForm from './LoginForm/LoginForm'
 import TasksForm from './TasksForm'
-import { TasksProvider } from './TasksContext'
+import { SessionContext, SessionContextProps } from './TasksContext'
 
 const App = (): JSX.Element => {
-  const [token, setToken] = useState('')
+  const { token, setToken } = useContext(SessionContext) as SessionContextProps
 
   useEffect(() => {
     if (document.cookie !== '') {
@@ -14,18 +15,10 @@ const App = (): JSX.Element => {
     }
   }, [])
 
-  const handleTokenChange = (token: string) => {
-    setToken(token)
-  }
-
   if (token !== '') {
-    return (
-      <TasksProvider>
-        <TasksForm token={token} onTokenChange={handleTokenChange} />
-      </TasksProvider>
-    )
+    return <TasksForm />
   } else {
-    return <LoginForm onTokenChange={handleTokenChange} />
+    return <LoginForm />
   }
 }
 

@@ -1,23 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react'
+
 import TaskCard from './TaskCard/TaskCard'
-import TasksContext, { Context } from './TasksContext'
+import {
+  SessionContext,
+  SessionContextProps,
+  TasksContext,
+  TasksContextProps
+} from './TasksContext'
 import { Task } from '../common/task'
 import { debounce } from '../common/helpers'
 
-interface TasksFormProps {
-  token: string
-  onTokenChange: (token: string) => void
-}
-
-const TasksForm = (props: TasksFormProps): JSX.Element => {
+const TasksForm = (): JSX.Element => {
   const [taskTitle, setTaskTitle] = useState('')
   const [disabled, setDisabled] = useState(true)
-  const { tasks, getTasks, postTask } = useContext(TasksContext) as Context
+  const { tasks, getTasks, postTask } = useContext(
+    TasksContext
+  ) as TasksContextProps
+  const { token, setToken } = useContext(SessionContext) as SessionContextProps
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        await getTasks(props.token)
+        await getTasks(token)
       } catch (e) {
         if (e.message === 'Unauthorized') {
           alert(e)
@@ -31,15 +35,11 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
   }, [])
 
   const handleLogout = () => {
-    const { onTokenChange } = props
-    const token = ''
     document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
-    onTokenChange(token)
+    setToken('')
   }
 
   const handleAddTask = async (): Promise<void> => {
-    const { token } = props
-
     if (taskTitle.trim() !== '') {
       try {
         await postTask(taskTitle, token)
@@ -91,7 +91,6 @@ const TasksForm = (props: TasksFormProps): JSX.Element => {
         <ul className="tasks-list">
           {tasks.map((task: Task) => (
             <TaskCard
-              token={props.token}
               onLogout={handleLogout}
               isCompleted={task.isCompleted}
               key={task.taskId}

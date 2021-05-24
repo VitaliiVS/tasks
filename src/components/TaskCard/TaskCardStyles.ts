@@ -28,8 +28,8 @@ const useStyles = createUseStyles({
     padding: 5,
     fontSize: '1.125em',
     overflow: 'hidden',
-    minWidth: 240,
-    maxWidth: 240
+    minWidth: 255,
+    maxWidth: 255
   },
   '@media (max-width: 576px)': {
     cardContainer: {

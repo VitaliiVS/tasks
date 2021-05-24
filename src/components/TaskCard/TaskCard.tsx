@@ -5,13 +5,17 @@ import IconButton from '@material-ui/core/IconButton'
 import Paper from '@material-ui/core/Paper'
 import { Delete, Edit, Save } from '@material-ui/icons'
 
-import TasksContext, { Context } from '../TasksContext'
+import {
+  SessionContext,
+  SessionContextProps,
+  TasksContext,
+  TasksContextProps
+} from '../TasksContext'
 import { debounce } from '../../common/helpers'
 import TaskTitle from '../TaskTitle'
 import useStyles from './TaskCardStyles'
 
 interface TaskCardProps {
-  token: string
   isCompleted: boolean
   taskTitle: string
   taskId: string
@@ -19,11 +23,12 @@ interface TaskCardProps {
 }
 
 const TaskCard = (props: TaskCardProps): JSX.Element => {
-  const { token, isCompleted, taskId, taskTitle, onLogout } = props
+  const { isCompleted, taskId, taskTitle, onLogout } = props
   const [taskName, setTaskName] = useState(taskTitle)
   const [editView, setEditView] = useState(false)
   const { cardContainer, title, completed, editViewStyles } = useStyles()
-  const { deleteTask, putTask } = useContext(TasksContext) as Context
+  const { deleteTask, putTask } = useContext(TasksContext) as TasksContextProps
+  const { token } = useContext(SessionContext) as SessionContextProps
 
   const handleSave = async (): Promise<void> => {
     const action = 'save'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -7,18 +7,12 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
 
-import { Session } from '../session'
+import { SessionContextProps, SessionContext } from '../TasksContext'
 import { debounce } from '../../common/helpers'
 import { loginUrl, registerUrl } from '../../common/config'
 import useStyles from './LoginFormStyles'
 
-const session = new Session()
-
-interface LoginProps {
-  onTokenChange: (token: string) => void
-}
-
-const LoginForm = (props: LoginProps): JSX.Element => {
+const LoginForm = (): JSX.Element => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -26,26 +20,20 @@ const LoginForm = (props: LoginProps): JSX.Element => {
     username: false,
     password: false
   })
-
+  const { login, register } = useContext(SessionContext) as SessionContextProps
   const { loginContainer, loginHeader, loginInput, loginButton } = useStyles()
 
   const handleLogin = async (): Promise<void> => {
-    const { onTokenChange } = props
-
     try {
-      const login = await session.login(loginUrl, username, password)
-      onTokenChange(login)
+      await login(loginUrl, username, password)
     } catch (e) {
       alert(e.message)
     }
   }
 
   const handleRegister = async (): Promise<void> => {
-    const { onTokenChange } = props
-
     try {
-      const register = await session.register(registerUrl, username, password)
-      onTokenChange(register)
+      await register(registerUrl, username, password)
     } catch (e) {
       alert(e.message)
     }
