@@ -12,7 +12,7 @@ import {
   TasksContextProps
 } from '../TasksContext'
 import { debounce } from '../../common/helpers'
-import TaskTitle from '../TaskTitle'
+import TaskTitle from '../TaskTitle/TaskTitle'
 import useStyles from './TaskCardStyles'
 
 interface TaskCardProps {
@@ -26,7 +26,7 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
   const { isCompleted, taskId, taskTitle, onLogout } = props
   const [taskName, setTaskName] = useState(taskTitle)
   const [editView, setEditView] = useState(false)
-  const { cardContainer, title, completed, editViewStyles } = useStyles()
+  const { cardContainerStyles } = useStyles()
   const { deleteTask, putTask } = useContext(TasksContext) as TasksContextProps
   const { token } = useContext(SessionContext) as SessionContextProps
 
@@ -95,17 +95,6 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
   const debounceComplete = debounce(handleComplete, 200)
   const debounceDelete = debounce(handleDelete, 200)
   const debounceKeyUp = debounce(handleKeyUp, 200)
-
-  const isCompletedClassNames = {
-    1: {
-      taskClassNames: `${title} ${completed}`
-    },
-    0: {
-      taskClassNames: editView ? editViewStyles : title
-    }
-  }
-  const comp = isCompleted ? 1 : 0
-  const { taskClassNames } = isCompletedClassNames[comp]
   const disableSave = isCompleted || taskName.trim().length === 0
   const saveButtonAction = editView ? debounceSave : handleEditViewChange
   const actionType = editView ? 'save' : 'edit'
@@ -118,7 +107,7 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
   return (
     <div>
       <Grid xs={12} item>
-        <Paper elevation={2} className={cardContainer}>
+        <Paper elevation={2} className={cardContainerStyles}>
           <Checkbox
             color="primary"
             onChange={debounceComplete}
@@ -130,7 +119,7 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
             handleKeyUp={debounceKeyUp}
             taskName={taskName}
             onChange={handleTaskNameChange}
-            classNames={taskClassNames}
+            isCompleted={isCompleted}
           />
           <IconButton
             color="primary"

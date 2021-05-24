@@ -1,5 +1,6 @@
 import React from 'react'
 import Input from '@material-ui/core/Input'
+import useStyles from './TaskTitleStyles'
 
 interface TaskTitleProps {
   editView: boolean
@@ -9,11 +10,23 @@ interface TaskTitleProps {
   ) => void
   taskName: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  classNames: string
+  isCompleted: boolean
 }
 
 const TaskTitle = (props: TaskTitleProps): JSX.Element => {
-  const { editView, handleKeyUp, taskName, onChange, classNames } = props
+  const { editView, handleKeyUp, taskName, onChange, isCompleted } = props
+  const { titleStyles, completedStyles, editViewStyles } = useStyles()
+
+  const isCompletedClassNames = {
+    1: {
+      taskClassNames: `${titleStyles} ${completedStyles}`
+    },
+    0: {
+      taskClassNames: editView ? editViewStyles : titleStyles
+    }
+  }
+  const comp = isCompleted ? 1 : 0
+  const { taskClassNames } = isCompletedClassNames[comp]
 
   if (editView === true) {
     return (
@@ -21,12 +34,12 @@ const TaskTitle = (props: TaskTitleProps): JSX.Element => {
         onKeyUp={handleKeyUp}
         value={taskName}
         onChange={onChange}
-        className={classNames}
+        className={taskClassNames}
         type="text"
       />
     )
   } else {
-    return <span className={classNames}>{taskName}</span>
+    return <span className={taskClassNames}>{taskName}</span>
   }
 }
 
