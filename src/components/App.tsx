@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 
 import LoginForm from './LoginForm/LoginForm'
-import TasksForm from './TasksForm'
+import TasksForm from './TasksForm/TasksForm'
 import { SessionContext, SessionContextProps } from './TasksContext'
 
 const App = (): JSX.Element => {
