@@ -15,14 +15,14 @@ interface TaskTitleProps {
 
 const TaskTitle = (props: TaskTitleProps): JSX.Element => {
   const { editView, handleKeyUp, taskName, onChange, isCompleted } = props
-  const { titleStyles, completedStyles, editViewStyles } = useStyles()
+  const { title, completed, editViewStyles } = useStyles()
 
   const isCompletedClassNames = {
     1: {
-      taskClassNames: `${titleStyles} ${completedStyles}`
+      taskClassNames: `${title} ${completed}`
     },
     0: {
-      taskClassNames: editView ? editViewStyles : titleStyles
+      taskClassNames: editView ? editViewStyles : title
     }
   }
   const comp = isCompleted ? 1 : 0

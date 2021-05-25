@@ -26,7 +26,7 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
   const { isCompleted, taskId, taskTitle, onLogout } = props
   const [taskName, setTaskName] = useState(taskTitle)
   const [editView, setEditView] = useState(false)
-  const { cardContainerStyles } = useStyles()
+  const { cardContainer } = useStyles()
   const { deleteTask, putTask } = useContext(TasksContext) as TasksContextProps
   const { token } = useContext(SessionContext) as SessionContextProps
 
@@ -107,7 +107,7 @@ const TaskCard = (props: TaskCardProps): JSX.Element => {
   return (
     <div>
       <Grid xs={12} item>
-        <Paper elevation={2} className={cardContainerStyles}>
+        <Paper elevation={2} className={cardContainer}>
           <Checkbox
             color="primary"
             onChange={debounceComplete}

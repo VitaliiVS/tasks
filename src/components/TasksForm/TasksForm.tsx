@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-  Typography
-} from '@material-ui/core'
+import { Button, Grid, TextField, Typography } from '@material-ui/core'
 
 import TaskCard from '../TaskCard/TaskCard'
 import {
@@ -26,7 +20,7 @@ const TasksForm = (): JSX.Element => {
     TasksContext
   ) as TasksContextProps
   const { token, setToken } = useContext(SessionContext) as SessionContextProps
-  const { tasksHeader, logoutButtonStyles } = useStyles()
+  const { tasksHeader, logoutButton, taskInput } = useStyles()
 
   useEffect(() => {
     const fetch = async () => {
@@ -81,66 +75,77 @@ const TasksForm = (): JSX.Element => {
 
   return (
     <div>
-      <Grid alignItems="center" justify="flex-end" container direction="row">
-        <Grid item xs={11}>
-          <Typography className={tasksHeader} variant="h3" component="h1">
-            Tasks
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleLogout}
-            className={logoutButtonStyles}
-          >
-            Log out
-          </Button>
+      <Grid item xs>
+        <Grid alignItems="center" justify="flex-end" container direction="row">
+          <Grid item xs>
+            <Typography className={tasksHeader} variant="h3" component="h1">
+              Tasks
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleLogout}
+              className={logoutButton}
+            >
+              Log out
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
-      <Grid alignItems="center" justify="center" container spacing={4}>
-        <Grid item xs={3}>
-          <TextField variant="outlined" />
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        style={{ marginTop: '50px' }}
+      >
+        <Grid item xs>
+          <Grid container spacing={5}>
+            <Grid item xs>
+              <TextField
+                className={taskInput}
+                value={taskTitle}
+                onChange={handleTaskNameChange}
+                onKeyUp={handleKeyUp}
+                placeholder="What you want to do?"
+              />
+            </Grid>
+            <Grid item xs>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddTaskDebounced}
+                disabled={disabled}
+              >
+                Add
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={1}>
-          <IconButton color="primary">
-            <Add fontSize="small" />
-          </IconButton>
+        <Grid item xs>
+          <Grid
+            direction="column"
+            justify="center"
+            alignItems="center"
+            container
+            spacing={3}
+            style={{ marginTop: '50px' }}
+          >
+            {tasks.map((task: Task) => (
+              <TaskCard
+                onLogout={handleLogout}
+                isCompleted={task.isCompleted}
+                key={task.taskId}
+                taskId={task.taskId}
+                taskTitle={task.taskLabel}
+              />
+            ))}
+          </Grid>
         </Grid>
       </Grid>
     </div>
-
-    // <div>
-    //   <h1 className="header">Tasks</h1>
-    //   <button onClick={handleLogout} className={'logout-button button'}>
-    //     Log out
-    //   </button>
-    //   <div className="container">
-    //     <input
-    //       value={taskTitle}
-    //       onChange={handleTaskNameChange}
-    //       onKeyUp={handleKeyUp}
-    //       className="task-input"
-    //       placeholder="What you want to do?"
-    //     />
-    //     <button
-    //       onClick={handleAddTaskDebounced}
-    //       className="create-button far fa-plus-square button"
-    //       disabled={disabled}
-    //     />
-    //     <ul className="tasks-list">
-    //       {tasks.map((task: Task) => (
-    //         <TaskCard
-    //           onLogout={handleLogout}
-    //           isCompleted={task.isCompleted}
-    //           key={task.taskId}
-    //           taskId={task.taskId}
-    //           taskTitle={task.taskLabel}
-    //         />
-    //       ))}
-    //     </ul>
-    //   </div>
-    // </div>
   )
 }
 

@@ -6,8 +6,20 @@ const useStyles = createUseStyles({
     textAlign: 'center',
     marginLeft: 100
   },
-  logoutButtonStyles: {
+  logoutButton: {
     top: 0
+  },
+  taskInput: {
+    fontSize: '1.125em',
+    width: 300,
+    '& placeholder': {
+      color: 'rgba(0, 0, 0, 0.5)'
+    }
+  },
+  '@media (max-width: 576px)': {
+    taskInput: {
+      width: 230
+    }
   }
 })
 

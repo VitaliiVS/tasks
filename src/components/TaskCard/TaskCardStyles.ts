@@ -1,16 +1,16 @@
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
-  cardContainerStyles: {
+  cardContainer: {
     margin: 'auto',
     padding: 10,
     display: 'flex',
     alignItems: 'center',
     marginTop: 10,
-    width: 380
+    width: 480
   },
   '@media (max-width: 576px)': {
-    cardContainerStyles: {
+    cardContainer: {
       width: 290
     }
   }

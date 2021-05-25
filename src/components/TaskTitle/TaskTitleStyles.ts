@@ -1,17 +1,17 @@
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
-  titleStyles: {
+  title: {
     margin: 0,
     padding: 5,
     fontSize: '1.125em',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    minWidth: 245,
-    maxWidth: 245
+    minWidth: 330,
+    maxWidth: 330
   },
-  completedStyles: {
+  completed: {
     textDecoration: 'line-through',
     color: 'gray'
   },
@@ -20,11 +20,11 @@ const useStyles = createUseStyles({
     padding: 5,
     fontSize: '1.125em',
     overflow: 'hidden',
-    minWidth: 255,
-    maxWidth: 255
+    minWidth: 340,
+    maxWidth: 340
   },
   '@media (max-width: 576px)': {
-    titleStyles: {
+    title: {
       minWidth: 160,
       maxWidth: 160
     },
