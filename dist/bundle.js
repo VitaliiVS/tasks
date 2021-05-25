@@ -20226,19 +20226,6 @@ var jss = create();
 
 /***/ }),
 
-/***/ "./src/scss/style.scss":
-/*!*****************************!*\
-  !*** ./src/scss/style.scss ***!
-  \*****************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
 /***/ "./node_modules/object-assign/index.js":
 /*!*********************************************!*\
   !*** ./node_modules/object-assign/index.js ***!
@@ -56275,7 +56262,8 @@ var useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_0__.createUseStyles)({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         minWidth: 330,
-        maxWidth: 330
+        maxWidth: 330,
+        fontFamily: "'Roboto', sans-serif"
     },
     completed: {
         textDecoration: 'line-through',
@@ -57004,18 +56992,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/style.scss */ "./src/scss/style.scss");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/App */ "./src/components/App.tsx");
-/* harmony import */ var _components_TasksContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/TasksContext */ "./src/components/TasksContext.tsx");
-
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/App */ "./src/components/App.tsx");
+/* harmony import */ var _components_TasksContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/TasksContext */ "./src/components/TasksContext.tsx");
 
 
 
 
 
 var root = document.querySelector('.root');
-react_dom__WEBPACK_IMPORTED_MODULE_3__.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_TasksContext__WEBPACK_IMPORTED_MODULE_5__.ContextProvider, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_App__WEBPACK_IMPORTED_MODULE_4__.default, {}, void 0) }, void 0), root);
+react_dom__WEBPACK_IMPORTED_MODULE_2__.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_TasksContext__WEBPACK_IMPORTED_MODULE_4__.ContextProvider, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_App__WEBPACK_IMPORTED_MODULE_3__.default, {}, void 0) }, void 0), root);
 
 }();
 /******/ })()

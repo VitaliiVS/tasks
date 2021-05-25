@@ -1,5 +1,4 @@
 const path = require('path')
-const miniCss = require('mini-css-extract-plugin')
 const PrettierPlugin = require("prettier-webpack-plugin")
 
 module.exports = {
@@ -30,33 +29,10 @@ module.exports = {
 						loader: 'ts-loader'
 					}
 				]
-			},
-			{
-				test: /\.(s*)css$/,
-				use: [
-					miniCss.loader,
-					'css-loader',
-					{
-						loader: 'postcss-loader',
-						options: {
-							sourceMap: true,
-							postcssOptions: {
-								config: path.resolve(
-									__dirname,
-									'postcss.config.js'
-								)
-							}
-						}
-					},
-					'sass-loader'
-				]
 			}
 		]
 	},
 	plugins: [
-		new miniCss({
-			filename: 'style.css'
-		}),
 		new PrettierPlugin()
 	],
 	devtool: 'source-map'

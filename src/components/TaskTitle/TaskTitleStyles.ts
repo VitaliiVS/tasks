@@ -9,7 +9,8 @@ const useStyles = createUseStyles({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     minWidth: 330,
-    maxWidth: 330
+    maxWidth: 330,
+    fontFamily: "'Roboto', sans-serif"
   },
   completed: {
     textDecoration: 'line-through',

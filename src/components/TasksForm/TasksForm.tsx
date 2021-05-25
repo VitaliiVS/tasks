@@ -11,7 +11,6 @@ import {
 import { Task } from '../../common/task'
 import { debounce } from '../../common/helpers'
 import useStyles from './TasksFormStyles'
-import { Add } from '@material-ui/icons'
 
 const TasksForm = (): JSX.Element => {
   const [taskTitle, setTaskTitle] = useState('')
