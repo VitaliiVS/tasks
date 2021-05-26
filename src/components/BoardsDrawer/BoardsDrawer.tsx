@@ -3,38 +3,46 @@ import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import IconButton from '@material-ui/core/IconButton'
+import { Delete, Edit, ArrowForward } from '@material-ui/icons'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import useStyles from './BoardsDrawerStyles'
 
 interface BoardsDrawerProps {
   open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  setOpen: () => void
 }
 
 const BoardsDrawer = (props: BoardsDrawerProps): JSX.Element => {
   const { open, setOpen } = props
   const { fullList } = useStyles()
 
-  const toggleDrawer = (open: boolean) => () => {
-    setOpen(open)
-  }
-
-  const list = () => (
-    <div className={fullList} onClick={toggleDrawer(false)}>
-      <List>
-        {['list of items'].map((text) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  )
-
   return (
     <div>
-      <Drawer anchor={'left'} open={open} onClose={toggleDrawer(false)}>
-        {list()}
+      <Drawer anchor={'left'} open={open} onClose={setOpen}>
+        <div className={fullList}>
+          <List
+            subheader={
+              <ListSubheader component="div">Collections</ListSubheader>
+            }
+          >
+            {['list of items'].map((text) => (
+              <ListItem key={text}>
+                <ListItemText primary={text} />
+                <IconButton color="primary">
+                  <Edit fontSize="small" />
+                </IconButton>
+                <IconButton color="secondary">
+                  <Delete fontSize="small" />
+                </IconButton>
+                <IconButton color="primary" onClick={setOpen}>
+                  <ArrowForward fontSize="small" />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </Drawer>
     </div>
   )

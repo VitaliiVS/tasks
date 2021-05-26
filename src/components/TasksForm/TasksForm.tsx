@@ -80,7 +80,7 @@ const TasksForm = (): JSX.Element => {
 
   return (
     <div>
-      <BoardsDrawer open={open} setOpen={setOpen} />
+      <BoardsDrawer open={open} setOpen={toggleDrawer} />
       <Grid item xs>
         <Grid
           alignItems="center"
