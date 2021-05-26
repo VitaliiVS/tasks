@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Button, Grid, TextField, Typography } from '@material-ui/core'
 
 import TaskCard from '../TaskCard/TaskCard'
+import BoardsDrawer from '../BoardsDrawer/BoardsDrawer'
 import {
   SessionContext,
   SessionContextProps,
@@ -15,11 +16,12 @@ import useStyles from './TasksFormStyles'
 const TasksForm = (): JSX.Element => {
   const [taskTitle, setTaskTitle] = useState('')
   const [disabled, setDisabled] = useState(true)
+  const [open, setOpen] = useState(false)
   const { tasks, getTasks, postTask } = useContext(
     TasksContext
   ) as TasksContextProps
   const { token, setToken } = useContext(SessionContext) as SessionContextProps
-  const { tasksHeader, logoutButton, taskInput } = useStyles()
+  const { tasksHeader, topButton, taskInput } = useStyles()
 
   useEffect(() => {
     const fetch = async () => {
@@ -40,6 +42,10 @@ const TasksForm = (): JSX.Element => {
   const handleLogout = () => {
     document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
     setToken('')
+  }
+
+  const toggleDrawer = () => {
+    setOpen(!open)
   }
 
   const handleAddTask = async (): Promise<void> => {
@@ -74,8 +80,15 @@ const TasksForm = (): JSX.Element => {
 
   return (
     <div>
+      <BoardsDrawer open={open} setOpen={setOpen} />
       <Grid item xs>
-        <Grid alignItems="center" justify="flex-end" container direction="row">
+        <Grid
+          alignItems="center"
+          justify="flex-end"
+          container
+          direction="row"
+          spacing={3}
+        >
           <Grid item xs>
             <Typography className={tasksHeader} variant="h3" component="h1">
               Tasks
@@ -84,9 +97,19 @@ const TasksForm = (): JSX.Element => {
           <Grid item>
             <Button
               variant="contained"
+              color="primary"
+              onClick={toggleDrawer}
+              className={topButton}
+            >
+              Boards
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
               color="secondary"
               onClick={handleLogout}
-              className={logoutButton}
+              className={topButton}
             >
               Log out
             </Button>
