@@ -7,7 +7,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
 
-import { SessionContextProps, SessionContext } from '../TasksContext'
+import { SessionContextProps, SessionContext } from '../Context/Context'
 import { debounce } from '../../common/helpers'
 import { loginUrl, registerUrl } from '../../common/config'
 import useStyles from './LoginFormStyles'

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-import { ApiCall } from '../common/api'
-import { Task } from '../common/task'
+import { ApiCall } from '../../common/api'
+import { Task } from '../../common/task'
 import { v4 as uuidv4 } from 'uuid'
-import { tasksUrl } from '../common/config'
+import { tasksUrl } from '../../common/config'
 
 export interface TasksContextProps {
   tasks: Task[]

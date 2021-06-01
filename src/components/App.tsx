@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 
 import LoginForm from './LoginForm/LoginForm'
 import TasksForm from './TasksForm/TasksForm'
-import { SessionContext, SessionContextProps } from './TasksContext'
+import { SessionContext, SessionContextProps } from './Context/Context'
 
 const App = (): JSX.Element => {
   const { token, setToken } = useContext(SessionContext) as SessionContextProps

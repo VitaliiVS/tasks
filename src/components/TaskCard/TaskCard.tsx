@@ -10,7 +10,7 @@ import {
   SessionContextProps,
   TasksContext,
   TasksContextProps
-} from '../TasksContext'
+} from '../Context/Context'
 import { debounce } from '../../common/helpers'
 import TaskTitle from '../TaskTitle/TaskTitle'
 import useStyles from './TaskCardStyles'

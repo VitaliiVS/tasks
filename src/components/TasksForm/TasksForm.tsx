@@ -8,7 +8,7 @@ import {
   SessionContextProps,
   TasksContext,
   TasksContextProps
-} from '../TasksContext'
+} from '../Context/Context'
 import { Task } from '../../common/task'
 import { debounce } from '../../common/helpers'
 import useStyles from './TasksFormStyles'
@@ -24,7 +24,7 @@ const TasksForm = (): JSX.Element => {
   const { tasksHeader, topButton, taskInput } = useStyles()
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchTasks = async () => {
       try {
         await getTasks(token)
       } catch (e) {
@@ -36,7 +36,7 @@ const TasksForm = (): JSX.Element => {
         }
       }
     }
-    fetch()
+    fetchTasks()
   }, [])
 
   const handleLogout = () => {
@@ -101,7 +101,7 @@ const TasksForm = (): JSX.Element => {
               onClick={toggleDrawer}
               className={topButton}
             >
-              Boards
+              Collections
             </Button>
           </Grid>
           <Grid item>
